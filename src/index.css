@@ -1,0 +1,94 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Base ─────────────────────────────────────────────── */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    direction: rtl;
+  }
+
+  body {
+    font-family: 'Tajawal', sans-serif;
+    @apply text-gray-900 bg-white overflow-x-hidden;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+}
+
+/* ─── Components ────────────────────────────────────────── */
+@layer components {
+  /* Primary button */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2
+           bg-brand-blue text-white font-medium
+           px-6 py-3 rounded-xl
+           transition-all duration-200 active:scale-[0.97]
+           cursor-pointer no-underline;
+  }
+  .btn-primary:hover {
+    background-color: #2338e0;
+    box-shadow: 0 8px 28px rgba(47, 72, 245, 0.38);
+    @apply no-underline;
+  }
+
+  /* Light button */
+  .btn-light {
+    @apply inline-flex items-center justify-center gap-2
+           bg-white text-brand-blue border-2 border-brand-blue font-medium
+           px-6 py-3 rounded-xl
+           transition-all duration-200 active:scale-[0.97]
+           cursor-pointer no-underline;
+  }
+  .btn-light:hover {
+    @apply bg-blue-50 no-underline;
+  }
+
+  /* Dark button */
+  .btn-dark {
+    @apply inline-flex items-center justify-center gap-2
+           bg-transparent text-white border-2 border-brand-blue font-medium
+           px-6 py-3 rounded-xl
+           transition-all duration-200 active:scale-[0.97]
+           cursor-pointer no-underline;
+  }
+  .btn-dark:hover {
+    @apply no-underline;
+    background-color: rgba(47, 72, 245, 0.12);
+  }
+}
+
+/* ─── Utilities ─────────────────────────────────────────── */
+@layer utilities {
+  /* Hero mesh grid pattern */
+  .hero-mesh {
+    background-image:
+      linear-gradient(rgba(47, 72, 245, 0.055) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(47, 72, 245, 0.055) 1px, transparent 1px);
+    background-size: 48px 48px;
+  }
+
+  /* Section label */
+  .section-label {
+    @apply text-brand-blue text-xs font-medium tracking-[0.18em] uppercase;
+  }
+
+  /* Card base */
+  .card {
+    @apply bg-white rounded-2xl border border-gray-100 shadow-sm
+           transition-all duration-300;
+  }
+  .card:hover {
+    @apply shadow-xl border-brand-blue/15;
+    box-shadow: 0 20px 50px rgba(47, 72, 245, 0.08);
+  }
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #f4f4f8; }
+::-webkit-scrollbar-thumb { background: #2f48f5; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #2338e0; }
