@@ -34,20 +34,38 @@ function FeaturedReport({ report }) {
       className="group relative block rounded-2xl overflow-hidden no-underline"
       style={{ minHeight: 380 }}
     >
-      {/* gradient bg */}
+      {/* Base gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-brand-navy via-[#1a2055] to-brand-blue" />
-      {/* mesh pattern */}
-      <div
-        className="absolute inset-0 opacity-20"
-        style={{
-          backgroundImage:
-            'linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px)',
-          backgroundSize: '36px 36px',
-        }}
-      />
-      {/* floating shapes */}
-      <div className="absolute top-8 left-8 w-32 h-32 rounded-full border border-white/10" />
-      <div className="absolute bottom-0 right-0 w-56 h-56 rounded-full border border-white/8 translate-x-16 translate-y-16" />
+
+      {/* Real photo — covers top half, fades into gradient */}
+      {report.image && (
+        <>
+          <img
+            src={report.image}
+            alt={report.title}
+            className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
+          />
+          {/* strong gradient overlay so text stays readable */}
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d1a] via-[#0d0d1acc] to-[#0d0d1a55]" />
+          <div className="absolute inset-0 bg-gradient-to-br from-brand-navy/70 to-transparent" />
+        </>
+      )}
+
+      {/* fallback mesh when no image */}
+      {!report.image && (
+        <>
+          <div
+            className="absolute inset-0 opacity-20"
+            style={{
+              backgroundImage:
+                'linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px)',
+              backgroundSize: '36px 36px',
+            }}
+          />
+          <div className="absolute top-8 left-8 w-32 h-32 rounded-full border border-white/10" />
+          <div className="absolute bottom-0 right-0 w-56 h-56 rounded-full border border-white/8 translate-x-16 translate-y-16" />
+        </>
+      )}
 
       <div className="relative z-10 flex flex-col justify-end h-full p-8 lg:p-10" style={{ minHeight: 380 }}>
         <div className="flex flex-wrap gap-2 mb-4">
@@ -95,12 +113,35 @@ function ReportCard({ report, index }) {
       whileHover={{ y: -4 }}
       className="group block bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:border-brand-blue/20 transition-all duration-300 overflow-hidden no-underline"
     >
-      {/* Top accent */}
-      <div className="h-1 bg-gradient-to-r from-brand-blue to-brand-blue-light" />
+      {/* Thumbnail */}
+      <div className="relative h-40 overflow-hidden">
+        {report.image ? (
+          <>
+            <img
+              src={report.image}
+              alt={report.title}
+              className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+          </>
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-brand-navy via-[#1a2055] to-brand-blue flex items-center justify-center">
+            <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5">
+                <path d="M4 4h12v12H4zM4 8h12M8 8v8" />
+              </svg>
+            </div>
+          </div>
+        )}
+        {/* Year badge */}
+        <span className="absolute top-3 right-3 text-[10px] font-bold bg-brand-blue text-white px-2 py-0.5 rounded-full">
+          {report.year}
+        </span>
+      </div>
 
-      <div className="p-6">
+      <div className="p-5">
         {/* Tags */}
-        <div className="flex flex-wrap gap-1.5 mb-4">
+        <div className="flex flex-wrap gap-1.5 mb-3">
           {report.tags.slice(0, 2).map(t => (
             <span key={t} className={`text-[11px] font-medium px-2.5 py-0.5 rounded-full border ${tagCls(t)}`}>
               {t}
@@ -108,11 +149,11 @@ function ReportCard({ report, index }) {
           ))}
         </div>
 
-        <h3 className="text-gray-900 font-bold text-[15px] leading-snug mb-2 group-hover:text-brand-blue transition-colors duration-200 line-clamp-3">
+        <h3 className="text-gray-900 font-bold text-[15px] leading-snug mb-2 group-hover:text-brand-blue transition-colors duration-200 line-clamp-2">
           {report.title}
         </h3>
 
-        <p className="text-gray-500 text-[13px] font-light leading-relaxed line-clamp-2 mb-5">
+        <p className="text-gray-500 text-[13px] font-light leading-relaxed line-clamp-2 mb-4">
           {report.excerpt}
         </p>
 
@@ -142,16 +183,31 @@ function ArticleCard({ article, index }) {
       whileHover={{ y: -4 }}
       className="group flex flex-col bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:border-brand-blue/20 transition-all duration-300 no-underline overflow-hidden"
     >
-      {/* Colorful header strip */}
-      <div className="h-1.5 bg-gradient-to-r from-brand-blue via-brand-blue-light to-brand-blue-alt" />
+      {/* Thumbnail */}
+      <div className="relative h-36 overflow-hidden flex-shrink-0">
+        {article.image ? (
+          <>
+            <img
+              src={article.image}
+              alt={article.title}
+              className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+          </>
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-brand-blue via-brand-blue-light to-[#818DE5] flex items-center justify-center">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5">
+              <path d="M6 6h16v16H6zM6 11h16M10 11v11" />
+            </svg>
+          </div>
+        )}
+        {/* Tag pill overlay */}
+        <span className={`absolute bottom-2.5 right-2.5 text-[10px] font-semibold px-2 py-0.5 rounded-full border backdrop-blur-sm ${tagCls(article.tag)}`}>
+          {article.tag}
+        </span>
+      </div>
 
-      <div className="p-6 flex flex-col flex-1">
-        <div className="mb-3">
-          <span className={`text-[11px] font-medium px-2.5 py-0.5 rounded-full border ${tagCls(article.tag)}`}>
-            {article.tag}
-          </span>
-        </div>
-
+      <div className="p-5 flex flex-col flex-1">
         <h3 className="text-gray-900 font-bold text-[15px] leading-snug flex-1 mb-4 group-hover:text-brand-blue transition-colors duration-200 line-clamp-3">
           {article.title}
         </h3>
@@ -370,19 +426,37 @@ export default function InsightPage() {
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: 0.1 * i }}
                   whileHover={{ x: -4 }}
-                  className="group flex-1 flex flex-col bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:border-brand-blue/20 transition-all duration-300 p-6 no-underline"
+                  className="group flex-1 flex bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:border-brand-blue/20 transition-all duration-300 no-underline overflow-hidden"
                 >
-                  <span className={`text-[11px] font-medium px-2.5 py-0.5 rounded-full border w-fit mb-3 ${tagCls(a.tag)}`}>
-                    {a.tag}
-                  </span>
-                  <h4 className="text-gray-900 font-bold text-sm leading-snug flex-1 group-hover:text-brand-blue transition-colors duration-200 mb-3 line-clamp-3">
-                    {a.title}
-                  </h4>
-                  <div className="flex items-center justify-between pt-3 border-t border-gray-50">
-                    <span className="text-gray-400 text-xs">{a.date}</span>
-                    <span className="text-brand-blue/60 group-hover:text-brand-blue transition-colors">
-                      <ExternalArrow />
+                  {/* Thumbnail */}
+                  <div className="relative w-28 flex-shrink-0 overflow-hidden">
+                    {a.image ? (
+                      <>
+                        <img
+                          src={a.image}
+                          alt={a.title}
+                          className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-l from-white/10 to-transparent" />
+                      </>
+                    ) : (
+                      <div className="absolute inset-0 bg-gradient-to-br from-brand-blue/80 to-brand-blue-light/60" />
+                    )}
+                  </div>
+                  {/* Content */}
+                  <div className="flex flex-col flex-1 p-5">
+                    <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full border w-fit mb-2.5 ${tagCls(a.tag)}`}>
+                      {a.tag}
                     </span>
+                    <h4 className="text-gray-900 font-bold text-sm leading-snug flex-1 group-hover:text-brand-blue transition-colors duration-200 mb-3 line-clamp-3">
+                      {a.title}
+                    </h4>
+                    <div className="flex items-center justify-between pt-3 border-t border-gray-50">
+                      <span className="text-gray-400 text-xs">{a.date}</span>
+                      <span className="text-brand-blue/60 group-hover:text-brand-blue transition-colors">
+                        <ExternalArrow />
+                      </span>
+                    </div>
                   </div>
                 </motion.a>
               ))}
