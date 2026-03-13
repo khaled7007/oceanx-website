@@ -1,9 +1,18 @@
 import { useState, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { Link } from 'react-router-dom'
 import {
   REPORTS, ARTICLES, TAG_COLORS,
   REPORT_YEARS, ARTICLE_TOPICS,
 } from '../data/insight'
+
+function articleHref(url) {
+  const m = url.match(/insight\.oceanx\.sa\/([^/]+)\/?$/)
+  if (!m) return null
+  const slug = m[1]
+  if (slug.startsWith('category') || slug.startsWith('tag')) return null
+  return `/insight/article/${slug}`
+}
 
 /* ─── Helpers ──────────────────────────────────────────────────── */
 
@@ -171,11 +180,15 @@ function ReportCard({ report, index }) {
 /* ─── Article card ─────────────────────────────────────────────── */
 
 function ArticleCard({ article, index }) {
+  const internalHref = articleHref(article.url)
+  const MotionEl = internalHref ? motion(Link) : motion.a
+  const linkProps = internalHref
+    ? { to: internalHref }
+    : { href: article.url, target: '_blank', rel: 'noopener noreferrer' }
+
   return (
-    <motion.a
-      href={article.url}
-      target="_blank"
-      rel="noopener noreferrer"
+    <MotionEl
+      {...linkProps}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 12 }}
@@ -219,7 +232,7 @@ function ArticleCard({ article, index }) {
           </span>
         </div>
       </div>
-    </motion.a>
+    </MotionEl>
   )
 }
 
@@ -415,12 +428,16 @@ export default function InsightPage() {
             </div>
             {/* 2 latest articles */}
             <div className="flex flex-col gap-5">
-              {latestArticles.map((a, i) => (
-                <motion.a
+              {latestArticles.map((a, i) => {
+                const internalHref = articleHref(a.url)
+                const MotionEl = internalHref ? motion(Link) : motion.a
+                const linkProps = internalHref
+                  ? { to: internalHref }
+                  : { href: a.url, target: '_blank', rel: 'noopener noreferrer' }
+                return (
+                <MotionEl
                   key={a.title}
-                  href={a.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  {...linkProps}
                   initial={{ opacity: 0, x: -16 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
@@ -458,8 +475,9 @@ export default function InsightPage() {
                       </span>
                     </div>
                   </div>
-                </motion.a>
-              ))}
+                </MotionEl>
+                )
+              })}
             </div>
           </div>
         </div>

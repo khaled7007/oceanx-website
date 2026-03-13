@@ -5,6 +5,7 @@ import Footer from './components/Footer'
 import Home from './pages/Home'
 import CompetenciesPage from './pages/CompetenciesPage'
 import InsightPage from './pages/InsightPage'
+import ArticleDetailPage from './pages/ArticleDetailPage'
 
 // Scroll to top on route change (except hash navigation)
 function ScrollToTop() {
@@ -25,6 +26,7 @@ function Layout() {
           <Route path="/" element={<Home />} />
           <Route path="/competencies" element={<CompetenciesPage />} />
           <Route path="/insight" element={<InsightPage />} />
+          <Route path="/insight/article/:slug" element={<ArticleDetailPage />} />
         </Routes>
       </main>
       <Footer />

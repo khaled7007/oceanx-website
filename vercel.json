@@ -1,3 +1,9 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    {
+      "source": "/wp-proxy/:path*",
+      "destination": "https://insight.oceanx.sa/:path*"
+    },
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
 }
