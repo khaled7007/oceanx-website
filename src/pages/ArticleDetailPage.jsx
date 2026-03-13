@@ -7,22 +7,6 @@ function tagCls(tag) {
   return TAG_COLORS[tag] ?? 'bg-gray-100 text-gray-600 border-gray-200'
 }
 
-function extractContent(pageHtml) {
-  const parser = new DOMParser()
-  const doc = parser.parseFromString(pageHtml, 'text/html')
-
-  // Divi renders text in .et_pb_text_inner divs
-  const textModules = doc.querySelectorAll('.et_pb_text_inner')
-  if (textModules.length > 0) {
-    return Array.from(textModules).map(el => el.innerHTML).join('\n')
-  }
-
-  // Fallback: standard WordPress entry-content
-  const entry = doc.querySelector('.entry-content, article .post-content, main article')
-  if (entry) return entry.innerHTML
-
-  return null
-}
 
 function ChevronIcon() {
   return (
@@ -126,16 +110,12 @@ export default function ArticleDetailPage() {
     setPost(null)
 
     fetch(`/api/article?slug=${encodeURIComponent(slug)}`)
-      .then(r => {
-        if (!r.ok) throw new Error('network')
-        return r.text()
-      })
-      .then(html => {
-        const content = extractContent(html)
-        if (!content || content.trim().length < 50) {
+      .then(r => r.json())
+      .then(data => {
+        if (data.error || !data.content || data.content.trim().length < 50) {
           setError('not_found')
         } else {
-          setPost({ content })
+          setPost({ content: data.content })
         }
         setLoading(false)
       })
