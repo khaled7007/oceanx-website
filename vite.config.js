@@ -5,11 +5,14 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      '/wp-proxy': {
+      '/api/article': {
         target: 'https://insight.oceanx.sa',
         changeOrigin: true,
         secure: true,
-        rewrite: (path) => path.replace(/^\/wp-proxy/, ''),
+        rewrite: (path) => {
+          const slug = new URL(`http://x${path}`).searchParams.get('slug') ?? ''
+          return `/${slug}/`
+        },
       },
     },
   },

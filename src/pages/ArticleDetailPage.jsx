@@ -125,7 +125,7 @@ export default function ArticleDetailPage() {
     setError(null)
     setPost(null)
 
-    fetch(`/wp-proxy/${slug}/`)
+    fetch(`/api/article?slug=${encodeURIComponent(slug)}`)
       .then(r => {
         if (!r.ok) throw new Error('network')
         return r.text()
