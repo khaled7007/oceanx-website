@@ -1,8 +1,8 @@
-import { useParams, Link, useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import { REPORTS, TAG_COLORS } from '../data/insight'
-import { isInsightDirectEntry, reportRoute } from '../utils/insightLinks'
+import { ARTICLES, REPORTS, TAG_COLORS } from '../data/insight'
+import { articleRoute, isInsightDirectEntry, reportRoute } from '../utils/insightLinks'
 
 function tagCls(tag) {
   return TAG_COLORS[tag] ?? 'bg-gray-100 text-gray-600 border-gray-200'
@@ -41,57 +41,44 @@ function Skeleton() {
   )
 }
 
-function RelatedReports({ currentId, report }) {
-  const related = REPORTS
-    .map((entry, reportIndex) => ({ ...entry, reportIndex }))
-    .filter((entry) => {
-      if (entry.reportIndex === currentId) return false
-      if (!isInsightDirectEntry(entry.url)) return false
-      if (entry.year === report.year) return true
-      return entry.tags.some((tag) => report.tags.includes(tag))
-    })
-    .slice(0, 3)
-
-  if (!related.length) return null
-
-  return (
-    <div className="mt-16 pt-10 border-t border-gray-100">
-      <h3 className="text-lg font-bold text-gray-900 mb-6">تقارير ذات صلة</h3>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {related.map((entry) => (
-          <Link
-            key={entry.reportIndex}
-            to={reportRoute(entry.reportIndex)}
-            className="group block bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-brand-blue/20 transition-all duration-300 overflow-hidden no-underline p-5"
-          >
-            <div className="flex flex-wrap gap-1.5 mb-3">
-              {entry.tags.slice(0, 2).map((tag) => (
-                <span key={tag} className={`text-[11px] font-medium px-2.5 py-0.5 rounded-full border ${tagCls(tag)}`}>
-                  {tag}
-                </span>
-              ))}
-            </div>
-            <h4 className="text-gray-900 font-bold text-sm leading-snug group-hover:text-brand-blue transition-colors duration-200 line-clamp-3">
-              {entry.title}
-            </h4>
-            <p className="text-gray-400 text-xs mt-3">{entry.date}</p>
-          </Link>
-        ))}
-      </div>
-    </div>
-  )
+function relatedLink(kind, id) {
+  return kind === 'article' ? articleRoute(id) : reportRoute(id)
 }
 
-export default function ReportDetailPage() {
-  const { reportId } = useParams()
+export default function InsightReaderPage({ forcedKind }) {
+  const { kind: routeKind, itemId } = useParams()
   const navigate = useNavigate()
   const [post, setPost] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [autoRedirecting, setAutoRedirecting] = useState(false)
 
-  const parsedId = Number(reportId)
-  const meta = Number.isInteger(parsedId) && parsedId >= 0 ? REPORTS[parsedId] ?? null : null
+  const kind = forcedKind ?? routeKind
+  const parsedId = Number(itemId)
+  const list = kind === 'report' ? REPORTS : ARTICLES
+  const meta = Number.isInteger(parsedId) && parsedId >= 0 ? list[parsedId] ?? null : null
+
+  const tags = useMemo(() => {
+    if (!meta) return []
+    if (kind === 'report') return meta.tags ?? []
+    return meta.tag ? [meta.tag] : []
+  }, [kind, meta])
+
+  const relatedItems = useMemo(() => {
+    if (!meta) return []
+
+    return list
+      .map((item, index) => ({ ...item, index }))
+      .filter((item) => {
+        if (item.index === parsedId) return false
+        if (!isInsightDirectEntry(item.url)) return false
+        if (kind === 'report') {
+          if (item.year === meta.year) return true
+          return (item.tags ?? []).some((tag) => tags.includes(tag))
+        }
+        return item.tag && tags.includes(item.tag)
+      })
+      .slice(0, 3)
+  }, [kind, list, meta, parsedId, tags])
 
   useEffect(() => {
     if (!meta || !isInsightDirectEntry(meta.url)) {
@@ -107,39 +94,19 @@ export default function ReportDetailPage() {
     fetch(`/api/article?url=${encodeURIComponent(meta.url)}`)
       .then(async (response) => {
         const data = await response.json().catch(() => ({}))
-        if (!response.ok) {
+        if (!response.ok || data.error || !data.content || data.content.trim().length < 50) {
           setError(response.status >= 500 ? 'fetch_error' : 'not_found')
           return
         }
-
-        if (data.error || !data.content || data.content.trim().length < 50) {
-          setError('not_found')
-          return
-        }
-
         setPost({ content: data.content })
       })
-      .catch(() => {
-        setError('fetch_error')
-      })
-      .finally(() => {
-        setLoading(false)
-      })
+      .catch(() => setError('fetch_error'))
+      .finally(() => setLoading(false))
   }, [meta])
 
-  const externalUrl = meta?.url ?? 'https://insight.oceanx.sa/reports/'
-
-  useEffect(() => {
-    if (loading || post || !meta?.url) return
-    if (error !== 'fetch_error' && error !== 'not_found') return
-
-    setAutoRedirecting(true)
-    const timer = window.setTimeout(() => {
-      window.location.assign(externalUrl)
-    }, 1200)
-
-    return () => window.clearTimeout(timer)
-  }, [loading, post, error, meta, externalUrl])
+  const externalUrl = meta?.url ?? (kind === 'report' ? 'https://insight.oceanx.sa/reports/' : 'https://insight.oceanx.sa/articles/')
+  const contentTypeLabel = kind === 'report' ? 'تقرير' : 'مقالة'
+  const relatedLabel = kind === 'report' ? 'تقارير ذات صلة' : 'مقالات ذات صلة'
 
   return (
     <>
@@ -175,12 +142,12 @@ export default function ReportDetailPage() {
             <span className="rotate-180 opacity-40"><ChevronIcon /></span>
             <Link to="/insight" className="hover:text-gray-300 transition-colors no-underline">إنسايت</Link>
             <span className="rotate-180 opacity-40"><ChevronIcon /></span>
-            <span className="text-gray-400 line-clamp-1">{meta?.title ?? 'تقرير'}</span>
+            <span className="text-gray-400 line-clamp-1">{meta?.title ?? contentTypeLabel}</span>
           </motion.div>
 
           <div className="flex flex-wrap gap-2 mb-4">
-            <span className="text-xs text-brand-blue-light font-semibold tracking-widest uppercase">تقرير</span>
-            {meta?.tags?.slice(0, 3).map((tag) => (
+            <span className="text-xs text-brand-blue-light font-semibold tracking-widest uppercase">{contentTypeLabel}</span>
+            {tags.slice(0, 3).map((tag) => (
               <span key={tag} className={`text-xs px-2.5 py-0.5 rounded-full border ${tagCls(tag)}`}>
                 {tag}
               </span>
@@ -193,7 +160,7 @@ export default function ReportDetailPage() {
             transition={{ duration: 0.55, delay: 0.1 }}
             className="text-3xl lg:text-4xl font-bold text-white leading-tight mb-4"
           >
-            {meta?.title ?? 'تقرير'}
+            {meta?.title ?? contentTypeLabel}
           </motion.h1>
 
           <motion.p
@@ -213,15 +180,10 @@ export default function ReportDetailPage() {
 
           {!loading && !post && (
             <div className="text-center py-20">
-              <h2 className="text-xl font-bold text-gray-800 mb-3">عرض التقرير من المصدر</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-3">تعذّر عرض {contentTypeLabel}</h2>
               <p className="text-gray-500 mb-8 font-light">
-                {error === 'fetch_error'
-                  ? 'تعذّر تحميل النسخة المضمنة مباشرة. يمكنك القراءة من المصدر أدناه.'
-                  : 'هذا التقرير غير متاح للاستخراج المباشر، لذلك نعرض النسخة الأصلية.'}
+                المحتوى غير متاح داخل الموقع حاليًا. يمكنك فتح النسخة الأصلية مباشرة.
               </p>
-              {autoRedirecting && (
-                <p className="text-sm text-brand-blue mb-4">جاري تحويلك للمصدر الأصلي...</p>
-              )}
               <div className="flex items-center justify-center gap-4 mb-8">
                 <a href={externalUrl} target="_blank" rel="noopener noreferrer" className="btn-primary text-sm">
                   افتح المصدر الأصلي
@@ -230,9 +192,11 @@ export default function ReportDetailPage() {
                   رجوع
                 </button>
               </div>
-              <p className="text-xs text-gray-400 font-light">
-                المصدر الخارجي يمنع العرض المضمن داخل الموقع.
-              </p>
+              {error === 'fetch_error' && (
+                <p className="text-xs text-gray-400 font-light">
+                  سبب تقني من المصدر الخارجي، وليس من الموقع الجديد.
+                </p>
+              )}
             </div>
           )}
 
@@ -264,11 +228,36 @@ export default function ReportDetailPage() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-sm text-brand-blue font-medium hover:underline"
                 >
-                  عرض التقرير الأصلي <ExternalArrow />
+                  عرض المصدر الأصلي <ExternalArrow />
                 </a>
               </div>
 
-              {Number.isInteger(parsedId) && meta && <RelatedReports currentId={parsedId} report={meta} />}
+              {relatedItems.length > 0 && (
+                <div className="mt-16 pt-10 border-t border-gray-100">
+                  <h3 className="text-lg font-bold text-gray-900 mb-6">{relatedLabel}</h3>
+                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {relatedItems.map((item) => (
+                      <Link
+                        key={item.index}
+                        to={relatedLink(kind, item.index)}
+                        className="group block bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-brand-blue/20 transition-all duration-300 overflow-hidden no-underline p-5"
+                      >
+                        <div className="flex flex-wrap gap-1.5 mb-3">
+                          {(kind === 'report' ? (item.tags ?? []).slice(0, 2) : item.tag ? [item.tag] : []).map((tag) => (
+                            <span key={tag} className={`text-[11px] font-medium px-2.5 py-0.5 rounded-full border ${tagCls(tag)}`}>
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+                        <h4 className="text-gray-900 font-bold text-sm leading-snug group-hover:text-brand-blue transition-colors duration-200 line-clamp-3">
+                          {item.title}
+                        </h4>
+                        <p className="text-gray-400 text-xs mt-3">{item.date}</p>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
             </motion.div>
           )}
         </div>

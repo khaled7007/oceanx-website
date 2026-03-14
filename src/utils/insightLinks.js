@@ -10,9 +10,9 @@ export function isInsightDirectEntry(url) {
 }
 
 export function articleRoute(index) {
-  return `/insight/article/${index}`
+  return `/insight/read/article/${index}`
 }
 
 export function reportRoute(index) {
-  return `/insight/report/${index}`
+  return `/insight/read/report/${index}`
 }

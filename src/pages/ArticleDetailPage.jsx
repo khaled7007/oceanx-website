@@ -79,6 +79,7 @@ export default function ArticleDetailPage() {
   const [post, setPost] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [autoRedirecting, setAutoRedirecting] = useState(false)
 
   const parsedId = Number(articleId)
   const meta = Number.isInteger(parsedId) && parsedId >= 0 ? ARTICLES[parsedId] ?? null : null
@@ -118,6 +119,18 @@ export default function ArticleDetailPage() {
   }, [meta])
 
   const externalUrl = meta?.url ?? 'https://insight.oceanx.sa/articles/'
+
+  useEffect(() => {
+    if (loading || post || !meta?.url) return
+    if (error !== 'fetch_error' && error !== 'not_found') return
+
+    setAutoRedirecting(true)
+    const timer = window.setTimeout(() => {
+      window.location.assign(externalUrl)
+    }, 1200)
+
+    return () => window.clearTimeout(timer)
+  }, [loading, post, error, meta, externalUrl])
 
   return (
     <>
@@ -199,6 +212,9 @@ export default function ArticleDetailPage() {
                   ? 'تعذّر تحميل النسخة المضمنة مباشرة. يمكنك القراءة من المصدر أدناه.'
                   : 'هذه المقالة غير متاحة للاستخراج المباشر، لذلك نعرض النسخة الأصلية.'}
               </p>
+              {autoRedirecting && (
+                <p className="text-sm text-brand-blue mb-4">جاري تحويلك للمصدر الأصلي...</p>
+              )}
               <div className="flex items-center justify-center gap-4 mb-8">
                 <a href={externalUrl} target="_blank" rel="noopener noreferrer" className="btn-primary text-sm">
                   افتح المصدر الأصلي
@@ -207,14 +223,9 @@ export default function ArticleDetailPage() {
                   رجوع
                 </button>
               </div>
-              <div className="rounded-2xl overflow-hidden border border-gray-200 bg-white">
-                <iframe
-                  title={meta?.title ?? 'Insight article'}
-                  src={externalUrl}
-                  className="w-full min-h-[1200px]"
-                  loading="lazy"
-                />
-              </div>
+              <p className="text-xs text-gray-400 font-light">
+                المصدر الخارجي يمنع العرض المضمن داخل الموقع.
+              </p>
             </div>
           )}
 
