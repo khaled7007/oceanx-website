@@ -1,14 +1,24 @@
 import { parse } from 'node-html-parser'
 
 export default async function handler(req, res) {
-  const { slug } = req.query
+  const { slug, url } = req.query
 
-  if (!slug) {
-    return res.status(400).json({ error: 'Missing slug' })
+  if (!slug && !url) {
+    return res.status(400).json({ error: 'Missing slug or url' })
   }
 
   try {
-    const wpUrl = `https://insight.oceanx.sa/${slug}/`
+    let wpUrl = ''
+    if (typeof url === 'string' && url.length > 0) {
+      const parsedUrl = new URL(url)
+      if (parsedUrl.hostname !== 'insight.oceanx.sa') {
+        return res.status(400).json({ error: 'Only insight.oceanx.sa URLs are allowed' })
+      }
+      wpUrl = parsedUrl.toString()
+    } else {
+      wpUrl = `https://insight.oceanx.sa/${slug}/`
+    }
+
     const response = await fetch(wpUrl, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',

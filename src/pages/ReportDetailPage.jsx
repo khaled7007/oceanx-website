@@ -1,8 +1,8 @@
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { ARTICLES, TAG_COLORS } from '../data/insight'
-import { articleRoute, isInsightDirectEntry } from '../utils/insightLinks'
+import { REPORTS, TAG_COLORS } from '../data/insight'
+import { isInsightDirectEntry, reportRoute } from '../utils/insightLinks'
 
 function tagCls(tag) {
   return TAG_COLORS[tag] ?? 'bg-gray-100 text-gray-600 border-gray-200'
@@ -41,31 +41,40 @@ function Skeleton() {
   )
 }
 
-function RelatedArticles({ currentId, tag }) {
-  const related = ARTICLES
-    .map((article, articleIndex) => ({ ...article, articleIndex }))
-    .filter((article) => article.articleIndex !== currentId && article.tag === tag && isInsightDirectEntry(article.url))
+function RelatedReports({ currentId, report }) {
+  const related = REPORTS
+    .map((entry, reportIndex) => ({ ...entry, reportIndex }))
+    .filter((entry) => {
+      if (entry.reportIndex === currentId) return false
+      if (!isInsightDirectEntry(entry.url)) return false
+      if (entry.year === report.year) return true
+      return entry.tags.some((tag) => report.tags.includes(tag))
+    })
     .slice(0, 3)
 
   if (!related.length) return null
 
   return (
     <div className="mt-16 pt-10 border-t border-gray-100">
-      <h3 className="text-lg font-bold text-gray-900 mb-6">مقالات ذات صلة</h3>
+      <h3 className="text-lg font-bold text-gray-900 mb-6">تقارير ذات صلة</h3>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {related.map((article) => (
+        {related.map((entry) => (
           <Link
-            key={article.articleIndex}
-            to={articleRoute(article.articleIndex)}
+            key={entry.reportIndex}
+            to={reportRoute(entry.reportIndex)}
             className="group block bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-brand-blue/20 transition-all duration-300 overflow-hidden no-underline p-5"
           >
-            <span className={`text-[11px] font-medium px-2.5 py-0.5 rounded-full border inline-block mb-3 ${tagCls(article.tag)}`}>
-              {article.tag}
-            </span>
+            <div className="flex flex-wrap gap-1.5 mb-3">
+              {entry.tags.slice(0, 2).map((tag) => (
+                <span key={tag} className={`text-[11px] font-medium px-2.5 py-0.5 rounded-full border ${tagCls(tag)}`}>
+                  {tag}
+                </span>
+              ))}
+            </div>
             <h4 className="text-gray-900 font-bold text-sm leading-snug group-hover:text-brand-blue transition-colors duration-200 line-clamp-3">
-              {article.title}
+              {entry.title}
             </h4>
-            <p className="text-gray-400 text-xs mt-3">{article.date}</p>
+            <p className="text-gray-400 text-xs mt-3">{entry.date}</p>
           </Link>
         ))}
       </div>
@@ -73,15 +82,15 @@ function RelatedArticles({ currentId, tag }) {
   )
 }
 
-export default function ArticleDetailPage() {
-  const { articleId } = useParams()
+export default function ReportDetailPage() {
+  const { reportId } = useParams()
   const navigate = useNavigate()
   const [post, setPost] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  const parsedId = Number(articleId)
-  const meta = Number.isInteger(parsedId) && parsedId >= 0 ? ARTICLES[parsedId] ?? null : null
+  const parsedId = Number(reportId)
+  const meta = Number.isInteger(parsedId) && parsedId >= 0 ? REPORTS[parsedId] ?? null : null
 
   useEffect(() => {
     if (!meta || !isInsightDirectEntry(meta.url)) {
@@ -110,7 +119,7 @@ export default function ArticleDetailPage() {
       })
   }, [meta])
 
-  const externalUrl = meta?.url ?? 'https://insight.oceanx.sa/articles/'
+  const externalUrl = meta?.url ?? 'https://insight.oceanx.sa/reports/'
 
   return (
     <>
@@ -146,19 +155,17 @@ export default function ArticleDetailPage() {
             <span className="rotate-180 opacity-40"><ChevronIcon /></span>
             <Link to="/insight" className="hover:text-gray-300 transition-colors no-underline">إنسايت</Link>
             <span className="rotate-180 opacity-40"><ChevronIcon /></span>
-            <span className="text-gray-400 line-clamp-1">{meta?.title ?? 'مقالة'}</span>
+            <span className="text-gray-400 line-clamp-1">{meta?.title ?? 'تقرير'}</span>
           </motion.div>
 
-          {meta?.tag && (
-            <motion.span
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.06 }}
-              className={`text-xs font-medium px-3 py-1 rounded-full border inline-block mb-4 ${tagCls(meta.tag)}`}
-            >
-              {meta.tag}
-            </motion.span>
-          )}
+          <div className="flex flex-wrap gap-2 mb-4">
+            <span className="text-xs text-brand-blue-light font-semibold tracking-widest uppercase">تقرير</span>
+            {meta?.tags?.slice(0, 3).map((tag) => (
+              <span key={tag} className={`text-xs px-2.5 py-0.5 rounded-full border ${tagCls(tag)}`}>
+                {tag}
+              </span>
+            ))}
+          </div>
 
           <motion.h1
             initial={{ opacity: 0, y: 18 }}
@@ -166,7 +173,7 @@ export default function ArticleDetailPage() {
             transition={{ duration: 0.55, delay: 0.1 }}
             className="text-3xl lg:text-4xl font-bold text-white leading-tight mb-4"
           >
-            {meta?.title ?? 'مقالة'}
+            {meta?.title ?? 'تقرير'}
           </motion.h1>
 
           <motion.p
@@ -186,9 +193,9 @@ export default function ArticleDetailPage() {
 
           {!loading && error === 'fetch_error' && (
             <div className="text-center py-20">
-              <h2 className="text-xl font-bold text-gray-800 mb-3">تعذّر تحميل المقالة</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-3">تعذّر تحميل التقرير</h2>
               <p className="text-gray-500 mb-8 font-light">
-                لم نتمكن من الوصول إلى المحتوى. يمكنك قراءة المقالة مباشرة على موقع إنسايت.
+                لم نتمكن من الوصول إلى المحتوى. يمكنك قراءة التقرير مباشرة على موقع إنسايت.
               </p>
               <a
                 href={externalUrl}
@@ -203,8 +210,8 @@ export default function ArticleDetailPage() {
 
           {!loading && error === 'not_found' && (
             <div className="text-center py-20">
-              <h2 className="text-xl font-bold text-gray-800 mb-3">المقالة غير متاحة</h2>
-              <p className="text-gray-500 mb-8 font-light">تعذّر العثور على هذه المقالة داخل الموقع.</p>
+              <h2 className="text-xl font-bold text-gray-800 mb-3">التقرير غير متاح</h2>
+              <p className="text-gray-500 mb-8 font-light">تعذّر العثور على هذا التقرير داخل الموقع.</p>
               <div className="flex items-center justify-center gap-4">
                 <button onClick={() => navigate(-1)} className="btn-light text-sm">
                   رجوع
@@ -237,20 +244,18 @@ export default function ArticleDetailPage() {
               />
 
               <div className="mt-12 pt-8 border-t border-gray-100 flex items-center justify-between flex-wrap gap-4">
-                <p className="text-gray-400 text-sm font-light">
-                  نُشر على منصة أوشن إكس إنسايت
-                </p>
+                <p className="text-gray-400 text-sm font-light">نُشر على منصة أوشن إكس إنسايت</p>
                 <a
                   href={externalUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 text-sm text-brand-blue font-medium hover:underline"
                 >
-                  عرض المقالة الأصلية <ExternalArrow />
+                  عرض التقرير الأصلي <ExternalArrow />
                 </a>
               </div>
 
-              {meta?.tag && Number.isInteger(parsedId) && <RelatedArticles currentId={parsedId} tag={meta.tag} />}
+              {Number.isInteger(parsedId) && meta && <RelatedReports currentId={parsedId} report={meta} />}
             </motion.div>
           )}
         </div>
