@@ -104,17 +104,24 @@ export default function ReportDetailPage() {
     setPost(null)
 
     fetch(`/api/article?url=${encodeURIComponent(meta.url)}`)
-      .then((response) => response.json())
-      .then((data) => {
+      .then(async (response) => {
+        const data = await response.json().catch(() => ({}))
+        if (!response.ok) {
+          setError(response.status >= 500 ? 'fetch_error' : 'not_found')
+          return
+        }
+
         if (data.error || !data.content || data.content.trim().length < 50) {
           setError('not_found')
-        } else {
-          setPost({ content: data.content })
+          return
         }
-        setLoading(false)
+
+        setPost({ content: data.content })
       })
       .catch(() => {
         setError('fetch_error')
+      })
+      .finally(() => {
         setLoading(false)
       })
   }, [meta])
@@ -191,34 +198,29 @@ export default function ReportDetailPage() {
         <div className="max-w-3xl mx-auto px-6 lg:px-10 py-14">
           {loading && <Skeleton />}
 
-          {!loading && error === 'fetch_error' && (
+          {!loading && !post && (
             <div className="text-center py-20">
-              <h2 className="text-xl font-bold text-gray-800 mb-3">تعذّر تحميل التقرير</h2>
+              <h2 className="text-xl font-bold text-gray-800 mb-3">عرض التقرير من المصدر</h2>
               <p className="text-gray-500 mb-8 font-light">
-                لم نتمكن من الوصول إلى المحتوى. يمكنك قراءة التقرير مباشرة على موقع إنسايت.
+                {error === 'fetch_error'
+                  ? 'تعذّر تحميل النسخة المضمنة مباشرة. يمكنك القراءة من المصدر أدناه.'
+                  : 'هذا التقرير غير متاح للاستخراج المباشر، لذلك نعرض النسخة الأصلية.'}
               </p>
-              <a
-                href={externalUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-primary inline-flex items-center gap-2"
-              >
-                اقرأ على إنسايت <ExternalArrow />
-              </a>
-            </div>
-          )}
-
-          {!loading && error === 'not_found' && (
-            <div className="text-center py-20">
-              <h2 className="text-xl font-bold text-gray-800 mb-3">التقرير غير متاح</h2>
-              <p className="text-gray-500 mb-8 font-light">تعذّر العثور على هذا التقرير داخل الموقع.</p>
-              <div className="flex items-center justify-center gap-4">
-                <button onClick={() => navigate(-1)} className="btn-light text-sm">
-                  رجوع
-                </button>
+              <div className="flex items-center justify-center gap-4 mb-8">
                 <a href={externalUrl} target="_blank" rel="noopener noreferrer" className="btn-primary text-sm">
                   افتح المصدر الأصلي
                 </a>
+                <button onClick={() => navigate(-1)} className="btn-light text-sm">
+                  رجوع
+                </button>
+              </div>
+              <div className="rounded-2xl overflow-hidden border border-gray-200 bg-white">
+                <iframe
+                  title={meta?.title ?? 'Insight report'}
+                  src={externalUrl}
+                  className="w-full min-h-[1200px]"
+                  loading="lazy"
+                />
               </div>
             </div>
           )}
