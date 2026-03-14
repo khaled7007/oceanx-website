@@ -5,7 +5,14 @@ import {
   REPORTS, ARTICLES, TAG_COLORS,
   REPORT_YEARS, ARTICLE_TOPICS,
 } from '../data/insight'
-import { isInsightDirectEntry, articleRoute, reportRoute } from '../utils/insightLinks'
+
+function articleHref(url, articleIndex) {
+  const m = url.match(/insight\.oceanx\.sa\/([^/]+)\/?$/)
+  if (!m) return null
+  const slug = m[1]
+  if (slug.startsWith('category') || slug.startsWith('tag')) return null
+  return `/insight/read/article/${articleIndex}`
+}
 
 /* ─── Helpers ──────────────────────────────────────────────────── */
 
@@ -23,15 +30,12 @@ function ExternalArrow() {
 
 /* ─── Featured report card (large) ────────────────────────────── */
 
-function FeaturedReport({ report, href, isInternal }) {
-  const MotionEl = isInternal ? motion(Link) : motion.a
-  const linkProps = isInternal
-    ? { to: href }
-    : { href: report.url, target: '_blank', rel: 'noopener noreferrer' }
-
+function FeaturedReport({ report }) {
   return (
-    <MotionEl
-      {...linkProps}
+    <motion.a
+      href={report.url}
+      target="_blank"
+      rel="noopener noreferrer"
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -99,21 +103,18 @@ function FeaturedReport({ report, href, isInternal }) {
           </span>
         </div>
       </div>
-    </MotionEl>
+    </motion.a>
   )
 }
 
 /* ─── Report card (grid) ───────────────────────────────────────── */
 
-function ReportCard({ report, index, href, isInternal }) {
-  const MotionEl = isInternal ? motion(Link) : motion.a
-  const linkProps = isInternal
-    ? { to: href }
-    : { href: report.url, target: '_blank', rel: 'noopener noreferrer' }
-
+function ReportCard({ report, index }) {
   return (
-    <MotionEl
-      {...linkProps}
+    <motion.a
+      href={report.url}
+      target="_blank"
+      rel="noopener noreferrer"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 12 }}
@@ -172,14 +173,14 @@ function ReportCard({ report, index, href, isInternal }) {
           </span>
         </div>
       </div>
-    </MotionEl>
+    </motion.a>
   )
 }
 
 /* ─── Article card ─────────────────────────────────────────────── */
 
 function ArticleCard({ article, index, articleIndex }) {
-  const internalHref = isInsightDirectEntry(article.url) ? articleRoute(articleIndex) : null
+  const internalHref = articleHref(article.url, articleIndex)
   const MotionEl = internalHref ? motion(Link) : motion.a
   const linkProps = internalHref
     ? { to: internalHref }
@@ -324,21 +325,16 @@ export default function InsightPage() {
   const [activeYear, setActiveYear] = useState(2025)
   const [activeTopic, setActiveTopic] = useState('الكل')
 
-  const reportsWithIndex = useMemo(
-    () => REPORTS.map((report, reportIndex) => ({ ...report, reportIndex })),
-    [],
-  )
+  const featuredReport = REPORTS.find(r => r.featured)
   const articlesWithIndex = useMemo(
     () => ARTICLES.map((article, articleIndex) => ({ ...article, articleIndex })),
     [],
   )
-
-  const featuredReport = reportsWithIndex.find(r => r.featured)
-  const latestArticles = articlesWithIndex.slice(0, 2)
+  const latestArticles = articlesWithIndex.filter(a => a.featured || true).slice(0, 2)
 
   const filteredReports = useMemo(
-    () => reportsWithIndex.filter(r => r.year === activeYear && !r.featured),
-    [activeYear, reportsWithIndex],
+    () => REPORTS.filter(r => r.year === activeYear && !r.featured),
+    [activeYear],
   )
 
   const filteredArticles = useMemo(
@@ -432,18 +428,12 @@ export default function InsightPage() {
           <div className="grid lg:grid-cols-3 gap-5">
             {/* Featured report takes 2 columns */}
             <div className="lg:col-span-2">
-              {featuredReport && (
-                <FeaturedReport
-                  report={featuredReport}
-                  href={reportRoute(featuredReport.reportIndex)}
-                  isInternal={isInsightDirectEntry(featuredReport.url)}
-                />
-              )}
+              {featuredReport && <FeaturedReport report={featuredReport} />}
             </div>
             {/* 2 latest articles */}
             <div className="flex flex-col gap-5">
               {latestArticles.map((a, i) => {
-                const internalHref = isInsightDirectEntry(a.url) ? articleRoute(a.articleIndex) : null
+                const internalHref = articleHref(a.url, a.articleIndex)
                 const MotionEl = internalHref ? motion(Link) : motion.a
                 const linkProps = internalHref
                   ? { to: internalHref }
@@ -584,13 +574,7 @@ export default function InsightPage() {
                       className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"
                     >
                       {filteredReports.map((r, i) => (
-                        <ReportCard
-                          key={r.reportIndex}
-                          report={r}
-                          index={i}
-                          href={reportRoute(r.reportIndex)}
-                          isInternal={isInsightDirectEntry(r.url)}
-                        />
+                        <ReportCard key={r.title} report={r} index={i} />
                       ))}
                     </motion.div>
                   </AnimatePresence>
