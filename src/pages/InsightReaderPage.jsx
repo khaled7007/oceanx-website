@@ -110,7 +110,7 @@ export default function InsightReaderPage({ forcedKind }) {
 
   return (
     <>
-      <div className="relative bg-brand-dark overflow-hidden pt-36 pb-12">
+      <div className="relative bg-brand-dark overflow-hidden pt-28 sm:pt-36 pb-10 sm:pb-12">
         <div
           className="absolute inset-0 opacity-30"
           style={{
@@ -158,7 +158,7 @@ export default function InsightReaderPage({ forcedKind }) {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.55, delay: 0.1 }}
-            className="text-3xl lg:text-4xl font-bold text-white leading-tight mb-4"
+            className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight mb-4"
           >
             {meta?.title ?? contentTypeLabel}
           </motion.h1>

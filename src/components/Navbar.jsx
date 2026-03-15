@@ -12,11 +12,16 @@ const NAV_LINKS = [
   { label: 'تواصل معنا', anchor: '#contact' },
 ]
 
+// Pages with dark hero sections that need a light navbar
+const DARK_HERO_ROUTES = ['/competencies', '/insight/read/', '/insight/article/', '/insight/report/']
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const { pathname } = useLocation()
   const isHome = pathname === '/'
+
+  const isDark = !scrolled && DARK_HERO_ROUTES.some((r) => pathname.startsWith(r))
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -40,6 +45,8 @@ export default function Navbar() {
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
         scrolled
           ? 'bg-white/96 backdrop-blur-lg shadow-[0_2px_24px_rgba(0,0,0,0.06)]'
+          : isDark
+          ? 'bg-brand-dark/30 backdrop-blur-sm'
           : 'bg-transparent'
       }`}
     >
@@ -61,6 +68,8 @@ export default function Navbar() {
             const cls = `relative text-sm font-medium transition-colors duration-200 no-underline group py-1 ${
               isActive
                 ? 'text-brand-blue'
+                : isDark
+                ? 'text-white/80 hover:text-white'
                 : 'text-gray-600 hover:text-brand-blue'
             }`
 
@@ -88,20 +97,29 @@ export default function Navbar() {
 
         {/* Desktop CTA */}
         <div className="hidden md:block">
-          <a href={anchorHref('#contact')} className="btn-primary text-sm py-2.5 px-5">
+          <a
+            href={anchorHref('#contact')}
+            className={`text-sm py-2.5 px-5 rounded-lg font-medium transition-all duration-200 ${
+              isDark
+                ? 'bg-white/15 text-white border border-white/25 hover:bg-white/25'
+                : 'btn-primary'
+            }`}
+          >
             ابدأ الآن
           </a>
         </div>
 
         {/* Mobile Hamburger */}
         <button
-          className="md:hidden w-10 h-10 rounded-lg flex flex-col items-center justify-center gap-[5px] hover:bg-gray-100 transition-colors"
+          className={`md:hidden w-10 h-10 rounded-lg flex flex-col items-center justify-center gap-[5px] transition-colors ${
+            isDark ? 'hover:bg-white/10' : 'hover:bg-gray-100'
+          }`}
           onClick={() => setMenuOpen((v) => !v)}
           aria-label="القائمة"
         >
-          <span className={`block w-5 h-px bg-gray-800 transition-all duration-300 origin-center ${menuOpen ? 'rotate-45 translate-y-[6px]' : ''}`} />
-          <span className={`block w-5 h-px bg-gray-800 transition-all duration-200 ${menuOpen ? 'opacity-0 scale-x-0' : ''}`} />
-          <span className={`block w-5 h-px bg-gray-800 transition-all duration-300 origin-center ${menuOpen ? '-rotate-45 -translate-y-[6px]' : ''}`} />
+          <span className={`block w-5 h-[1.5px] transition-all duration-300 origin-center ${isDark ? 'bg-white' : 'bg-gray-800'} ${menuOpen ? 'rotate-45 translate-y-[6px]' : ''}`} />
+          <span className={`block w-5 h-[1.5px] transition-all duration-200 ${isDark ? 'bg-white' : 'bg-gray-800'} ${menuOpen ? 'opacity-0 scale-x-0' : ''}`} />
+          <span className={`block w-5 h-[1.5px] transition-all duration-300 origin-center ${isDark ? 'bg-white' : 'bg-gray-800'} ${menuOpen ? '-rotate-45 -translate-y-[6px]' : ''}`} />
         </button>
       </nav>
 
