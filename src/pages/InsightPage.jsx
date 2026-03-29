@@ -1,416 +1,456 @@
-import { useState, useMemo } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   REPORTS, ARTICLES, TAG_COLORS,
   REPORT_YEARS, ARTICLE_TOPICS,
 } from '../data/insight'
 
-function articleHref(url, articleIndex) {
-  const m = url.match(/insight\.oceanx\.sa\/([^/]+)\/?$/)
-  if (!m) return null
-  const slug = m[1]
-  if (slug.startsWith('category') || slug.startsWith('tag')) return null
-  return `/insight/read/article/${articleIndex}`
+function ExternalArrow() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 13 13" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+      <path d="M3 10L10 3M6.5 3h3.5v3.5" />
+    </svg>
+  )
 }
-
-/* ─── Helpers ──────────────────────────────────────────────────── */
 
 function tagCls(tag) {
   return TAG_COLORS[tag] ?? 'bg-gray-100 text-gray-600 border-gray-200'
 }
 
-function ExternalArrow() {
+/* ── Featured strip ──────────────────────────────────── */
+function FeaturedStrip() {
+  const featured = REPORTS.find(r => r.featured)
+  const report2 = REPORTS.filter(r => !r.featured && r.image)[0]
+  const report3 = REPORTS.filter(r => !r.featured && r.image)[1]
+
   return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-      <path d="M3 11L11 3M6 3h5v5" />
-    </svg>
-  )
-}
+    <div className="bg-[#0a0c25] py-12">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="grid grid-cols-3 gap-4 mb-4">
+          {/* Blue CTA */}
+          <Link to="/insight#reports" className="bg-brand-blue rounded-xl p-8 flex flex-col justify-between min-h-[220px] no-underline group">
+            <span className="text-white/60 text-[11px] font-semibold tracking-widest uppercase">إنسايت</span>
+            <div>
+              <p className="text-white font-bold text-xl leading-snug mb-5">
+                اكتشف<br />أحدث<br />الإنسايت
+              </p>
+              <div className="w-9 h-9 rounded-full border border-white/30 flex items-center justify-center group-hover:border-white transition-colors">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round">
+                  <path d="M11 7H3M5 3L1 7l4 4" />
+                </svg>
+              </div>
+            </div>
+          </Link>
 
-/* ─── Featured report card (large) ────────────────────────────── */
+          {/* Report 2 */}
+          {report2 && (
+            <a href={report2.url} target="_blank" rel="noopener noreferrer" className="relative rounded-xl overflow-hidden no-underline group min-h-[220px]">
+              <img src={report2.image} alt={report2.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+              <div className="absolute bottom-0 p-5 z-10">
+                <span className="text-white/50 text-[10px] font-semibold tracking-widest uppercase block mb-1">تقرير</span>
+                <p className="text-white font-bold text-sm leading-snug">{report2.title}</p>
+              </div>
+            </a>
+          )}
 
-function FeaturedReport({ report }) {
-  return (
-    <motion.a
-      href={report.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.65 }}
-      className="group relative block rounded-2xl overflow-hidden no-underline"
-      style={{ minHeight: 380 }}
-    >
-      {/* Base gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-brand-navy via-[#1a2055] to-brand-blue" />
-
-      {/* Real photo — covers top half, fades into gradient */}
-      {report.image && (
-        <>
-          <img
-            src={report.image}
-            alt={report.title}
-            className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
-          />
-          {/* strong gradient overlay so text stays readable */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d1a] via-[#0d0d1acc] to-[#0d0d1a55]" />
-          <div className="absolute inset-0 bg-gradient-to-br from-brand-navy/70 to-transparent" />
-        </>
-      )}
-
-      {/* fallback mesh when no image */}
-      {!report.image && (
-        <>
-          <div
-            className="absolute inset-0 opacity-20"
-            style={{
-              backgroundImage:
-                'linear-gradient(rgba(255,255,255,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.07) 1px, transparent 1px)',
-              backgroundSize: '36px 36px',
-            }}
-          />
-          <div className="absolute top-8 left-8 w-32 h-32 rounded-full border border-white/10" />
-          <div className="absolute bottom-0 right-0 w-56 h-56 rounded-full border border-white/8 translate-x-16 translate-y-16" />
-        </>
-      )}
-
-      <div className="relative z-10 flex flex-col justify-end h-full p-8 lg:p-10" style={{ minHeight: 380 }}>
-        <div className="flex flex-wrap gap-2 mb-4">
-          <span className="text-xs text-brand-blue-light font-semibold tracking-widest uppercase">
-            تقرير مميز
-          </span>
-          {report.tags.slice(0, 2).map(t => (
-            <span key={t} className="text-xs bg-white/10 text-white/70 px-2.5 py-0.5 rounded-full border border-white/15">
-              {t}
-            </span>
-          ))}
+          {/* Report 3 */}
+          {report3 && (
+            <a href={report3.url} target="_blank" rel="noopener noreferrer" className="relative rounded-xl overflow-hidden no-underline group min-h-[220px]">
+              <img src={report3.image} alt={report3.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+              <div className="absolute bottom-0 p-5 z-10">
+                <span className="text-white/50 text-[10px] font-semibold tracking-widest uppercase block mb-1">تقرير</span>
+                <p className="text-white font-bold text-sm leading-snug">{report3.title}</p>
+              </div>
+            </a>
+          )}
         </div>
 
-        <h3 className="text-xl lg:text-2xl font-bold text-white leading-snug mb-3 group-hover:text-brand-blue-light transition-colors duration-200">
-          {report.title}
-        </h3>
+        {/* Separator */}
+        <div className="border-t border-white/8 pt-4">
+          <div className="grid grid-cols-4 gap-3">
+            {/* 3 small articles */}
+            {ARTICLES.slice(0, 3).map((a, i) => (
+              <a
+                key={a.title}
+                href={a.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex gap-3 items-start no-underline group"
+              >
+                <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-brand-navy">
+                  {a.image && <img src={a.image} alt={a.title} className="w-full h-full object-cover" />}
+                </div>
+                <p className="text-white/60 text-[12px] font-medium leading-snug group-hover:text-white transition-colors line-clamp-3">
+                  {a.title}
+                </p>
+              </a>
+            ))}
 
-        <p className="text-white/60 text-sm font-light leading-relaxed mb-5 line-clamp-2">
-          {report.excerpt}
-        </p>
-
-        <div className="flex items-center justify-between">
-          <span className="text-white/40 text-xs">{report.date}</span>
-          <span className="inline-flex items-center gap-1.5 text-brand-blue-light text-sm font-medium group-hover:gap-2.5 transition-all duration-200">
-            اقرأ التقرير <ExternalArrow />
-          </span>
-        </div>
-      </div>
-    </motion.a>
-  )
-}
-
-/* ─── Report card (grid) ───────────────────────────────────────── */
-
-function ReportCard({ report, index }) {
-  return (
-    <motion.a
-      href={report.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 12 }}
-      transition={{ duration: 0.4, delay: index * 0.05 }}
-      whileHover={{ y: -4 }}
-      className="group block bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:border-brand-blue/20 transition-all duration-300 overflow-hidden no-underline"
-    >
-      {/* Thumbnail */}
-      <div className="relative h-40 overflow-hidden">
-        {report.image ? (
-          <>
-            <img
-              src={report.image}
-              alt={report.title}
-              className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
-          </>
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-brand-navy via-[#1a2055] to-brand-blue flex items-center justify-center">
-            <div className="w-12 h-12 rounded-full border border-white/20 flex items-center justify-center">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5">
-                <path d="M4 4h12v12H4zM4 8h12M8 8v8" />
-              </svg>
+            {/* Watch / Listen / Inspired */}
+            <div className="bg-white rounded-xl p-4 flex flex-col justify-between">
+              <p className="text-gray-900 font-bold text-[13px] leading-snug">
+                Watch,<br />Listen &<br />get inspired
+              </p>
+              <Link to="/insight#podcast" className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center hover:border-brand-blue hover:text-brand-blue transition-colors no-underline text-gray-400 self-start mt-2">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                  <path d="M9 6H3M5 4L3 6l2 2" />
+                </svg>
+              </Link>
             </div>
           </div>
-        )}
-        {/* Year badge */}
-        <span className="absolute top-3 right-3 text-[10px] font-bold bg-brand-blue text-white px-2 py-0.5 rounded-full">
-          {report.year}
-        </span>
+        </div>
       </div>
+    </div>
+  )
+}
 
-      <div className="p-5">
-        {/* Tags */}
-        <div className="flex flex-wrap gap-1.5 mb-3">
-          {report.tags.slice(0, 2).map(t => (
-            <span key={t} className={`text-[11px] font-medium px-2.5 py-0.5 rounded-full border ${tagCls(t)}`}>
-              {t}
-            </span>
+/* ── Trending Topics ──────────────────────────────────── */
+function TrendingTopics() {
+  const [activeTopic, setActiveTopic] = useState('الكل')
+  const topics = ['الكل', ...ARTICLE_TOPICS.filter(t => t !== 'الكل').slice(0, 4)]
+
+  const filtered = activeTopic === 'الكل'
+    ? ARTICLES
+    : ARTICLES.filter(a => a.tag === activeTopic)
+
+  const featuredArticle = filtered[0]
+  const gridArticles = filtered.slice(1, 4)
+
+  return (
+    <div className="py-14 bg-white">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        {/* Header + filter */}
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-xl font-bold text-gray-900">Trending Topics</h2>
+          <div className="flex items-center gap-3">
+            {topics.map(t => (
+              <button
+                key={t}
+                onClick={() => setActiveTopic(t)}
+                className={`text-[12px] font-semibold px-3 py-1.5 rounded-full border transition-all duration-150 ${
+                  activeTopic === t
+                    ? 'bg-brand-blue text-white border-brand-blue'
+                    : 'text-gray-500 border-gray-200 hover:border-brand-blue/40'
+                }`}
+              >
+                {t}
+              </button>
+            ))}
+            <div className="flex gap-2 mr-2">
+              <button className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-blue hover:text-brand-blue transition-colors">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M2 6h8M6 2l4 4-4 4" /></svg>
+              </button>
+              <button className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-blue hover:text-brand-blue transition-colors">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M10 6H2M6 2L2 6l4 4" /></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Featured dark article card */}
+        {featuredArticle && (
+          <a
+            href={featuredArticle.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block rounded-2xl overflow-hidden mb-6 no-underline group"
+            style={{ background: 'linear-gradient(135deg, #06081e 0%, #0f1235 100%)' }}
+          >
+            <div className="grid lg:grid-cols-[1fr_auto] items-center gap-6 p-8 lg:p-10">
+              <div>
+                <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${tagCls(featuredArticle.tag)} inline-block mb-3`}>
+                  {featuredArticle.tag}
+                </span>
+                <h3 className="text-white font-bold text-xl lg:text-2xl leading-snug mb-2 group-hover:text-brand-blue-light transition-colors">
+                  {featuredArticle.title}
+                </h3>
+                <span className="text-white/40 text-xs">{featuredArticle.date}</span>
+              </div>
+              {featuredArticle.image && (
+                <div className="w-48 h-32 rounded-xl overflow-hidden flex-shrink-0 hidden lg:block">
+                  <img src={featuredArticle.image} alt={featuredArticle.title} className="w-full h-full object-cover" />
+                </div>
+              )}
+            </div>
+          </a>
+        )}
+
+        {/* 3-col article grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {gridArticles.map((a, i) => (
+            <motion.a
+              key={a.title}
+              href={a.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.35, delay: i * 0.06 }}
+              className="group block bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-lg hover:border-brand-blue/15 transition-all duration-300 no-underline"
+            >
+              <div className="h-36 overflow-hidden bg-gray-100">
+                {a.image
+                  ? <img src={a.image} alt={a.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  : <div className="w-full h-full bg-gradient-to-br from-brand-navy to-brand-blue" />
+                }
+              </div>
+              <div className="p-5">
+                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${tagCls(a.tag)} inline-block mb-2`}>{a.tag}</span>
+                <h4 className="text-gray-900 font-bold text-[13px] leading-snug mb-3 group-hover:text-brand-blue transition-colors line-clamp-2">{a.title}</h4>
+                <div className="flex items-center justify-between pt-3 border-t border-gray-50">
+                  <span className="text-gray-400 text-[11px]">{a.date}</span>
+                  <span className="text-brand-blue/60 group-hover:text-brand-blue transition-colors">
+                    <ExternalArrow />
+                  </span>
+                </div>
+              </div>
+            </motion.a>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+/* ── Reports section ──────────────────────────────────── */
+function ReportsSection() {
+  const [activeYear, setActiveYear] = useState(2025)
+  const filtered = REPORTS.filter(r => r.year === activeYear)
+
+  return (
+    <div id="reports" className="py-14 bg-gray-50 border-t border-gray-100">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        {/* Header */}
+        <div className="flex items-end justify-between mb-8">
+          <div>
+            <h2 className="text-2xl font-bold text-gray-900">أحدث التقارير البحثية</h2>
+          </div>
+          <div className="flex items-center gap-3">
+            {/* Year filter */}
+            <div className="flex gap-2">
+              {REPORT_YEARS.map(yr => (
+                <button
+                  key={yr}
+                  onClick={() => setActiveYear(yr)}
+                  className={`text-[12px] font-semibold px-3 py-1.5 rounded-full border transition-all ${
+                    activeYear === yr
+                      ? 'bg-brand-blue text-white border-brand-blue'
+                      : 'text-gray-500 border-gray-200 hover:border-brand-blue/40'
+                  }`}
+                >
+                  {yr}
+                </button>
+              ))}
+            </div>
+            <div className="flex gap-2">
+              <button className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-blue hover:text-brand-blue transition-colors">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M2 6h8M6 2l4 4-4 4" /></svg>
+              </button>
+              <button className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-blue hover:text-brand-blue transition-colors">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M10 6H2M6 2L2 6l4 4" /></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* 4-col grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {filtered.map((r, i) => (
+            <a
+              key={r.title}
+              href={r.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group block bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg hover:border-brand-blue/15 transition-all duration-300 no-underline"
+            >
+              <div className="h-36 overflow-hidden bg-gray-100">
+                {r.image
+                  ? <img src={r.image} alt={r.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  : <div className="w-full h-full bg-gradient-to-br from-brand-navy to-brand-blue" />
+                }
+              </div>
+              <div className="p-4">
+                <p className="text-gray-800 font-bold text-[13px] leading-snug mb-3 group-hover:text-brand-blue transition-colors line-clamp-2">{r.title}</p>
+                <div className="flex items-center justify-between">
+                  <span className="text-gray-400 text-[11px]">{r.date}</span>
+                  <span className="text-brand-blue text-[11px] font-semibold flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    اقرأ المزيد <ExternalArrow />
+                  </span>
+                </div>
+              </div>
+            </a>
           ))}
         </div>
 
-        <h3 className="text-gray-900 font-bold text-[15px] leading-snug mb-2 group-hover:text-brand-blue transition-colors duration-200 line-clamp-2">
-          {report.title}
-        </h3>
-
-        <p className="text-gray-500 text-[13px] font-light leading-relaxed line-clamp-2 mb-4">
-          {report.excerpt}
-        </p>
-
-        <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-          <span className="text-gray-400 text-xs">{report.date}</span>
-          <span className="text-brand-blue text-xs font-medium inline-flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            اقرأ التقرير <ExternalArrow />
-          </span>
+        <div className="text-center mt-8">
+          <a href="https://insight.oceanx.sa/reports/" target="_blank" rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-brand-blue no-underline transition-colors font-medium border border-gray-200 hover:border-brand-blue/30 px-5 py-2.5 rounded-lg">
+            عرض جميع التقارير <ExternalArrow />
+          </a>
         </div>
       </div>
-    </motion.a>
+    </div>
   )
 }
 
-/* ─── Article card ─────────────────────────────────────────────── */
-
-function ArticleCard({ article, index, articleIndex }) {
-  const internalHref = articleHref(article.url, articleIndex)
-  const MotionEl = internalHref ? motion(Link) : motion.a
-  const linkProps = internalHref
-    ? { to: internalHref }
-    : { href: article.url, target: '_blank', rel: 'noopener noreferrer' }
-
-  return (
-    <MotionEl
-      {...linkProps}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 12 }}
-      transition={{ duration: 0.4, delay: index * 0.04 }}
-      whileHover={{ y: -4 }}
-      className="group flex flex-col bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:border-brand-blue/20 transition-all duration-300 no-underline overflow-hidden"
-    >
-      {/* Thumbnail */}
-      <div className="relative h-36 overflow-hidden flex-shrink-0">
-        {article.image ? (
-          <>
-            <img
-              src={article.image}
-              alt={article.title}
-              className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
-          </>
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-brand-blue via-brand-blue-light to-[#818DE5] flex items-center justify-center">
-            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1.5">
-              <path d="M6 6h16v16H6zM6 11h16M10 11v11" />
-            </svg>
-          </div>
-        )}
-        {/* Tag pill overlay */}
-        <span className={`absolute bottom-2.5 right-2.5 text-[10px] font-semibold px-2 py-0.5 rounded-full border backdrop-blur-sm ${tagCls(article.tag)}`}>
-          {article.tag}
-        </span>
-      </div>
-
-      <div className="p-5 flex flex-col flex-1">
-        <h3 className="text-gray-900 font-bold text-[15px] leading-snug flex-1 mb-4 group-hover:text-brand-blue transition-colors duration-200 line-clamp-3">
-          {article.title}
-        </h3>
-
-        <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-50">
-          <span className="text-gray-400 text-xs">أوشن إكس · {article.date}</span>
-          <span className="text-brand-blue/70 group-hover:text-brand-blue transition-colors">
-            <ExternalArrow />
-          </span>
-        </div>
-      </div>
-    </MotionEl>
-  )
-}
-
-/* ─── Podcast section ──────────────────────────────────────────── */
-
+/* ── Podcast section ──────────────────────────────────── */
 function PodcastSection() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 24 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="max-w-3xl mx-auto"
-    >
-      {/* Main card */}
-      <div className="relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#1a0533] via-[#2d1060] to-[#1a1a3e] p-10 lg:p-14 text-center mb-8">
-        <div
-          className="absolute inset-0 opacity-15"
-          style={{
-            backgroundImage: 'radial-gradient(circle at 25% 25%, rgba(129,141,229,0.4) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(47,72,245,0.3) 0%, transparent 50%)',
-          }}
-        />
-        {/* Podcast image */}
-        <div className="relative z-10">
-          <div className="w-28 h-28 rounded-2xl mx-auto mb-6 overflow-hidden border-2 border-white/20 shadow-2xl">
-            <img
-              src="https://insight.oceanx.sa/wp-content/uploads/2022/10/72-1-scaled.jpg"
-              alt="بودكاست أوشن إكس إنسايت"
-              className="w-full h-full object-cover"
-            />
+    <div id="podcast" className="py-14 bg-white border-t border-gray-100">
+      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="grid lg:grid-cols-[1fr_1fr] gap-6">
+          {/* Popular & Trending */}
+          <div className="bg-brand-blue rounded-2xl p-8 text-white flex flex-col justify-between min-h-[220px]">
+            <div>
+              <span className="text-white/60 text-[11px] font-semibold tracking-widest uppercase block mb-3">Popular & Trending</span>
+              <h3 className="text-xl font-bold leading-snug">بودكاست أوشن إكس إنسايت</h3>
+            </div>
+            <a
+              href="https://insight.oceanx.sa/بودكاست-2/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-outline text-[13px] self-start mt-6 no-underline"
+            >
+              استمع الآن
+            </a>
           </div>
-          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/70 text-xs font-medium px-3 py-1.5 rounded-full mb-5">
-            <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
-            بودكاست
+
+          {/* Platform cards */}
+          <div className="grid grid-cols-2 gap-4">
+            {[
+              { name: 'بودكاست أوشن إكس', sub: 'الإدارة والأعمال', href: 'https://insight.oceanx.sa/بودكاست-2/' },
+              { name: 'أوشن إكس تتحدث', sub: 'الاستشارات والتطوير', href: 'https://insight.oceanx.sa/بودكاست-2/' },
+            ].map(p => (
+              <a
+                key={p.name}
+                href={p.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-white border border-gray-100 rounded-xl p-5 hover:shadow-md hover:border-brand-blue/20 transition-all no-underline group"
+              >
+                <div className="w-10 h-10 rounded-xl bg-brand-blue/10 flex items-center justify-center mb-3">
+                  <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="#2f48f5" strokeWidth="1.5">
+                    <path d="M9 2a5 5 0 0 0-5 5v3a5 5 0 0 0 10 0V7a5 5 0 0 0-5-5z" />
+                    <path d="M3 9v1a6 6 0 0 0 12 0V9M9 16v2M6 18h6" strokeLinecap="round" />
+                  </svg>
+                </div>
+                <p className="text-gray-900 font-bold text-[13px] leading-snug mb-0.5 group-hover:text-brand-blue transition-colors">{p.name}</p>
+                <p className="text-gray-400 text-[11px]">{p.sub}</p>
+              </a>
+            ))}
           </div>
-          <h3 className="text-2xl lg:text-3xl font-bold text-white mb-3">
-            بودكاست أوشن إكس إنسايت
-          </h3>
-          <p className="text-white/60 font-light leading-relaxed max-w-lg mx-auto mb-8">
-            نقاشات متخصصة في الشأن الإداري والاستشاري والمالي وعالم الأعمال، يستضيف فيها خبراء
-            ومتخصصين من مختلف القطاعات بهدف تعميق الحوار المهني.
-          </p>
-          <a
-            href="https://insight.oceanx.sa/بودكاست-2/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-primary inline-flex gap-2"
-          >
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M6 3.5L12 8L6 12.5V3.5Z" />
-              <circle cx="8" cy="8" r="7" stroke="currentColor" strokeWidth="1.5" fill="none" />
-            </svg>
-            استمع إلى البودكاست
-          </a>
         </div>
       </div>
-
-      {/* Platform links */}
-      <div className="grid grid-cols-3 gap-4">
-        {[
-          { name: 'Spotify', icon: '🎵' },
-          { name: 'Apple Podcasts', icon: '🎙️' },
-          { name: 'Google Podcasts', icon: '📻' },
-        ].map((p) => (
-          <a
-            key={p.name}
-            href="https://insight.oceanx.sa/بودكاست-2/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2.5 bg-white border border-gray-200 rounded-xl py-3.5 px-4 text-sm font-medium text-gray-700 hover:border-brand-blue/30 hover:text-brand-blue hover:shadow-md transition-all duration-200 no-underline"
-          >
-            <span>{p.icon}</span>
-            {p.name}
-          </a>
-        ))}
-      </div>
-    </motion.div>
+    </div>
   )
 }
 
-/* ─── Main Page ─────────────────────────────────────────────────── */
+/* ── Membership CTA ───────────────────────────────────── */
+function MembershipCTA() {
+  return (
+    <div
+      className="py-16"
+      style={{ background: 'linear-gradient(135deg, #06081e 0%, #0c1030 100%)' }}
+    >
+      <div className="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div>
+          <p className="text-white/40 text-xs font-semibold tracking-widest uppercase mb-2">عضوية إنسايت</p>
+          <h3 className="text-white font-bold text-lg lg:text-xl">
+            للمحتوى الحصري والمحدّث — احصل على عضوية{' '}
+            <span className="italic text-brand-blue-light">OCEANX INSIGHTS</span>
+          </h3>
+        </div>
+        <div className="flex gap-3 flex-shrink-0">
+          <input
+            type="email"
+            placeholder="بريدك الإلكتروني"
+            className="bg-white/8 border border-white/15 text-white placeholder-white/30 text-sm rounded-lg px-4 py-2.5 outline-none focus:border-brand-blue/60 w-52"
+          />
+          <button className="btn-primary text-sm px-5">اشترك</button>
+        </div>
+      </div>
+    </div>
+  )
+}
 
-const TABS = [
-  { id: 'reports', label: 'التقارير', count: REPORTS.length },
-  { id: 'articles', label: 'المقالات', count: ARTICLES.length },
-  { id: 'podcast', label: 'البودكاست', count: null },
-]
-
+/* ── Main page ────────────────────────────────────────── */
 export default function InsightPage() {
-  const [activeTab, setActiveTab] = useState('reports')
-  const [activeYear, setActiveYear] = useState(2025)
-  const [activeTopic, setActiveTopic] = useState('الكل')
-
-  const featuredReport = REPORTS.find(r => r.featured)
-  const articlesWithIndex = useMemo(
-    () => ARTICLES.map((article, articleIndex) => ({ ...article, articleIndex })),
-    [],
-  )
-  const latestArticles = articlesWithIndex.filter(a => a.featured || true).slice(0, 2)
-
-  const filteredReports = useMemo(
-    () => REPORTS.filter(r => r.year === activeYear && !r.featured),
-    [activeYear],
-  )
-
-  const filteredArticles = useMemo(
-    () => activeTopic === 'الكل'
-      ? articlesWithIndex
-      : articlesWithIndex.filter(a => a.tag === activeTopic),
-    [activeTopic, articlesWithIndex],
-  )
-
   return (
     <>
-      {/* ── Page Hero ─────────────────────────────────── */}
-      <div className="relative bg-brand-dark overflow-hidden pt-40 pb-16">
+      {/* ── Dark Hero ──────────────────────────────── */}
+      <div
+        className="relative overflow-hidden pt-40 pb-14"
+        style={{ background: 'linear-gradient(160deg, #07091f 0%, #0a0c28 60%, #080618 100%)' }}
+      >
+        <div className="absolute inset-0 ocean-mesh opacity-25 pointer-events-none" />
         <div
-          className="absolute inset-0 opacity-35"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(47,72,245,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(47,72,245,0.08) 1px, transparent 1px)',
-            backgroundSize: '44px 44px',
-          }}
-        />
-        <div
-          className="absolute top-0 left-0 right-0 h-px"
-          style={{ background: 'linear-gradient(90deg, transparent, rgba(47,72,245,0.4), transparent)' }}
+          className="absolute -top-32 -right-32 w-[500px] h-[500px] pointer-events-none"
+          style={{ background: 'radial-gradient(circle, rgba(47,72,245,0.1) 0%, transparent 65%)' }}
         />
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
-          <div className="max-w-2xl">
-            <motion.div
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="flex items-center gap-3 mb-5"
-            >
-              <img src="/logo.png" alt="OceanX" className="h-8 w-auto brightness-0 invert opacity-80" />
-              <span className="text-white/40 text-sm">×</span>
-              <span className="text-brand-blue-light text-sm font-semibold tracking-widest uppercase">
-                Insight
-              </span>
-            </motion.div>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex items-center gap-2 text-xs text-white/30 mb-10"
+          >
+            <Link to="/" className="hover:text-white/50 no-underline transition-colors">Home</Link>
+            <span>/</span>
+            <span className="text-white/50">Insights</span>
+          </motion.div>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 22 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.08 }}
-              className="text-4xl lg:text-5xl font-bold text-white leading-tight mb-4"
-            >
-              معرفة تُحدث{' '}
-              <span className="text-brand-blue">فارقًا</span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.16 }}
-              className="text-gray-400 text-lg font-light leading-relaxed mb-8"
-            >
-              تقارير بحثية، مقالات تحليلية، وحوارات متخصصة تُلقي الضوء على أعمق التحولات
-              في الاقتصاد السعودي وبيئة الأعمال الإقليمية.
-            </motion.p>
+          <div className="grid lg:grid-cols-2 gap-8 items-end">
+            <div>
+              <motion.h1
+                initial={{ opacity: 0, y: 32 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
+                className="text-6xl lg:text-8xl font-black text-white italic leading-none mb-5"
+              >
+                Insights
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.22 }}
+                className="text-white/50 text-[13px] font-light leading-relaxed max-w-sm mb-8"
+              >
+                استكشف محيطًا من الأفكار والرؤى. تقارير متخصصة تُرصد أبرز توجهات الأعمال والثقافة والمجتمع، داخل اشتراك خاص أو عام.
+              </motion.p>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.4, delay: 0.35 }}
+              >
+                <a
+                  href="https://insight.oceanx.sa"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-outline text-[13px] no-underline"
+                >
+                  SUBSCRIBE NOW
+                </a>
+              </motion.div>
+            </div>
 
             {/* Quick stats */}
             <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.24 }}
-              className="flex flex-wrap gap-6"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="hidden lg:flex justify-end gap-10"
             >
               {[
-                { value: '+41', label: 'تقرير بحثي' },
-                { value: '+73', label: 'مقالة تحليلية' },
-                { value: '٢٠١٨', label: 'منذ عام' },
+                { v: '+41', l: 'تقرير بحثي' },
+                { v: '+73', l: 'مقالة تحليلية' },
+                { v: '٢٠١٨', l: 'منذ عام' },
               ].map(s => (
-                <div key={s.label}>
-                  <div className="text-2xl font-bold text-brand-blue">{s.value}</div>
-                  <div className="text-gray-500 text-xs mt-0.5 font-light">{s.label}</div>
+                <div key={s.l} className="text-center">
+                  <div className="text-3xl font-bold text-brand-blue">{s.v}</div>
+                  <div className="text-white/30 text-[11px] mt-1">{s.l}</div>
                 </div>
               ))}
             </motion.div>
@@ -418,252 +458,20 @@ export default function InsightPage() {
         </div>
       </div>
 
-      {/* ── Featured strip ────────────────────────────── */}
-      <div className="bg-gray-50/70 py-14 border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
-          <div className="flex items-center gap-3 mb-8">
-            <span className="section-label">أحدث المحتوى</span>
-            <div className="h-px flex-1 bg-gray-200" />
-          </div>
-          <div className="grid lg:grid-cols-3 gap-5">
-            {/* Featured report takes 2 columns */}
-            <div className="lg:col-span-2">
-              {featuredReport && <FeaturedReport report={featuredReport} />}
-            </div>
-            {/* 2 latest articles */}
-            <div className="flex flex-col gap-5">
-              {latestArticles.map((a, i) => {
-                const internalHref = articleHref(a.url, a.articleIndex)
-                const MotionEl = internalHref ? motion(Link) : motion.a
-                const linkProps = internalHref
-                  ? { to: internalHref }
-                  : { href: a.url, target: '_blank', rel: 'noopener noreferrer' }
-                return (
-                <MotionEl
-                  key={a.articleIndex}
-                  {...linkProps}
-                  initial={{ opacity: 0, x: -16 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: 0.1 * i }}
-                  whileHover={{ x: -4 }}
-                  className="group flex-1 flex bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:border-brand-blue/20 transition-all duration-300 no-underline overflow-hidden"
-                >
-                  {/* Thumbnail */}
-                  <div className="relative w-28 flex-shrink-0 overflow-hidden">
-                    {a.image ? (
-                      <>
-                        <img
-                          src={a.image}
-                          alt={a.title}
-                          className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-l from-white/10 to-transparent" />
-                      </>
-                    ) : (
-                      <div className="absolute inset-0 bg-gradient-to-br from-brand-blue/80 to-brand-blue-light/60" />
-                    )}
-                  </div>
-                  {/* Content */}
-                  <div className="flex flex-col flex-1 p-5">
-                    <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full border w-fit mb-2.5 ${tagCls(a.tag)}`}>
-                      {a.tag}
-                    </span>
-                    <h4 className="text-gray-900 font-bold text-sm leading-snug flex-1 group-hover:text-brand-blue transition-colors duration-200 mb-3 line-clamp-3">
-                      {a.title}
-                    </h4>
-                    <div className="flex items-center justify-between pt-3 border-t border-gray-50">
-                      <span className="text-gray-400 text-xs">{a.date}</span>
-                      <span className="text-brand-blue/60 group-hover:text-brand-blue transition-colors">
-                        <ExternalArrow />
-                      </span>
-                    </div>
-                  </div>
-                </MotionEl>
-                )
-              })}
-            </div>
-          </div>
-        </div>
-      </div>
+      {/* ── Featured Strip ──────────────────────────── */}
+      <FeaturedStrip />
 
-      {/* ── Main content tabs ─────────────────────────── */}
-      <div className="bg-white min-h-screen">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10 py-14">
+      {/* ── Trending Topics ─────────────────────────── */}
+      <TrendingTopics />
 
-          {/* Tab nav */}
-          <div className="flex items-center gap-1 mb-10 border-b border-gray-100 pb-0">
-            {TABS.map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`relative px-5 py-3 text-sm font-semibold transition-colors duration-200 whitespace-nowrap ${
-                  activeTab === tab.id
-                    ? 'text-brand-blue'
-                    : 'text-gray-500 hover:text-gray-800'
-                }`}
-              >
-                {tab.label}
-                {tab.count && (
-                  <span className={`mr-1.5 text-xs px-1.5 py-0.5 rounded-full ${
-                    activeTab === tab.id ? 'bg-brand-blue/10 text-brand-blue' : 'bg-gray-100 text-gray-500'
-                  }`}>
-                    {tab.count}
-                  </span>
-                )}
-                {activeTab === tab.id && (
-                  <motion.div
-                    layoutId="tab-underline"
-                    className="absolute bottom-0 inset-x-0 h-0.5 bg-brand-blue rounded-full"
-                  />
-                )}
-              </button>
-            ))}
-            {/* Link to full site */}
-            <div className="mr-auto">
-              <a
-                href="https://insight.oceanx.sa"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-xs text-gray-400 hover:text-brand-blue transition-colors no-underline font-medium"
-              >
-                الموقع الكامل <ExternalArrow />
-              </a>
-            </div>
-          </div>
+      {/* ── Reports ────────────────────────────────── */}
+      <ReportsSection />
 
-          <AnimatePresence mode="wait">
-            {/* ── REPORTS TAB ──────────────────────────── */}
-            {activeTab === 'reports' && (
-              <motion.div
-                key="reports"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.3 }}
-              >
-                {/* Year filter */}
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {REPORT_YEARS.map(yr => (
-                    <button
-                      key={yr}
-                      onClick={() => setActiveYear(yr)}
-                      className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-200 ${
-                        activeYear === yr
-                          ? 'bg-brand-blue text-white border-brand-blue shadow-md shadow-brand-blue/25'
-                          : 'bg-white text-gray-600 border-gray-200 hover:border-brand-blue/40 hover:text-brand-blue'
-                      }`}
-                    >
-                      {yr}
-                    </button>
-                  ))}
-                </div>
+      {/* ── Podcast ────────────────────────────────── */}
+      <PodcastSection />
 
-                {filteredReports.length === 0 ? (
-                  <p className="text-gray-400 text-center py-16 font-light">
-                    لا توجد تقارير لهذا العام بعد.
-                  </p>
-                ) : (
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={activeYear}
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                      className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5"
-                    >
-                      {filteredReports.map((r, i) => (
-                        <ReportCard key={r.title} report={r} index={i} />
-                      ))}
-                    </motion.div>
-                  </AnimatePresence>
-                )}
-
-                <div className="mt-10 text-center">
-                  <a
-                    href="https://insight.oceanx.sa/reports/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-light text-sm inline-flex items-center gap-2"
-                  >
-                    عرض جميع التقارير
-                    <ExternalArrow />
-                  </a>
-                </div>
-              </motion.div>
-            )}
-
-            {/* ── ARTICLES TAB ─────────────────────────── */}
-            {activeTab === 'articles' && (
-              <motion.div
-                key="articles"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.3 }}
-              >
-                {/* Topic filter */}
-                <div className="flex flex-wrap gap-2 mb-8">
-                  {ARTICLE_TOPICS.map(t => (
-                    <button
-                      key={t}
-                      onClick={() => setActiveTopic(t)}
-                      className={`px-4 py-1.5 rounded-full text-sm font-medium border transition-all duration-200 ${
-                        activeTopic === t
-                          ? 'bg-brand-blue text-white border-brand-blue shadow-md shadow-brand-blue/25'
-                          : 'bg-white text-gray-600 border-gray-200 hover:border-brand-blue/40 hover:text-brand-blue'
-                      }`}
-                    >
-                      {t}
-                    </button>
-                  ))}
-                </div>
-
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={activeTopic}
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
-                  >
-                    {filteredArticles.map((a, i) => (
-                      <ArticleCard key={a.articleIndex} article={a} index={i} articleIndex={a.articleIndex} />
-                    ))}
-                  </motion.div>
-                </AnimatePresence>
-
-                <div className="mt-10 text-center">
-                  <a
-                    href="https://insight.oceanx.sa/articles/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-light text-sm inline-flex items-center gap-2"
-                  >
-                    عرض جميع المقالات
-                    <ExternalArrow />
-                  </a>
-                </div>
-              </motion.div>
-            )}
-
-            {/* ── PODCAST TAB ──────────────────────────── */}
-            {activeTab === 'podcast' && (
-              <motion.div
-                key="podcast"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.3 }}
-              >
-                <PodcastSection />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
+      {/* ── Membership CTA ──────────────────────────── */}
+      <MembershipCTA />
     </>
   )
 }

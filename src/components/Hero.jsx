@@ -1,206 +1,220 @@
+import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { REPORTS, ARTICLES } from '../data/insight'
 
-/* ── Orbital visualization ──────────────────────────────── */
-function OrbitalVisual() {
+/* ── Content grid cards ─────────────────────────────────── */
+function GridCard({ children, className = '', delay = 0 }) {
   return (
-    <div className="relative w-full max-w-[540px] aspect-square mx-auto select-none pointer-events-none">
-      {/* Ambient glow */}
-      <div
-        className="absolute inset-[20%] rounded-full"
-        style={{
-          background: 'radial-gradient(circle, rgba(47,72,245,0.18) 0%, transparent 70%)',
-          filter: 'blur(52px)',
-        }}
-      />
-
-      {/* Outer ring — slow clockwise, 2 orbit dots */}
-      <motion.div
-        animate={{ rotate: 360 }}
-        transition={{ duration: 90, repeat: Infinity, ease: 'linear' }}
-        className="absolute inset-[4%] rounded-full"
-        style={{ border: '1px solid rgba(47,72,245,0.1)', borderTopColor: 'rgba(47,72,245,0.44)' }}
-      >
-        <div
-          className="absolute -top-[6px] left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-brand-blue"
-          style={{ boxShadow: '0 0 0 3px white, 0 0 0 5px rgba(47,72,245,0.22)' }}
-        />
-        <div
-          className="absolute -bottom-[6px] left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-brand-blue-light"
-          style={{ boxShadow: '0 0 0 3px white, 0 0 0 5px rgba(129,141,229,0.22)' }}
-        />
-      </motion.div>
-
-      {/* Middle ring — dashed, counter-clockwise */}
-      <motion.div
-        animate={{ rotate: -360 }}
-        transition={{ duration: 62, repeat: Infinity, ease: 'linear' }}
-        className="absolute inset-[22%] rounded-full"
-        style={{ border: '1.5px dashed rgba(47,72,245,0.18)' }}
-      >
-        <div
-          className="absolute -top-[5px] left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-brand-blue-light"
-          style={{ boxShadow: '0 0 0 2.5px white, 0 0 0 4px rgba(129,141,229,0.2)' }}
-        />
-      </motion.div>
-
-      {/* Inner static ring */}
-      <div
-        className="absolute inset-[38%] rounded-full border border-brand-blue/12"
-        style={{ background: 'rgba(47,72,245,0.04)' }}
-      />
-
-      {/* Centre logo */}
-      <div className="absolute inset-[44%] rounded-full bg-white shadow-xl border border-gray-100 flex items-center justify-center">
-        <img src="/logo.png" alt="OceanX" className="w-[80%] h-auto object-contain" />
-      </div>
-
-      {/* Floating stat cards */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 1.3, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute top-[3%] right-[5%] bg-white rounded-2xl shadow-xl border border-gray-100 px-4 py-3"
-      >
-        <div className="text-[22px] font-bold text-brand-blue leading-none">+100</div>
-        <div className="text-gray-500 text-[11px] mt-1 font-medium">مشروع منجز</div>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 1.65, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute bottom-[7%] left-[5%] bg-white rounded-2xl shadow-xl border border-gray-100 px-4 py-3"
-      >
-        <div className="text-[22px] font-bold text-brand-blue leading-none">+30</div>
-        <div className="text-gray-500 text-[11px] mt-1 font-medium">عميل موثوق</div>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ delay: 2.0, duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute top-[44%] left-[3%] -translate-y-1/2 bg-brand-blue rounded-2xl shadow-xl px-4 py-3"
-      >
-        <div className="text-[22px] font-bold text-white leading-none">+12</div>
-        <div className="text-white/70 text-[11px] mt-1 font-medium">سنة خبرة</div>
-      </motion.div>
-    </div>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay }}
+      className={`rounded-xl overflow-hidden ${className}`}
+    >
+      {children}
+    </motion.div>
   )
 }
 
-/* ── Stats strip data ───────────────────────────────────── */
-const STRIP_STATS = [
-  { value: '+12', label: 'سنة خبرة' },
-  { value: '+30', label: 'عميل موثوق' },
-  { value: '+100', label: 'مشروع منجز' },
-  { value: '٢٠١٢', label: 'تأسست عام' },
-]
-
-/* ── Hero ───────────────────────────────────────────────── */
 export default function Hero() {
+  const featuredReport = REPORTS.find(r => r.featured) || REPORTS[0]
+  const latestReport = REPORTS.filter(r => !r.featured)[0]
+  const latestArticle = ARTICLES[0]
+
   return (
-    <section id="home" className="relative min-h-screen bg-white overflow-hidden flex flex-col">
-      {/* Dot-grid background */}
+    <section
+      id="home"
+      className="relative min-h-screen flex flex-col overflow-hidden"
+      style={{
+        background: 'linear-gradient(145deg, #06081e 0%, #090c2a 55%, #07051a 100%)',
+      }}
+    >
+      {/* Mesh grid */}
+      <div className="absolute inset-0 ocean-mesh opacity-40 pointer-events-none" />
+
+      {/* Radial glows */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute pointer-events-none"
         style={{
-          backgroundImage: 'radial-gradient(circle, rgba(47,72,245,0.1) 1px, transparent 1px)',
-          backgroundSize: '32px 32px',
-          opacity: 0.45,
+          top: '-10%', right: '10%',
+          width: 600, height: 600,
+          background: 'radial-gradient(circle, rgba(47,72,245,0.12) 0%, transparent 65%)',
+        }}
+      />
+      <div
+        className="absolute pointer-events-none"
+        style={{
+          bottom: '5%', left: '5%',
+          width: 400, height: 400,
+          background: 'radial-gradient(circle, rgba(47,72,245,0.08) 0%, transparent 65%)',
         }}
       />
 
-      {/* Gradient tint on text side */}
-      <div
-        className="absolute inset-y-0 right-0 w-[55%] pointer-events-none hidden lg:block"
-        style={{ background: 'linear-gradient(to left, rgba(235,239,255,0.5) 0%, transparent 100%)' }}
-      />
+      {/* Main grid */}
+      <div className="flex-1 max-w-7xl mx-auto px-6 lg:px-10 w-full grid lg:grid-cols-2 gap-12 items-center pt-36 pb-16 lg:py-0">
 
-      {/* Main content */}
-      <div className="flex-1 max-w-7xl mx-auto px-6 lg:px-10 w-full grid lg:grid-cols-2 items-center gap-10 lg:gap-6 pt-36 pb-12 lg:py-0">
-
-        {/* Text column — right in RTL */}
+        {/* Text — right in RTL */}
         <div className="relative z-10">
-          <motion.p
-            initial={{ opacity: 0, y: 12 }}
+          <motion.span
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-xs font-medium tracking-[0.24em] text-gray-400 uppercase mb-8"
+            transition={{ duration: 0.4, delay: 0.1 }}
+            className="block text-xs font-medium tracking-[0.25em] text-white/40 uppercase mb-7"
           >
-            محيطٌ من الحلول — منذ ٢٠١٢
-          </motion.p>
+            Ocean of Solutions — Since 2012
+          </motion.span>
 
           <motion.h1
-            initial={{ opacity: 0, y: 42 }}
+            initial={{ opacity: 0, y: 36 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.78, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
-            className="text-[2.9rem] sm:text-[3.5rem] lg:text-[4.2rem] xl:text-[5rem] font-bold text-gray-900 leading-[1.1] tracking-tight mb-5"
+            transition={{ duration: 0.75, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="text-[3rem] sm:text-[3.8rem] lg:text-[4.6rem] xl:text-[5.2rem] font-bold text-white leading-[1.1] tracking-tight mb-8"
           >
-            شركاء نجاحكم
+            محيطٌ من
             <br />
-            في{' '}
-            <span className="text-brand-blue">عالم التحوّل</span>
-            <br />
-            الاستراتيجي
+            <span className="text-brand-blue">الحلول</span>
           </motion.h1>
 
-          <motion.div
-            initial={{ scaleX: 0, opacity: 0 }}
-            animate={{ scaleX: 1, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.52, ease: 'easeOut' }}
-            className="w-14 h-[3px] bg-brand-blue rounded-full mb-8 origin-right"
-          />
-
           <motion.p
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.46 }}
-            className="text-[16px] text-gray-500 font-light leading-[1.85] mb-11 max-w-md"
+            transition={{ duration: 0.55, delay: 0.36 }}
+            className="text-white/50 text-[16px] font-light leading-[1.9] mb-10 max-w-md"
           >
             شركة استشارية سعودية تأسست ٢٠١٢ — تُعيد تشكيل المؤسسات عبر الابتكار،
             الاستشارات الإدارية، وأبحاث السوق.
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 14 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.64 }}
+            transition={{ duration: 0.45, delay: 0.5 }}
             className="flex flex-wrap gap-3"
           >
-            <a href="#contact" className="btn-primary text-[15px] px-8 py-4">
-              ابدأ المحادثة
-            </a>
-            <a href="#about" className="btn-light text-[15px] px-8 py-4">
-              اعرف أكثر
-            </a>
+            <Link to="/about" className="btn-primary text-[15px] px-7 py-3.5">
+              اكتشف أوشن إكس
+            </Link>
+            <Link to="/contact" className="btn-outline text-[15px] px-7 py-3.5">
+              تواصل معنا
+            </Link>
           </motion.div>
         </div>
 
-        {/* Visual column — left in RTL */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.9, delay: 0.38, ease: [0.22, 1, 0.36, 1] }}
-          className="hidden lg:block"
-        >
-          <OrbitalVisual />
-        </motion.div>
+        {/* 2×2 content grid — left in RTL */}
+        <div className="hidden lg:grid grid-cols-2 gap-3 h-[460px]">
+
+          {/* Card 1 — blue insight CTA */}
+          <GridCard delay={0.45} className="bg-brand-blue p-7 flex flex-col justify-between group cursor-pointer hover:bg-[#2338e0] transition-colors duration-300">
+            <Link to="/insight" className="flex flex-col h-full no-underline">
+              <span className="text-white/60 text-xs font-medium tracking-widest uppercase mb-3">
+                أوشن إكس إنسايت
+              </span>
+              <p className="text-white font-bold text-xl leading-snug flex-1">
+                اكتشف
+                <br />
+                أحدث
+                <br />
+                الإنسايت
+              </p>
+              <div className="mt-6 w-10 h-10 rounded-full border border-white/30 flex items-center justify-center group-hover:border-white/60 transition-colors">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round">
+                  <path d="M13 8H3M7 4l-4 4 4 4" />
+                </svg>
+              </div>
+            </Link>
+          </GridCard>
+
+          {/* Card 2 — featured report image */}
+          <GridCard delay={0.52} className="relative bg-brand-navy">
+            {featuredReport?.image ? (
+              <>
+                <img
+                  src={featuredReport.image}
+                  alt={featuredReport.title}
+                  className="absolute inset-0 w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              </>
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-br from-brand-navy to-[#1a2055]" />
+            )}
+            <div className="absolute bottom-0 right-0 left-0 p-5 z-10">
+              <span className="text-[10px] text-white/60 font-medium tracking-widest uppercase">تقرير</span>
+              <p className="text-white text-sm font-bold leading-snug mt-1 line-clamp-2">
+                {featuredReport?.title}
+              </p>
+            </div>
+          </GridCard>
+
+          {/* Card 3 — article/dark card */}
+          <GridCard delay={0.59} className="relative bg-[#0a0c22]">
+            {latestReport?.image ? (
+              <>
+                <img
+                  src={latestReport.image}
+                  alt={latestReport.title}
+                  className="absolute inset-0 w-full h-full object-cover opacity-60"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+              </>
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-br from-[#0a0c22] to-[#1a1060]" />
+            )}
+            {/* Play icon overlay */}
+            <div className="absolute inset-0 flex items-center justify-center z-10">
+              <div className="w-12 h-12 rounded-full bg-white/15 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="white">
+                  <path d="M5 3.5L13 8L5 12.5V3.5Z" />
+                </svg>
+              </div>
+            </div>
+            <div className="absolute bottom-0 right-0 left-0 p-5 z-10">
+              <span className="text-[10px] text-white/50 tracking-widest uppercase">شاهد · استمع · استلهم</span>
+            </div>
+          </GridCard>
+
+          {/* Card 4 — latest article */}
+          <GridCard delay={0.66} className="bg-white p-6 flex flex-col justify-between">
+            <div>
+              <span className="text-[10px] text-brand-blue font-semibold tracking-widest uppercase">
+                {latestArticle?.tag || 'مقالة'}
+              </span>
+              <p className="text-gray-900 font-bold text-sm leading-snug mt-2 line-clamp-3">
+                {latestArticle?.title || 'آخر المقالات التحليلية من أوشن إكس إنسايت'}
+              </p>
+            </div>
+            <Link
+              to="/insight"
+              className="mt-4 text-brand-blue text-xs font-semibold flex items-center gap-1.5 no-underline hover:gap-2.5 transition-all duration-200"
+            >
+              اقرأ المزيد
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <path d="M9 6H3M5 4L3 6l2 2" />
+              </svg>
+            </Link>
+          </GridCard>
+        </div>
       </div>
 
-      {/* Dark stats strip */}
-      <div className="bg-brand-dark">
+      {/* Bottom stats strip */}
+      <div className="border-t border-white/5">
         <div className="max-w-7xl mx-auto px-6 lg:px-10">
           <div className="flex">
-            {STRIP_STATS.map((s, i) => (
+            {[
+              { v: '+12', l: 'سنة خبرة' },
+              { v: '+30', l: 'عميل موثوق' },
+              { v: '+100', l: 'مشروع منجز' },
+              { v: '٢٠١٢', l: 'تأسست عام' },
+            ].map((s, i) => (
               <motion.div
-                key={s.label}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.0 + i * 0.08, duration: 0.45 }}
-                className={`flex-1 py-5 px-3 lg:px-6 text-center ${i > 0 ? 'border-r border-white/8' : ''}`}
+                key={s.l}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.9 + i * 0.07 }}
+                className={`flex-1 py-5 text-center ${i > 0 ? 'border-r border-white/6' : ''}`}
               >
-                <div className="text-xl lg:text-2xl font-bold text-brand-blue">{s.value}</div>
-                <div className="text-gray-500 text-[11px] mt-0.5 font-light tracking-wide">{s.label}</div>
+                <div className="text-xl lg:text-2xl font-bold text-brand-blue">{s.v}</div>
+                <div className="text-white/30 text-[11px] mt-0.5 font-light">{s.l}</div>
               </motion.div>
             ))}
           </div>

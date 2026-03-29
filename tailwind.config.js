@@ -9,7 +9,8 @@ export default {
           'blue-alt': '#3548EC',
           'blue-light': '#818DE5',
           navy: '#1a1a3e',
-          dark: '#0d0d1a',
+          dark: '#06081e',
+          teal: '#0ea5a0',
         },
       },
       fontFamily: {
