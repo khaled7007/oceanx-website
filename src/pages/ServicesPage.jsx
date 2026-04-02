@@ -83,49 +83,55 @@ function DummyImage({ index }) {
 function ServiceRow({ s, index }) {
   const isEven = index % 2 === 0
 
+  const imageEl = (
+    <motion.div {...fadeUp(0.05)}>
+      {s.image
+        ? <img src={s.image} alt={s.title} className="w-full rounded-2xl object-cover min-h-[360px]" style={{ maxHeight: 420 }} />
+        : <DummyImage index={index} />
+      }
+    </motion.div>
+  )
+
+  const textEl = (
+    <motion.div {...fadeUp(0.15)}>
+      <div className="flex items-center gap-3 mb-5">
+        <span className="text-brand-blue font-black text-[18px] tabular-nums tracking-widest">
+          {s.num}
+        </span>
+        <div className="h-px flex-1 bg-brand-blue/20" />
+      </div>
+      <h2 className="text-3xl lg:text-4xl font-black text-gray-900 leading-tight mb-2">
+        {s.title}
+      </h2>
+      <p className="text-gray-500 font-light text-[18px] leading-[1.9] mb-8">
+        {s.desc}
+      </p>
+      <ul className="space-y-3 mb-8">
+        {s.points.map((pt) => (
+          <li key={pt} className="flex items-center gap-3">
+            <span className="w-1.5 h-1.5 rounded-full bg-brand-blue flex-shrink-0" />
+            <span className="text-gray-700 font-medium text-[14px]">{pt}</span>
+          </li>
+        ))}
+      </ul>
+    </motion.div>
+  )
+
   return (
     <div className="py-16 lg:py-24 border-b border-gray-100 last:border-0">
       <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-
-        {/* Image side */}
-        <motion.div {...fadeUp(isEven ? 0 : 0.1)} className={isEven ? 'lg:order-2' : 'lg:order-1'}>
-          {s.image
-            ? <img src={s.image} alt={s.title} className="w-full rounded-2xl object-cover min-h-[360px]" style={{ maxHeight: 420 }} />
-            : <DummyImage index={index} />
-          }
-        </motion.div>
-
-        {/* Text side */}
-        <motion.div {...fadeUp(isEven ? 0.1 : 0)} className={isEven ? 'lg:order-1' : 'lg:order-2'}>
-          {/* Number + label */}
-          <div className="flex items-center gap-3 mb-5">
-            <span className="text-brand-blue font-black text-[18px] tabular-nums tracking-widest">
-              {s.num}
-            </span>
-            <div className="h-px flex-1 bg-brand-blue/20" />
-          </div>
-
-          {/* Title */}
-          <h2 className="text-3xl lg:text-4xl font-black text-gray-900 leading-tight mb-2">
-            {s.title}
-          </h2>
-          {/* Description */}
-          <p className="text-gray-500 font-light text-[18px] leading-[1.9] mb-8">
-            {s.desc}
-          </p>
-
-          {/* Bullet points */}
-          <ul className="space-y-3 mb-8">
-            {s.points.map((pt) => (
-              <li key={pt} className="flex items-center gap-3">
-                <span className="w-1.5 h-1.5 rounded-full bg-brand-blue flex-shrink-0" />
-                <span className="text-gray-700 font-medium text-[14px]">{pt}</span>
-              </li>
-            ))}
-          </ul>
-
-        </motion.div>
-
+        {/* في RTL: العنصر الأول يذهب لليمين، الثاني لليسار */}
+        {isEven ? (
+          <>
+            {imageEl}
+            {textEl}
+          </>
+        ) : (
+          <>
+            {textEl}
+            {imageEl}
+          </>
+        )}
       </div>
     </div>
   )
