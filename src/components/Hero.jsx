@@ -1,21 +1,59 @@
+import { useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
 export default function Hero() {
+  const videoRef = useRef(null)
+
+  useEffect(() => {
+    const v = videoRef.current
+    if (!v) return
+
+    const kickPlay = () => {
+      v.defaultMuted = true
+      v.muted = true
+      v.setAttribute('muted', '')
+      v.volume = 0
+      const p = v.play()
+      if (p !== undefined) p.catch(() => {})
+    }
+
+    kickPlay()
+    v.addEventListener('loadeddata', kickPlay)
+    v.addEventListener('canplay', kickPlay)
+
+    const onVis = () => {
+      if (document.visibilityState === 'visible') kickPlay()
+    }
+    document.addEventListener('visibilitychange', onVis)
+
+    return () => {
+      v.removeEventListener('loadeddata', kickPlay)
+      v.removeEventListener('canplay', kickPlay)
+      document.removeEventListener('visibilitychange', onVis)
+    }
+  }, [])
+
   return (
     <section
       id="home"
       className="relative min-h-[100dvh] min-h-[100svh] flex flex-col items-center justify-end sm:justify-center overflow-hidden"
     >
-      {/* ── Video background ── */}
+      {/* ── Video background — تشغيل صريح لسياسات autoplay على الديسكتوب ── */}
       <video
+        ref={videoRef}
         autoPlay
         muted
         loop
         playsInline
-        className="absolute inset-0 w-full h-full object-cover"
-        src="/hero-video.mp4"
-      />
+        preload="auto"
+        disablePictureInPicture
+        controls={false}
+        className="absolute inset-0 z-0 w-full h-full min-h-full min-w-full object-cover pointer-events-none"
+        aria-hidden={true}
+      >
+        <source src="/hero-video.mp4" type="video/mp4" />
+      </video>
 
       {/* Dark overlay for readability */}
       <div className="absolute inset-0 bg-black/55" />
