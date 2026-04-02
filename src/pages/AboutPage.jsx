@@ -163,19 +163,20 @@ export default function AboutPage() {
       >
         <div className="absolute inset-0 ocean-mesh opacity-25 pointer-events-none" />
 
-        {/* Image — يمتد من الحافة اليسرى للمنتصف */}
+        {/* Image — card عائمة على اليسار */}
         <motion.div
-          initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.9, delay: 0.2 }}
-          className="absolute inset-y-0 left-0 w-full lg:w-1/2 hidden lg:block overflow-hidden"
-          style={{ borderRadius: '0 2.5rem 2.5rem 0' }}
+          className="absolute hidden lg:block"
+          style={{ top: '10%', bottom: '10%', left: 0, width: '46%' }}
         >
-          <img src="/office-hero.png" alt="مكتب أوشن إكس" className="w-full h-full object-cover object-center" />
-          {/* تدرج ناعم للدمج مع الخلفية */}
-          <div className="absolute inset-y-0 right-0 w-32 pointer-events-none"
-            style={{ background: 'linear-gradient(to left, #0c1030 10%, transparent)' }} />
-          <div className="absolute inset-0 pointer-events-none"
-            style={{ background: 'linear-gradient(to bottom, #0c1030 0%, transparent 15%, transparent 85%, #0c1030 100%)' }} />
+          <div className="w-full h-full overflow-hidden shadow-2xl"
+            style={{ borderRadius: '0 2rem 2rem 0' }}
+          >
+            <img src="/office-hero.png" alt="مكتب أوشن إكس" className="w-full h-full object-cover object-center" />
+            <div className="absolute inset-y-0 right-0 w-24 pointer-events-none"
+              style={{ background: 'linear-gradient(to left, rgba(12,16,48,0.6), transparent)' }} />
+          </div>
         </motion.div>
 
         {/* Text content */}
