@@ -86,7 +86,7 @@ function ServiceRow({ s, index }) {
   const imageEl = (
     <motion.div {...fadeUp(isEven ? 0 : 0.1)}>
       {s.image
-        ? <img src={s.image} alt={s.title} className="w-full rounded-2xl object-cover min-h-[360px]" style={{ maxHeight: 420 }} />
+        ? <img src={s.image} alt={s.title} loading="lazy" decoding="async" fetchPriority="low" className="w-full rounded-2xl object-cover min-h-[360px]" style={{ maxHeight: 420 }} />
         : <DummyImage index={index} />
       }
     </motion.div>

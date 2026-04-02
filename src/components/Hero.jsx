@@ -3,50 +3,68 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
 export default function Hero() {
+  const sectionRef = useRef(null)
   const videoRef = useRef(null)
 
   useEffect(() => {
     const v = videoRef.current
-    if (!v) return
+    const root = sectionRef.current
+    if (!v || !root) return
 
-    const kickPlay = () => {
+    const prepare = () => {
       v.defaultMuted = true
       v.muted = true
       v.setAttribute('muted', '')
       v.volume = 0
-      const p = v.play()
-      if (p !== undefined) p.catch(() => {})
     }
 
-    kickPlay()
-    v.addEventListener('loadeddata', kickPlay)
-    v.addEventListener('canplay', kickPlay)
-
-    const onVis = () => {
-      if (document.visibilityState === 'visible') kickPlay()
+    const tryPlay = () => {
+      prepare()
+      v.play().catch(() => {})
     }
-    document.addEventListener('visibilitychange', onVis)
+
+    prepare()
+
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (e.isIntersecting) tryPlay()
+        else v.pause()
+      },
+      { threshold: 0.12 }
+    )
+    io.observe(root)
+
+    const onTabVisible = () => {
+      if (document.visibilityState !== 'visible') return
+      const r = root.getBoundingClientRect()
+      if (r.bottom > 0 && r.top < window.innerHeight) tryPlay()
+    }
+    document.addEventListener('visibilitychange', onTabVisible)
+
+    if (v.readyState >= 2) tryPlay()
+    else v.addEventListener('canplay', tryPlay, { once: true })
 
     return () => {
-      v.removeEventListener('loadeddata', kickPlay)
-      v.removeEventListener('canplay', kickPlay)
-      document.removeEventListener('visibilitychange', onVis)
+      io.disconnect()
+      document.removeEventListener('visibilitychange', onTabVisible)
+      v.removeEventListener('canplay', tryPlay)
     }
   }, [])
 
   return (
     <section
+      ref={sectionRef}
       id="home"
       className="relative min-h-[100dvh] min-h-[100svh] flex flex-col items-center justify-end sm:justify-center overflow-hidden"
     >
-      {/* ── Video background — تشغيل صريح لسياسات autoplay على الديسكتوب ── */}
+      {/* ── Video: preload metadata فقط لتقليل التحميل الفوري (~ملف كبير) + إيقاف عند الخروج من الشاشة ── */}
       <video
         ref={videoRef}
         autoPlay
         muted
         loop
         playsInline
-        preload="auto"
+        preload="metadata"
         disablePictureInPicture
         controls={false}
         className="absolute inset-0 z-0 w-full h-full min-h-full min-w-full object-cover pointer-events-none"

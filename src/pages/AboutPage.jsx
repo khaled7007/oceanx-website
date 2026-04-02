@@ -297,7 +297,7 @@ export default function AboutPage() {
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
           <motion.div {...fadeUp(0)} className="flex flex-col lg:flex-row items-center gap-10 lg:gap-20">
-            <img src="/gptw-badge.png" alt="Great Place To Work Certified" className="w-56 flex-shrink-0" />
+            <img src="/gptw-badge.png" alt="Great Place To Work Certified" loading="lazy" decoding="async" className="w-56 flex-shrink-0" />
             <div>
               <motion.span {...fadeUp(0.06)} className="section-label block mb-3 text-base">بيئة عملنا</motion.span>
               <motion.h2 {...fadeUp(0.1)} className="text-3xl lg:text-4xl font-black text-gray-900 mb-3">
