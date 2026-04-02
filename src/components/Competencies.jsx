@@ -84,17 +84,6 @@ const TEAM = [
     linkedin: 'https://www.linkedin.com/in/sara-alzuhimeel-a80a9ab6/',
   },
   {
-    name: 'رومان سانت كلير',
-    nameEn: 'Roman St. Clair',
-    title: 'شريك — إدارة أبحاث السوق',
-    photo: 'https://oceanx.sa/wp-content/uploads/2026/01/Roman-headshot-1-2-500x500.png',
-    initials: 'RS',
-    experience: '+10',
-    expLabel: 'سنة في الخليج',
-    bio: 'قائد في الاتصال الاستراتيجي وتحليل الأسواق بخبرة أكثر من 10 سنوات في دول الخليج، متخصص في رؤى الأعمال والتحليلات التي تدعم صناعة القرار لدى الجهات الحكومية والخاصة.',
-    linkedin: 'https://www.linkedin.com/in/roman-st-clair-48813343/',
-  },
-  {
     name: 'أسماء المطيري',
     nameEn: 'Asma Almutairi',
     title: 'مدير عام — الاستشارات الإدارية',
