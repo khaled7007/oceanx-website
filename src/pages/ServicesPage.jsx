@@ -84,7 +84,7 @@ function ServiceRow({ s, index }) {
   const isEven = index % 2 === 0
 
   const imageEl = (
-    <motion.div {...fadeUp(0.05)}>
+    <motion.div {...fadeUp(isEven ? 0 : 0.1)}>
       {s.image
         ? <img src={s.image} alt={s.title} className="w-full rounded-2xl object-cover min-h-[360px]" style={{ maxHeight: 420 }} />
         : <DummyImage index={index} />
@@ -93,7 +93,7 @@ function ServiceRow({ s, index }) {
   )
 
   const textEl = (
-    <motion.div {...fadeUp(0.15)}>
+    <motion.div dir="rtl" {...fadeUp(isEven ? 0.1 : 0)}>
       <div className="flex items-center gap-3 mb-5">
         <span className="text-brand-blue font-black text-[18px] tabular-nums tracking-widest">
           {s.num}
@@ -119,17 +119,16 @@ function ServiceRow({ s, index }) {
 
   return (
     <div className="py-16 lg:py-24 border-b border-gray-100 last:border-0">
-      <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-        {/* في RTL: العنصر الأول يذهب لليمين، الثاني لليسار */}
+      <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center" dir="ltr">
         {isEven ? (
           <>
-            {imageEl}
             {textEl}
+            {imageEl}
           </>
         ) : (
           <>
-            {textEl}
             {imageEl}
+            {textEl}
           </>
         )}
       </div>
