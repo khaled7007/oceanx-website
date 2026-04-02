@@ -5,7 +5,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden"
+      className="relative min-h-[100dvh] min-h-[100svh] flex flex-col items-center justify-end sm:justify-center overflow-hidden"
     >
       {/* ── Video background ── */}
       <video
@@ -33,14 +33,14 @@ export default function Hero() {
         }}
       />
 
-      {/* ── Center content ── */}
-      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center mt-72 lg:mt-96">
+      {/* ── Center content — مساحة تحت الشريط + قراءة أوضح على الجوال */}
+      <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 text-center pt-28 pb-36 sm:pt-32 sm:pb-28 md:pb-32 lg:pt-40 lg:pb-40">
 
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, delay: 0.55 }}
-          className="text-white/55 text-[15px] lg:text-base font-light leading-relaxed max-w-lg mx-auto mb-10"
+          className="text-white/55 text-[15px] sm:text-base font-light leading-[1.75] sm:leading-relaxed max-w-md sm:max-w-lg mx-auto mb-8 sm:mb-10 px-1"
         >
           شركة استشارية سعوديـة تقدم خدماتها الاستشارية للقطاعين الحكومي والخاص.
         </motion.p>
@@ -50,7 +50,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.72 }}
         >
-          <Link to="/about" className="btn-primary px-8 py-3.5 text-[14px]">
+          <Link to="/about" className="btn-primary px-8 py-3.5 text-[14px] min-h-[48px] inline-flex items-center justify-center touch-manipulation">
             اكتشف أوشن إكس
           </Link>
         </motion.div>
@@ -61,7 +61,7 @@ export default function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.4, duration: 0.6 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        className="absolute bottom-[max(1.25rem,env(safe-area-inset-bottom,0px))] left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none"
       >
         <span className="text-white/20 text-[9px] font-semibold tracking-[0.3em] uppercase">
           scroll

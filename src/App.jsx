@@ -35,17 +35,23 @@ function FloatingContact() {
   const inputCls = 'w-full border border-gray-200 rounded-lg px-3.5 py-2.5 text-sm text-gray-900 placeholder-gray-400 outline-none focus:border-brand-blue/60 focus:ring-2 focus:ring-brand-blue/10 transition-all duration-200'
 
   return (
-    <div className="fixed bottom-6 left-6 z-50 flex flex-col items-end gap-3">
+    <div
+      className="fixed z-50 flex flex-col gap-3 items-stretch sm:items-end
+        bottom-[max(1rem,env(safe-area-inset-bottom,0px))]
+        left-[max(1rem,env(safe-area-inset-left,0px))]
+        right-[max(1rem,env(safe-area-inset-right,0px))]
+        sm:left-6 sm:right-auto sm:w-auto"
+    >
 
       {/* ── Form panel ── */}
       <div
-        className={`transition-all duration-300 origin-bottom-left ${
+        className={`transition-all duration-300 origin-bottom sm:origin-bottom-left w-full sm:w-auto ${
           open
             ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto'
             : 'opacity-0 scale-95 translate-y-4 pointer-events-none'
         }`}
       >
-        <div className="w-[320px] bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
+        <div className="w-full max-w-[min(20rem,calc(100vw-2rem))] sm:w-80 sm:max-w-none mx-auto sm:mx-0 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
 
           {/* Header */}
           <div className="flex items-center justify-between px-5 py-4"
@@ -133,10 +139,11 @@ function FloatingContact() {
 
       {/* ── Trigger button ── */}
       <button
+        type="button"
         onClick={() => setOpen(v => !v)}
         aria-label="تواصل معنا"
-        className={`w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-all duration-300 ${
-          open ? 'rotate-45 bg-gray-800' : 'bg-brand-blue hover:bg-[#2338e0] hover:scale-110'
+        className={`self-end min-h-[48px] min-w-[48px] w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-all duration-300 touch-manipulation ${
+          open ? 'rotate-45 bg-gray-800' : 'bg-brand-blue hover:bg-[#2338e0] active:scale-95 sm:hover:scale-110'
         }`}
       >
         {open ? (
@@ -159,7 +166,7 @@ function Layout() {
     <div className="font-arabic">
       <ScrollToTop />
       <Navbar />
-      <main>
+      <main className="pb-page-mobile">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutPage />} />

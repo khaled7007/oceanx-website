@@ -12,7 +12,7 @@ export default function NewsletterBanner() {
 
   return (
     <section
-      className="relative overflow-hidden py-16 lg:py-20"
+      className="relative overflow-hidden py-12 sm:py-16 lg:py-20"
       style={{ background: 'linear-gradient(135deg, #06081e 0%, #0a0e2a 100%)' }}
     >
       <div className="absolute inset-0 ocean-mesh opacity-30 pointer-events-none" />
@@ -21,7 +21,7 @@ export default function NewsletterBanner() {
         style={{ background: 'linear-gradient(90deg, transparent, rgba(47,72,245,0.4), transparent)' }}
       />
 
-      <div className="relative z-10 max-w-3xl mx-auto px-6 lg:px-10 text-center">
+      <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 lg:px-10 text-center">
 
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -30,7 +30,7 @@ export default function NewsletterBanner() {
           transition={{ duration: 0.55 }}
           className="mb-8"
         >
-          <h3 className="text-white text-2xl lg:text-3xl font-bold leading-snug mb-3">
+          <h3 className="text-white text-xl sm:text-2xl lg:text-3xl font-bold leading-snug mb-3">
             نشرة <span className="text-brand-blue italic">أوشن إكس إنسايت</span> البريدية
           </h3>
           <p className="text-white/50 text-[15px] font-light leading-relaxed">
@@ -51,16 +51,16 @@ export default function NewsletterBanner() {
               <span className="text-white/70 text-sm">شكرًا! ستصلك نشرتنا قريبًا.</span>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="flex gap-2">
+            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 sm:gap-2">
               <input
                 type="email"
                 placeholder="بريدك الإلكتروني"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 required
-                className="flex-1 bg-white/8 border border-white/15 text-white placeholder-white/35 text-sm rounded-lg px-4 py-3 outline-none focus:border-brand-blue/60 focus:bg-white/12 transition-all duration-200"
+                className="flex-1 min-h-[48px] bg-white/8 border border-white/15 text-white placeholder-white/35 text-base sm:text-sm rounded-lg px-4 py-3 outline-none focus:border-brand-blue/60 focus:bg-white/12 transition-all duration-200"
               />
-              <button type="submit" className="btn-primary text-sm px-6 py-3 whitespace-nowrap">
+              <button type="submit" className="btn-primary text-sm px-6 py-3 min-h-[48px] whitespace-nowrap w-full sm:w-auto touch-manipulation">
                 اشترك
               </button>
             </form>

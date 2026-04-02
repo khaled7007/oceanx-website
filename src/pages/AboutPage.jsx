@@ -157,8 +157,8 @@ export default function AboutPage() {
     <>
       {/* ══ HERO ════════════════════════════════════════════ */}
       <div
-        className="relative overflow-hidden"
-        style={{ background: 'linear-gradient(160deg, #07091f 0%, #0c1030 60%, #080618 100%)', minHeight: 560 }}
+        className="relative overflow-hidden lg:min-h-[560px]"
+        style={{ background: 'linear-gradient(160deg, #07091f 0%, #0c1030 60%, #080618 100%)' }}
       >
         <div className="absolute inset-0 ocean-mesh opacity-25 pointer-events-none" />
 
@@ -179,16 +179,16 @@ export default function AboutPage() {
         </motion.div>
 
         {/* Text content — مثبت على يمين الشاشة (هامش يسار تلقائي) حتى لا يغطي صورة المكتب */}
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 pt-24">
-          <div className="w-full max-w-md sm:max-w-lg lg:max-w-xl xl:max-w-2xl ml-auto flex flex-col justify-center py-10 lg:py-20 text-right">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-24 sm:pt-28">
+          <div className="w-full max-w-none sm:max-w-lg lg:max-w-xl xl:max-w-2xl sm:ml-auto flex flex-col justify-center py-8 sm:py-10 lg:py-20 text-right">
 
             {/* Mobile image */}
             <motion.div
               initial={{ opacity: 0 }} animate={{ opacity: 1 }}
               transition={{ duration: 0.7, delay: 0.2 }}
-              className="block lg:hidden w-full h-56 rounded-2xl overflow-hidden mb-8"
+              className="block lg:hidden w-full aspect-[5/3] max-h-[220px] sm:max-h-none sm:h-56 rounded-2xl overflow-hidden mb-6 sm:mb-8 shadow-lg"
             >
-              <img src="/office-hero.png" alt="مكتب أوشن إكس" className="w-full h-full object-cover" />
+              <img src="/office-hero.png" alt="مكتب أوشن إكس" className="w-full h-full object-cover object-center" />
             </motion.div>
 
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-2 text-xs text-white/30 mb-6">
@@ -200,7 +200,7 @@ export default function AboutPage() {
             <motion.h1
               initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.85, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-              className="text-3xl lg:text-4xl xl:text-5xl font-black text-white leading-[1.2] mb-6"
+              className="text-[1.65rem] sm:text-3xl lg:text-4xl xl:text-5xl font-black text-white leading-[1.25] sm:leading-[1.2] mb-5 sm:mb-6"
             >
               أعوامنا من المعرفة جعلتنا كياناً{' '}
               <span className="text-brand-blue">يمكنك الوثوق به</span>
@@ -208,7 +208,7 @@ export default function AboutPage() {
             <motion.p
               initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.35 }}
-              className="text-white/60 text-[15px] font-light leading-[1.8]"
+              className="text-white/60 text-[15px] sm:text-[15px] font-light leading-[1.85]"
             >
               أوشن إكس لحلول الأعمال شركة استشارية سعودية تأسست عام 2012، تقدم خدماتها للقطاعين الحكومي والخاص. نُسهم في تطوير المنظمات عبر الابتكار، الاستشارات الإدارية، الاستشارات المالية، وأبحاث السوق — بأحدث المنهجيات وأعلى معايير الجودة.
             </motion.p>
@@ -218,8 +218,8 @@ export default function AboutPage() {
 
       {/* ══ رؤيتنا + رسالتنا ════════════════════════════════ */}
 
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col divide-y divide-gray-100">
+      <section className="py-12 sm:py-16 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 flex flex-col divide-y divide-gray-100">
           <motion.div {...fadeUp(0)} className="grid lg:grid-cols-[180px_1fr] gap-6 lg:gap-16 lg:items-center pb-10">
             <h3 className="text-brand-blue text-2xl font-black flex-shrink-0">رؤيتنا</h3>
             <p className="text-gray-600 font-light text-[18px] leading-relaxed">أن نكون ضمن الجهات الاستشارية التي تُحدث فرقًا حقيقيًا في قطاع الأعمال بالمملكة، من خلال استشارات ترتبط بالنتائج وتنعكس أثرًا ملموسًا ومستدامًا.</p>
@@ -233,7 +233,7 @@ export default function AboutPage() {
 
       {/* ══ قيمنا ═══════════════════════════════════════════ */}
       <section className="py-14 lg:py-20 bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
           <motion.div {...fadeUp(0)} className="grid lg:grid-cols-[180px_1fr] gap-6 lg:gap-16 lg:items-start">
             <h3 className="text-brand-blue text-2xl font-black flex-shrink-0">قيمنا</h3>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -256,7 +256,7 @@ export default function AboutPage() {
 
       {/* ══ تميّزنا ══════════════════════════════════════════ */}
       <section className="py-14 lg:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
           <div className="grid lg:grid-cols-[1fr_1.4fr] gap-12 items-start">
             <div className="lg:sticky lg:top-28">
               <motion.span {...fadeUp(0)} className="section-label block mb-4 text-base">تميّزنا</motion.span>
@@ -283,7 +283,7 @@ export default function AboutPage() {
 
       {/* ══ بيئة عملنا ══════════════════════════════════════ */}
       <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
           <motion.div {...fadeUp(0)} className="flex flex-col lg:flex-row items-center gap-10 lg:gap-20">
             <img src="/gptw-badge.png" alt="Great Place To Work Certified" className="w-56 flex-shrink-0" />
             <div>
@@ -301,7 +301,7 @@ export default function AboutPage() {
 
       {/* ══ مجلس الإدارة + المؤسسون ════════════════════════ */}
       <section className="py-14 lg:py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
           <div className="mb-12">
             <SectionDivider label="مجلس الإدارة" />
             <div className="grid grid-cols-3 gap-8 max-w-4xl mx-auto">
@@ -319,7 +319,7 @@ export default function AboutPage() {
 
       {/* ══ الكفاءات ═════════════════════════════════════════ */}
       <section className="py-14 lg:py-20 bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
           <SectionDivider label="الكفاءات" />
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {TEAM.map((m, i) => <TeamCard key={m.nameEn} m={m} i={i} />)}
@@ -329,7 +329,7 @@ export default function AboutPage() {
 
       {/* ══ دورنا في رؤية 2030 ══════════════════════════════ */}
       <section className="py-14 lg:py-20 bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
           <div className="grid lg:grid-cols-[180px_1fr] gap-6 lg:gap-16 items-center">
             <h3 className="text-brand-blue text-2xl font-black flex-shrink-0">دورنا في رؤية 2030</h3>
             <motion.p {...fadeUp(0.08)} className="text-gray-600 font-light text-[18px] leading-relaxed">

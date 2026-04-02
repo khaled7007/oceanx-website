@@ -118,8 +118,8 @@ function ServiceRow({ s, index }) {
   )
 
   return (
-    <div className="py-16 lg:py-24 border-b border-gray-100 last:border-0">
-      <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center" dir="ltr">
+    <div className="py-12 sm:py-16 lg:py-24 border-b border-gray-100 last:border-0">
+      <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-20 items-center" dir="ltr">
         {isEven ? (
           <>
             {textEl}
@@ -142,17 +142,17 @@ export default function ServicesPage() {
     <>
       {/* ══ HERO ════════════════════════════════════════════ */}
       <div
-        className="relative overflow-hidden pt-36 pb-16"
+        className="relative overflow-hidden pt-28 sm:pt-32 lg:pt-36 pb-12 sm:pb-16"
         style={{ background: 'linear-gradient(160deg, #07091f 0%, #0c1030 60%, #080618 100%)' }}
       >
         <div className="absolute inset-0 ocean-mesh opacity-25 pointer-events-none" />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
           {/* Breadcrumb */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="flex items-center gap-2 text-xs text-white/30 mb-12"
+            className="flex items-center gap-2 text-xs text-white/30 mb-8 sm:mb-12"
           >
             <Link to="/" className="hover:text-white/60 no-underline transition-colors">الرئيسية</Link>
             <span>/</span>
@@ -165,7 +165,7 @@ export default function ServicesPage() {
                 initial={{ opacity: 0, y: 32 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.85, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-                className="text-5xl lg:text-7xl font-black text-white leading-none"
+                className="text-[2.25rem] sm:text-5xl lg:text-7xl font-black text-white leading-[1.05] sm:leading-none"
               >
                 خدماتنا
               </motion.h1>
@@ -177,7 +177,7 @@ export default function ServicesPage() {
 
       {/* ══ SERVICES LIST ═══════════════════════════════════ */}
       <section className="bg-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
           {SERVICES.map((s, i) => (
             <div key={s.slug} id={`practice-${s.slug}`}>
               <ServiceRow s={s} index={i} />

@@ -195,7 +195,7 @@ function TeamCard({ m, i }) {
       whileHover={{ y: -5 }}
       className="flex"
     >
-      <div className="card p-7 flex flex-col gap-5 w-full">
+      <div className="card p-5 sm:p-7 flex flex-col gap-4 sm:gap-5 w-full">
         <div className="flex items-start gap-4">
           <Avatar photo={m.photo} initials={m.initials} size="lg" />
           <div className="flex-1 min-w-0 pt-1">
@@ -231,11 +231,11 @@ function TeamCard({ m, i }) {
 
 export default function Competencies() {
   return (
-    <section id="competencies" className="py-20 lg:py-28 bg-white">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+    <section id="competencies" className="py-14 sm:py-20 lg:py-28 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
 
         {/* Section header */}
-        <div className="text-center max-w-xl mx-auto mb-20">
+        <div className="text-center max-w-xl mx-auto mb-12 sm:mb-20 px-1">
           <motion.span
             initial={{ opacity: 0, y: 14 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -250,7 +250,7 @@ export default function Competencies() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.6, delay: 0.08 }}
-            className="text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight"
+            className="text-[1.75rem] sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight"
           >
             الكفاءات و<span className="text-brand-blue">الخبرات</span>
           </motion.h2>
@@ -266,17 +266,17 @@ export default function Competencies() {
         </div>
 
         {/* ══ 1. مجلس الإدارة ══ */}
-        <div className="mb-20">
+        <div className="mb-14 sm:mb-20">
           <SectionDivider label="مجلس الإدارة" />
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-5 max-w-2xl">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-5 max-w-2xl">
             {BOARD.map((m, i) => <BoardCard key={m.nameEn} m={m} i={i} />)}
           </div>
         </div>
 
         {/* ══ 2. المؤسسون ══ */}
-        <div className="mb-20">
+        <div className="mb-14 sm:mb-20">
           <SectionDivider label="المؤسسون" />
-          <div className="grid sm:grid-cols-2 gap-6 max-w-2xl">
+          <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 max-w-2xl">
             {FOUNDERS.map((m, i) => <TeamCard key={m.nameEn} m={m} i={i} />)}
           </div>
         </div>
@@ -284,7 +284,7 @@ export default function Competencies() {
         {/* ══ 3. الكفاءات ══ */}
         <div>
           <SectionDivider label="الكفاءات" />
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {TEAM.map((m, i) => <TeamCard key={m.nameEn} m={m} i={i} />)}
           </div>
         </div>

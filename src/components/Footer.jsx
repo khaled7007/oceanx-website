@@ -62,7 +62,7 @@ function FooterCol({ title, links }) {
   return (
     <div>
       <h4 className="text-white/90 font-semibold text-sm mb-5">{title}</h4>
-      <ul className="space-y-3">
+      <ul className="space-y-1 sm:space-y-3">
         {links.map((link) => (
           <li key={link.label}>
             {link.external ? (
@@ -70,14 +70,14 @@ function FooterCol({ title, links }) {
                 href={link.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-white/40 hover:text-white/70 text-sm transition-colors duration-200 no-underline"
+                className="inline-flex items-center min-h-[40px] sm:min-h-0 py-1.5 sm:py-0 text-white/40 hover:text-white/70 text-sm transition-colors duration-200 no-underline touch-manipulation"
               >
                 {link.label}
               </a>
             ) : (
               <Link
                 to={link.to}
-                className="text-white/40 hover:text-white/70 text-sm transition-colors duration-200 no-underline"
+                className="inline-flex items-center min-h-[40px] sm:min-h-0 py-1.5 sm:py-0 text-white/40 hover:text-white/70 text-sm transition-colors duration-200 no-underline touch-manipulation"
               >
                 {link.label}
               </Link>
@@ -92,8 +92,8 @@ function FooterCol({ title, links }) {
 export default function Footer() {
   return (
     <footer className="bg-brand-dark border-t border-white/5">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 pt-16 pb-8">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-[1.8fr_1fr_1fr_1fr] gap-10 mb-14">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-12 sm:pt-16 pb-8 pb-[max(2rem,env(safe-area-inset-bottom,0px))]">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-[1.8fr_1fr_1fr_1fr] gap-8 sm:gap-10 mb-12 sm:mb-14">
 
           {/* Brand */}
           <div>
@@ -116,7 +116,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.name}
-                  className="w-8 h-8 rounded-lg bg-white/6 hover:bg-brand-blue/30 text-white/40 hover:text-white flex items-center justify-center transition-all duration-200 no-underline"
+                  className="min-w-[40px] min-h-[40px] w-10 h-10 sm:w-8 sm:h-8 rounded-lg bg-white/6 hover:bg-brand-blue/30 text-white/40 hover:text-white flex items-center justify-center transition-all duration-200 no-underline touch-manipulation"
                 >
                   {s.icon}
                 </a>

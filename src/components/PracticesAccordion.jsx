@@ -7,14 +7,15 @@ function AccordionItem({ practice, isOpen, onToggle }) {
   return (
     <div className="border-b border-gray-100">
       <button
+        type="button"
         onClick={onToggle}
-        className="w-full flex items-center justify-between py-6 text-right group"
+        className="w-full flex items-center justify-between gap-3 py-5 sm:py-6 min-h-[56px] text-right group touch-manipulation"
       >
         <div className="flex items-center gap-5">
           <span className="text-gray-200 text-sm font-medium select-none w-6">
             {String(PRACTICES.indexOf(practice) + 1).padStart(2, '0')}
           </span>
-          <h3 className={`text-xl font-bold transition-colors duration-200 ${
+          <h3 className={`text-lg sm:text-xl font-bold transition-colors duration-200 ${
             isOpen ? 'text-brand-blue' : 'text-gray-900 group-hover:text-brand-blue'
           }`}>
             {practice.title}
@@ -41,8 +42,8 @@ function AccordionItem({ practice, isOpen, onToggle }) {
             transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
             className="overflow-hidden"
           >
-            <div className="pb-8 pr-11">
-              <p className="text-gray-500 font-light leading-[1.85] text-[19px]">
+            <div className="pb-6 sm:pb-8 pr-2 sm:pr-11 pl-1">
+              <p className="text-gray-500 font-light leading-[1.8] sm:leading-[1.85] text-[16px] sm:text-[19px]">
                   {practice.subtitle}
                 </p>
               <Link
@@ -66,14 +67,14 @@ export default function PracticesAccordion() {
   const [openId, setOpenId] = useState('innovation')
 
   return (
-    <section className="py-24 lg:py-32 bg-white">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10">
+    <section className="py-16 sm:py-24 lg:py-32 bg-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
 
         {/* Header */}
-        <div className="flex items-end justify-between mb-12 pb-6 border-b border-gray-100">
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-10 sm:mb-12 pb-6 border-b border-gray-100">
           <div>
             <span className="section-label block mb-3">ممارساتنا</span>
-            <h2 className="text-3xl lg:text-4xl font-bold text-gray-900">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">
               خدماتنا <span className="text-brand-blue">الأساسية</span>
             </h2>
           </div>
