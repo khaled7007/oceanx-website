@@ -27,11 +27,11 @@ function FeaturedStrip() {
   const report3 = REPORTS.filter(r => !r.featured && r.image)[1]
 
   return (
-    <div className="bg-[#0a0c25] py-12">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10">
-        <div className="grid grid-cols-3 gap-4 mb-4">
+    <div className="bg-[#0a0c25] py-8 sm:py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
           {/* Blue CTA */}
-          <Link to="/insight#reports" className="bg-brand-blue rounded-xl p-8 flex flex-col justify-between min-h-[220px] no-underline group">
+          <Link to="/insight#reports" className="bg-brand-blue rounded-xl p-6 sm:p-8 flex flex-col justify-between min-h-[180px] sm:min-h-[220px] no-underline group touch-manipulation active:opacity-95">
             <span className="text-white/60 text-[11px] font-semibold tracking-widest uppercase">إنسايت</span>
             <div>
               <p className="text-white font-bold text-xl leading-snug mb-5">
@@ -47,7 +47,7 @@ function FeaturedStrip() {
 
           {/* Report 2 */}
           {report2 && (() => { const idx = REPORTS.indexOf(report2); return (
-            <Link to={reportRoute(idx)} className="relative rounded-xl overflow-hidden no-underline group min-h-[220px]">
+            <Link to={reportRoute(idx)} className="relative rounded-xl overflow-hidden no-underline group min-h-[200px] sm:min-h-[220px] touch-manipulation active:opacity-95 block">
               <img src={report2.image} alt={report2.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
               <div className="absolute bottom-0 p-5 z-10">
@@ -59,7 +59,7 @@ function FeaturedStrip() {
 
           {/* Report 3 */}
           {report3 && (() => { const idx = REPORTS.indexOf(report3); return (
-            <Link to={reportRoute(idx)} className="relative rounded-xl overflow-hidden no-underline group min-h-[220px]">
+            <Link to={reportRoute(idx)} className="relative rounded-xl overflow-hidden no-underline group min-h-[200px] sm:min-h-[220px] touch-manipulation active:opacity-95 block">
               <img src={report3.image} alt={report3.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
               <div className="absolute bottom-0 p-5 z-10">
@@ -72,13 +72,13 @@ function FeaturedStrip() {
 
         {/* Separator */}
         <div className="border-t border-white/8 pt-4">
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {/* 3 small articles */}
             {ARTICLES.slice(0, 3).map((a, i) => (
               <Link
                 key={a.title}
                 to={articleRoute(i)}
-                className="flex gap-3 items-start no-underline group"
+                className="flex gap-3 items-center min-h-[52px] sm:min-h-0 py-2 sm:py-0 no-underline group touch-manipulation active:opacity-90 rounded-lg sm:rounded-none"
               >
                 <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-brand-navy">
                   {a.image && <img src={a.image} alt={a.title} className="w-full h-full object-cover" />}
@@ -90,11 +90,12 @@ function FeaturedStrip() {
             ))}
 
             {/* Watch / Listen / Inspired */}
-            <div className="bg-white rounded-xl p-4 flex flex-col justify-between">
-              <p className="text-gray-900 font-bold text-[13px] leading-snug">
-                استمع<br />وتلهّم<br />بالمحتوى
+            <div className="bg-white rounded-xl p-4 flex flex-row sm:flex-col justify-between items-center sm:items-stretch gap-3 sm:gap-0 min-h-[52px] sm:min-h-0">
+              <p className="text-gray-900 font-bold text-[13px] leading-snug flex-1 sm:flex-none">
+                <span className="sm:hidden">استمع وتلهّم بالمحتوى</span>
+                <span className="hidden sm:block">استمع<br />وتلهّم<br />بالمحتوى</span>
               </p>
-              <Link to="/insight#podcast" className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center hover:border-brand-blue hover:text-brand-blue transition-colors no-underline text-gray-400 self-start mt-2">
+              <Link to="/insight#podcast" className="min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 w-11 h-11 sm:w-7 sm:h-7 shrink-0 rounded-full border border-gray-200 flex items-center justify-center hover:border-brand-blue hover:text-brand-blue transition-colors no-underline text-gray-400 self-start sm:mt-2 touch-manipulation active:bg-gray-50">
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                   <path d="M9 6H3M5 4L3 6l2 2" />
                 </svg>

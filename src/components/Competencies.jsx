@@ -161,6 +161,7 @@ function BoardCard({ m, i }) {
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.55, delay: 0.06 * i }}
       whileHover={{ y: -5 }}
+      className="w-full min-w-0"
     >
       <div className="card p-5 flex flex-col items-center text-center gap-4 h-full">
         <Avatar photo={m.photo} initials={m.initials} size="md" />
@@ -174,7 +175,8 @@ function BoardCard({ m, i }) {
           href={m.linkedin}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-brand-blue-light hover:text-brand-blue transition-colors no-underline"
+          className="inline-flex items-center justify-center min-h-[44px] min-w-[44px] rounded-xl text-brand-blue-light hover:text-brand-blue active:bg-brand-blue/10 transition-colors no-underline touch-manipulation"
+          aria-label={`LinkedIn — ${m.name}`}
         >
           <LinkedInIcon />
         </a>
@@ -216,7 +218,7 @@ function TeamCard({ m, i }) {
             href={m.linkedin}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 text-brand-blue-light hover:text-brand-blue text-xs font-medium transition-colors no-underline"
+            className="inline-flex items-center gap-2 min-h-[44px] px-1 -mx-1 rounded-lg text-brand-blue-light hover:text-brand-blue text-xs font-medium transition-colors no-underline touch-manipulation active:bg-brand-blue/8"
           >
             <LinkedInIcon />
             عرض الملف الشخصي

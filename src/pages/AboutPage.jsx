@@ -93,16 +93,23 @@ function BoardCard({ m, i }) {
       initial={{ opacity: 0, y: 22 }} whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }} transition={{ duration: 0.55, delay: 0.06 * i }}
       whileHover={{ y: -5 }}
+      className="w-full min-w-0"
     >
-      <div className="card p-8 flex flex-col items-center text-center gap-5 h-full">
+      <div className="card p-6 sm:p-8 flex flex-col items-center text-center gap-4 sm:gap-5 h-full">
         <Avatar photo={m.photo} initials={m.initials} size="lg" />
-        <div className="flex-1">
+        <div className="flex-1 min-w-0 w-full">
           <p className="font-bold text-gray-900 text-base leading-snug">{m.name}</p>
           <p className="text-[12px] text-gray-400 font-light mt-1">{m.nameEn}</p>
           <p className="text-brand-blue text-sm font-semibold mt-3 leading-snug">{m.title}</p>
           {m.subtitle && <p className="text-gray-400 text-[12px] mt-1 font-light">{m.subtitle}</p>}
         </div>
-        <a href={m.linkedin} target="_blank" rel="noopener noreferrer" className="text-brand-blue-light hover:text-brand-blue transition-colors no-underline">
+        <a
+          href={m.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center justify-center min-h-[44px] min-w-[44px] rounded-xl text-brand-blue-light hover:text-brand-blue active:bg-brand-blue/10 transition-colors no-underline touch-manipulation"
+          aria-label={`LinkedIn — ${m.name}`}
+        >
           <LinkedInIcon />
         </a>
       </div>
@@ -115,9 +122,9 @@ function TeamCard({ m, i }) {
     <motion.div
       initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }} transition={{ duration: 0.6, delay: 0.07 * i }}
-      whileHover={{ y: -5 }} className="flex"
+      whileHover={{ y: -5 }} className="flex w-full min-w-0"
     >
-      <div className="card p-7 flex flex-col gap-5 w-full">
+      <div className="card p-5 sm:p-7 flex flex-col gap-5 w-full min-w-0">
         <div className="flex items-start gap-4">
           <Avatar photo={m.photo} initials={m.initials} size="lg" />
           <div className="flex-1 min-w-0 pt-1">
@@ -132,7 +139,12 @@ function TeamCard({ m, i }) {
         </div>
         <p className="text-gray-600 text-[14px] font-light leading-relaxed flex-1">{m.bio}</p>
         <div className="pt-4 border-t border-gray-100">
-          <a href={m.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-brand-blue-light hover:text-brand-blue text-xs font-medium transition-colors no-underline">
+          <a
+            href={m.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 min-h-[44px] px-1 -mx-1 rounded-lg text-brand-blue-light hover:text-brand-blue text-xs font-medium transition-colors no-underline touch-manipulation active:bg-brand-blue/8"
+          >
             <LinkedInIcon /> عرض الملف الشخصي
           </a>
         </div>
@@ -304,7 +316,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
           <div className="mb-12">
             <SectionDivider label="مجلس الإدارة" />
-            <div className="grid grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 sm:gap-6 lg:gap-8 max-w-4xl mx-auto w-full">
               {BOARD.map((m, i) => <BoardCard key={m.nameEn} m={m} i={i} />)}
             </div>
           </div>

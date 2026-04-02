@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef, useLayoutEffect } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -14,6 +14,8 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [menuTop, setMenuTop] = useState(72)
+  const headerRef = useRef(null)
   const { pathname } = useLocation()
 
   useEffect(() => {
@@ -25,6 +27,22 @@ export default function Navbar() {
   useEffect(() => {
     setMenuOpen(false)
   }, [pathname])
+
+  useEffect(() => {
+    if (!menuOpen) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = prev }
+  }, [menuOpen])
+
+  useLayoutEffect(() => {
+    if (!menuOpen || !headerRef.current) return
+    const el = headerRef.current
+    const sync = () => setMenuTop(el.getBoundingClientRect().bottom)
+    sync()
+    window.addEventListener('resize', sync)
+    return () => window.removeEventListener('resize', sync)
+  }, [menuOpen, scrolled])
 
   const isDark = pathname === '/' || pathname === '/services'
   const isScrolledOrLight = scrolled || !isDark
@@ -44,7 +62,7 @@ export default function Navbar() {
           : 'bg-transparent'
       }`}
     >
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 min-h-[4.5rem] sm:min-h-[5rem] py-2 sm:py-0 flex items-center justify-between gap-3">
+      <nav ref={headerRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 min-h-[4.5rem] sm:min-h-[5rem] py-2 sm:py-0 flex items-center justify-between gap-3">
 
         {/* Logo */}
         <Link to="/" className="flex items-center no-underline">
@@ -102,29 +120,52 @@ export default function Navbar() {
         </button>
       </nav>
 
-      {/* Mobile menu */}
+      {/* Mobile menu — خلفية + لوحة؛ قياس ارتفاع الشريط لعدم تداخل المحتوى */}
       <AnimatePresence>
         {menuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.22 }}
-            className="md:hidden overflow-hidden bg-white border-t border-gray-100 shadow-[0_12px_40px_rgba(0,0,0,0.06)]"
+            key="mobile-nav-layer"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="md:hidden fixed inset-x-0 bottom-0 z-[55] pointer-events-none"
+            style={{ top: menuTop }}
           >
-            <div className="px-4 sm:px-6 py-2 flex flex-col">
-              {NAV_LINKS.map((link) => (
-                <Link
-                  key={link.label}
-                  to={link.to}
-                  className={`text-base font-medium min-h-[48px] flex items-center border-b border-gray-50 last:border-0 no-underline transition-colors touch-manipulation ${
-                    pathname === link.to ? 'text-brand-blue' : 'text-gray-700 active:text-brand-blue'
-                  }`}
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </div>
+            <button
+              type="button"
+              aria-label="إغلاق القائمة"
+              className="absolute inset-0 z-0 bg-black/35 backdrop-blur-[1px] pointer-events-auto"
+              onClick={() => setMenuOpen(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+              className="relative z-10 mx-auto w-full max-w-lg bg-white border-t border-gray-100 shadow-[0_16px_48px_rgba(0,0,0,0.14)] overflow-y-auto overscroll-contain rounded-b-2xl pointer-events-auto"
+              style={{
+                maxHeight: `calc(100dvh - ${menuTop}px)`,
+                paddingBottom: 'max(1rem, env(safe-area-inset-bottom, 0px))',
+              }}
+            >
+              <div className="px-3 sm:px-5 py-3 flex flex-col gap-0.5">
+                {NAV_LINKS.map((link) => (
+                  <Link
+                    key={link.label}
+                    to={link.to}
+                    onClick={() => setMenuOpen(false)}
+                    className={`text-[17px] font-semibold min-h-[54px] px-3 flex items-center rounded-xl no-underline transition-colors duration-150 touch-manipulation active:scale-[0.99] active:bg-brand-blue/[0.08] ${
+                      pathname === link.to
+                        ? 'text-brand-blue bg-brand-blue/[0.06]'
+                        : 'text-gray-800 active:text-brand-blue'
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

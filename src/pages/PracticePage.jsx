@@ -108,8 +108,8 @@ function PlaceholderCard({ text }) {
 function InsightStrip({ reports }) {
   return (
     <section className="py-14 bg-white">
-      <div className="max-w-7xl mx-auto px-6 lg:px-10">
-        <div className="grid grid-cols-3 gap-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {reports.slice(0, 2).map(r => (
             <a
               key={r.title}
