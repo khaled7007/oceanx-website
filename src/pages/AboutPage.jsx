@@ -167,12 +167,15 @@ export default function AboutPage() {
         <motion.div
           initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.9, delay: 0.2 }}
-          className="absolute inset-y-0 left-0 w-full lg:w-1/2 hidden lg:block"
+          className="absolute inset-y-0 left-0 w-full lg:w-1/2 hidden lg:block overflow-hidden"
+          style={{ borderRadius: '0 2.5rem 2.5rem 0' }}
         >
           <img src="/office-hero.png" alt="مكتب أوشن إكس" className="w-full h-full object-cover object-center" />
-          {/* تدرج للدمج مع الخلفية */}
-          <div className="absolute inset-y-0 right-0 w-40 pointer-events-none"
-            style={{ background: 'linear-gradient(to left, #0c1030, transparent)' }} />
+          {/* تدرج ناعم للدمج مع الخلفية */}
+          <div className="absolute inset-y-0 right-0 w-32 pointer-events-none"
+            style={{ background: 'linear-gradient(to left, #0c1030 10%, transparent)' }} />
+          <div className="absolute inset-0 pointer-events-none"
+            style={{ background: 'linear-gradient(to bottom, #0c1030 0%, transparent 15%, transparent 85%, #0c1030 100%)' }} />
         </motion.div>
 
         {/* Text content */}
