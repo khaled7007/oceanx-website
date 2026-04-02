@@ -6,6 +6,7 @@ import {
   REPORT_YEARS, ARTICLE_TOPICS,
   PODCASTS, PODCAST_META,
 } from '../data/insight'
+import { articleRoute, reportRoute, isInsightDirectEntry } from '../utils/insightLinks'
 
 function ExternalArrow() {
   return (
@@ -45,28 +46,28 @@ function FeaturedStrip() {
           </Link>
 
           {/* Report 2 */}
-          {report2 && (
-            <a href={report2.url} target="_blank" rel="noopener noreferrer" className="relative rounded-xl overflow-hidden no-underline group min-h-[220px]">
+          {report2 && (() => { const idx = REPORTS.indexOf(report2); return (
+            <Link to={reportRoute(idx)} className="relative rounded-xl overflow-hidden no-underline group min-h-[220px]">
               <img src={report2.image} alt={report2.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
               <div className="absolute bottom-0 p-5 z-10">
                 <span className="text-white/50 text-[10px] font-semibold tracking-widest uppercase block mb-1">تقرير</span>
                 <p className="text-white font-bold text-sm leading-snug">{report2.title}</p>
               </div>
-            </a>
-          )}
+            </Link>
+          )})()}
 
           {/* Report 3 */}
-          {report3 && (
-            <a href={report3.url} target="_blank" rel="noopener noreferrer" className="relative rounded-xl overflow-hidden no-underline group min-h-[220px]">
+          {report3 && (() => { const idx = REPORTS.indexOf(report3); return (
+            <Link to={reportRoute(idx)} className="relative rounded-xl overflow-hidden no-underline group min-h-[220px]">
               <img src={report3.image} alt={report3.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
               <div className="absolute bottom-0 p-5 z-10">
                 <span className="text-white/50 text-[10px] font-semibold tracking-widest uppercase block mb-1">تقرير</span>
                 <p className="text-white font-bold text-sm leading-snug">{report3.title}</p>
               </div>
-            </a>
-          )}
+            </Link>
+          )})()}
         </div>
 
         {/* Separator */}
@@ -74,11 +75,9 @@ function FeaturedStrip() {
           <div className="grid grid-cols-4 gap-3">
             {/* 3 small articles */}
             {ARTICLES.slice(0, 3).map((a, i) => (
-              <a
+              <Link
                 key={a.title}
-                href={a.url}
-                target="_blank"
-                rel="noopener noreferrer"
+                to={articleRoute(i)}
                 className="flex gap-3 items-start no-underline group"
               >
                 <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-brand-navy">
@@ -87,7 +86,7 @@ function FeaturedStrip() {
                 <p className="text-white/60 text-[12px] font-medium leading-snug group-hover:text-white transition-colors line-clamp-3">
                   {a.title}
                 </p>
-              </a>
+              </Link>
             ))}
 
             {/* Watch / Listen / Inspired */}
@@ -113,12 +112,11 @@ function TrendingTopics() {
   const [activeTopic, setActiveTopic] = useState('الكل')
   const topics = ['الكل', ...ARTICLE_TOPICS.filter(t => t !== 'الكل').slice(0, 4)]
 
-  const filtered = activeTopic === 'الكل'
-    ? ARTICLES
-    : ARTICLES.filter(a => a.tag === activeTopic)
+  const filteredWithIndex = (activeTopic === 'الكل' ? ARTICLES : ARTICLES.filter(a => a.tag === activeTopic))
+    .map(a => ({ ...a, articleIndex: ARTICLES.indexOf(a) }))
 
-  const featuredArticle = filtered[0]
-  const gridArticles = filtered.slice(1, 4)
+  const featuredArticle = filteredWithIndex[0]
+  const gridArticles = filteredWithIndex.slice(1, 4)
 
   return (
     <div className="py-14 bg-white">
@@ -153,10 +151,8 @@ function TrendingTopics() {
 
         {/* Featured dark article card */}
         {featuredArticle && (
-          <a
-            href={featuredArticle.url}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            to={articleRoute(featuredArticle.articleIndex)}
             className="block rounded-2xl overflow-hidden mb-6 no-underline group"
             style={{ background: 'linear-gradient(135deg, #06081e 0%, #0f1235 100%)' }}
           >
@@ -176,20 +172,20 @@ function TrendingTopics() {
                 </div>
               )}
             </div>
-          </a>
+          </Link>
         )}
 
         {/* 3-col article grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {gridArticles.map((a, i) => (
-            <motion.a
+            <motion.div
               key={a.title}
-              href={a.url}
-              target="_blank"
-              rel="noopener noreferrer"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, delay: i * 0.06 }}
+            >
+            <Link
+              to={articleRoute(a.articleIndex)}
               className="group block bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-lg hover:border-brand-blue/15 transition-all duration-300 no-underline"
             >
               <div className="h-36 overflow-hidden bg-gray-100">
@@ -208,7 +204,8 @@ function TrendingTopics() {
                   </span>
                 </div>
               </div>
-            </motion.a>
+            </Link>
+            </motion.div>
           ))}
         </div>
       </div>
@@ -259,12 +256,12 @@ function ReportsSection() {
 
         {/* 4-col grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {filtered.map((r, i) => (
-            <a
+          {filtered.map((r) => {
+            const globalIndex = REPORTS.indexOf(r)
+            return (
+            <Link
               key={r.title}
-              href={r.url}
-              target="_blank"
-              rel="noopener noreferrer"
+              to={reportRoute(globalIndex)}
               className="group block bg-white rounded-xl border border-gray-100 overflow-hidden hover:shadow-lg hover:border-brand-blue/15 transition-all duration-300 no-underline"
             >
               <div className="h-36 overflow-hidden bg-gray-100">
@@ -282,8 +279,9 @@ function ReportsSection() {
                   </span>
                 </div>
               </div>
-            </a>
-          ))}
+            </Link>
+            )
+          })}
         </div>
 
         <div className="text-center mt-8">

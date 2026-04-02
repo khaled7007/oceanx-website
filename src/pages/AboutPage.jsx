@@ -158,56 +158,63 @@ export default function AboutPage() {
     <>
       {/* ══ HERO ════════════════════════════════════════════ */}
       <div
-        className="relative overflow-hidden pt-24 pb-0"
-        style={{ background: 'linear-gradient(160deg, #07091f 0%, #0c1030 60%, #080618 100%)' }}
+        className="relative overflow-hidden"
+        style={{ background: 'linear-gradient(160deg, #07091f 0%, #0c1030 60%, #080618 100%)', minHeight: 560 }}
       >
         <div className="absolute inset-0 ocean-mesh opacity-25 pointer-events-none" />
-        <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[400px] pointer-events-none"
-          style={{ background: 'radial-gradient(ellipse, rgba(47,72,245,0.1) 0%, transparent 65%)' }} />
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10">
-          <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center pb-10">
+        {/* Image — يمتد من الحافة اليسرى للمنتصف */}
+        <motion.div
+          initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.9, delay: 0.2 }}
+          className="absolute inset-y-0 left-0 w-full lg:w-1/2 hidden lg:block"
+        >
+          <img src="/office-hero.png" alt="مكتب أوشن إكس" className="w-full h-full object-cover object-center" />
+          {/* تدرج للدمج مع الخلفية */}
+          <div className="absolute inset-y-0 right-0 w-40 pointer-events-none"
+            style={{ background: 'linear-gradient(to left, #0c1030, transparent)' }} />
+        </motion.div>
 
-            {/* Image */}
+        {/* Text content */}
+        <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 pt-24">
+          <div className="lg:w-1/2 lg:mr-auto flex flex-col justify-center py-10 lg:py-20">
+
+            {/* Mobile image */}
             <motion.div
-              initial={{ opacity: 0, x: 24 }} animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="overflow-hidden rounded-2xl order-2 lg:order-2 flex items-center justify-center"
-              style={{ height: 360, background: 'rgba(255,255,255,0.04)' }}
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+              transition={{ duration: 0.7, delay: 0.2 }}
+              className="block lg:hidden w-full h-56 rounded-2xl overflow-hidden mb-8"
             >
-              <img src="/office-hero.png" alt="مكتب أوشن إكس" className="w-full h-full rounded-2xl" style={{ objectFit: 'contain' }} />
+              <img src="/office-hero.png" alt="مكتب أوشن إكس" className="w-full h-full object-cover" />
             </motion.div>
 
-            {/* Text */}
-            <div className="order-1 lg:order-1 flex flex-col justify-center py-10 lg:py-12">
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-2 text-xs text-white/30 mb-6">
-                <Link to="/" className="hover:text-white/60 no-underline transition-colors">الرئيسية</Link>
-                <span>/</span>
-                <span className="text-white/50">من نحن</span>
-              </motion.div>
-              <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} className="section-label block mb-4">من نحن</motion.span>
-              <motion.h1
-                initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.85, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-                className="text-3xl lg:text-4xl xl:text-5xl font-black text-white leading-[1.2] mb-6"
-              >
-                أعوامنا من المعرفة جعلتنا كياناً{' '}
-                <span className="text-brand-blue">يمكنك الوثوق به</span>
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.35 }}
-                className="text-white/60 text-[15px] font-light leading-[1.8]"
-              >
-                أوشن إكس لحلول الأعمال شركة استشارية سعودية تأسست عام 2012، تقدم خدماتها للقطاعين الحكومي والخاص. نُسهم في تطوير المنظمات عبر الابتكار، الاستشارات الإدارية، الاستشارات المالية، وأبحاث السوق — بأحدث المنهجيات وأعلى معايير الجودة.
-              </motion.p>
-            </div>
-
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-2 text-xs text-white/30 mb-6">
+              <Link to="/" className="hover:text-white/60 no-underline transition-colors">الرئيسية</Link>
+              <span>/</span>
+              <span className="text-white/50">من نحن</span>
+            </motion.div>
+            <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} className="section-label block mb-4">من نحن</motion.span>
+            <motion.h1
+              initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.85, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+              className="text-3xl lg:text-4xl xl:text-5xl font-black text-white leading-[1.2] mb-6"
+            >
+              أعوامنا من المعرفة جعلتنا كياناً{' '}
+              <span className="text-brand-blue">يمكنك الوثوق به</span>
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.35 }}
+              className="text-white/60 text-[15px] font-light leading-[1.8]"
+            >
+              أوشن إكس لحلول الأعمال شركة استشارية سعودية تأسست عام 2012، تقدم خدماتها للقطاعين الحكومي والخاص. نُسهم في تطوير المنظمات عبر الابتكار، الاستشارات الإدارية، الاستشارات المالية، وأبحاث السوق — بأحدث المنهجيات وأعلى معايير الجودة.
+            </motion.p>
           </div>
         </div>
       </div>
 
       {/* ══ رؤيتنا + رسالتنا ════════════════════════════════ */}
+
       <section className="py-16 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col divide-y divide-gray-100">
           <motion.div {...fadeUp(0)} className="grid lg:grid-cols-[180px_1fr] gap-6 lg:gap-16 lg:items-center pb-10">

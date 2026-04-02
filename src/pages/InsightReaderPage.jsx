@@ -178,25 +178,63 @@ export default function InsightReaderPage({ forcedKind }) {
         <div className="max-w-3xl mx-auto px-6 lg:px-10 py-14">
           {loading && <Skeleton />}
 
-          {!loading && !post && (
-            <div className="text-center py-20">
-              <h2 className="text-xl font-bold text-gray-800 mb-3">تعذّر عرض {contentTypeLabel}</h2>
-              <p className="text-gray-500 mb-8 font-light">
-                المحتوى غير متاح داخل الموقع حاليًا. يمكنك فتح النسخة الأصلية مباشرة.
-              </p>
-              <div className="flex items-center justify-center gap-4 mb-8">
-                <a href={externalUrl} target="_blank" rel="noopener noreferrer" className="btn-primary text-sm">
-                  افتح المصدر الأصلي
-                </a>
-                <button onClick={() => navigate(-1)} className="btn-light text-sm">
+          {!loading && !post && meta && (
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="space-y-10"
+            >
+              {meta.image && (
+                <div className="rounded-2xl overflow-hidden shadow-md aspect-video">
+                  <img
+                    src={meta.image}
+                    alt={meta.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+
+              {meta.excerpt && (
+                <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100">
+                  <p className="text-gray-500 text-xs font-semibold tracking-widest uppercase mb-4">
+                    ملخص {contentTypeLabel}
+                  </p>
+                  <p className="text-gray-700 text-lg leading-relaxed font-light" dir="rtl">
+                    {meta.excerpt}
+                  </p>
+                </div>
+              )}
+
+              <div className="flex items-center justify-between flex-wrap gap-4 pt-4 border-t border-gray-100">
+                <button
+                  onClick={() => navigate(-1)}
+                  className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-800 transition-colors"
+                >
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M10 12L6 8l4-4" />
+                  </svg>
                   رجوع
                 </button>
+                <a
+                  href={externalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 text-sm text-brand-blue font-medium hover:underline"
+                >
+                  قراءة {contentTypeLabel} كاملةً
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+                    <path d="M3 11L11 3M6 3h5v5" />
+                  </svg>
+                </a>
               </div>
-              {error === 'fetch_error' && (
-                <p className="text-xs text-gray-400 font-light">
-                  سبب تقني من المصدر الخارجي، وليس من الموقع الجديد.
-                </p>
-              )}
+            </motion.div>
+          )}
+
+          {!loading && !post && !meta && (
+            <div className="text-center py-20">
+              <h2 className="text-xl font-bold text-gray-800 mb-3">{contentTypeLabel} غير موجودة</h2>
+              <button onClick={() => navigate(-1)} className="btn-light text-sm mt-4">رجوع</button>
             </div>
           )}
 
