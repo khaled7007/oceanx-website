@@ -85,10 +85,10 @@ function ServiceRow({ s, index }) {
 
   return (
     <div className="py-16 lg:py-24 border-b border-gray-100 last:border-0">
-      <div className={`grid lg:grid-cols-2 gap-12 lg:gap-20 items-center ${isEven ? '' : 'lg:[direction:ltr]'}`}>
+      <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
 
         {/* Image side */}
-        <motion.div {...fadeUp(isEven ? 0 : 0.1)} className={isEven ? '' : 'lg:order-2'}>
+        <motion.div {...fadeUp(isEven ? 0 : 0.1)} className={isEven ? 'lg:order-2' : 'lg:order-1'}>
           {s.image
             ? <img src={s.image} alt={s.title} className="w-full rounded-2xl object-cover min-h-[360px]" style={{ maxHeight: 420 }} />
             : <DummyImage index={index} />
@@ -96,7 +96,7 @@ function ServiceRow({ s, index }) {
         </motion.div>
 
         {/* Text side */}
-        <motion.div {...fadeUp(isEven ? 0.1 : 0)} className={`[direction:rtl] ${isEven ? '' : 'lg:order-1'}`}>
+        <motion.div {...fadeUp(isEven ? 0.1 : 0)} className={isEven ? 'lg:order-1' : 'lg:order-2'}>
           {/* Number + label */}
           <div className="flex items-center gap-3 mb-5">
             <span className="text-brand-blue font-black text-[18px] tabular-nums tracking-widest">
