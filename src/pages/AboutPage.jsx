@@ -178,9 +178,9 @@ export default function AboutPage() {
           </div>
         </motion.div>
 
-        {/* Text content */}
+        {/* Text content — مثبت على يمين الشاشة (هامش يسار تلقائي) حتى لا يغطي صورة المكتب */}
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-10 pt-24">
-          <div className="lg:w-1/2 lg:mr-auto flex flex-col justify-center py-10 lg:py-20">
+          <div className="w-full max-w-md sm:max-w-lg lg:max-w-xl xl:max-w-2xl ml-auto flex flex-col justify-center py-10 lg:py-20 text-right">
 
             {/* Mobile image */}
             <motion.div
