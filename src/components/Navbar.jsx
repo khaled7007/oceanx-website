@@ -56,13 +56,15 @@ export default function Navbar() {
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 pt-[env(safe-area-inset-top,0px)] ${
+      className={`fixed inset-x-0 top-0 transition-all duration-300 pt-[env(safe-area-inset-top,0px)] ${
+        menuOpen ? 'z-[80]' : 'z-50'
+      } ${
         isScrolledOrLight
           ? 'bg-white/97 backdrop-blur-md shadow-[0_1px_20px_rgba(0,0,0,0.07)]'
           : 'bg-transparent'
       }`}
     >
-      <nav ref={headerRef} className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 min-h-[4.5rem] sm:min-h-[5rem] py-2 sm:py-0 flex items-center justify-between gap-3">
+      <nav ref={headerRef} className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 min-h-[4.5rem] sm:min-h-[5rem] py-2 sm:py-0 flex items-center justify-between gap-3">
 
         {/* Logo */}
         <Link to="/" className="flex items-center no-underline">
@@ -129,7 +131,7 @@ export default function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="md:hidden fixed inset-x-0 bottom-0 z-[55] pointer-events-none"
+            className="md:hidden fixed inset-x-0 bottom-0 z-10 pointer-events-none"
             style={{ top: menuTop }}
           >
             <button

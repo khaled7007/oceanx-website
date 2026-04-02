@@ -36,7 +36,7 @@ function FloatingContact() {
 
   return (
     <div
-      className="fixed z-50 flex flex-col gap-3 items-stretch sm:items-end
+      className="fixed z-50 flex flex-col gap-3 items-stretch sm:items-end pointer-events-none
         bottom-[max(1rem,env(safe-area-inset-bottom,0px))]
         left-[max(1rem,env(safe-area-inset-left,0px))]
         right-[max(1rem,env(safe-area-inset-right,0px))]
@@ -48,7 +48,7 @@ function FloatingContact() {
         className={`transition-all duration-300 origin-bottom sm:origin-bottom-left w-full sm:w-auto ${
           open
             ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto'
-            : 'opacity-0 scale-95 translate-y-4 pointer-events-none'
+            : 'opacity-0 scale-95 translate-y-4 pointer-events-none invisible min-h-0 max-h-0 overflow-hidden'
         }`}
       >
         <div className="w-full max-w-[min(20rem,calc(100vw-2rem))] sm:w-80 sm:max-w-none mx-auto sm:mx-0 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
@@ -142,7 +142,7 @@ function FloatingContact() {
         type="button"
         onClick={() => setOpen(v => !v)}
         aria-label="تواصل معنا"
-        className={`self-end min-h-[48px] min-w-[48px] w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-all duration-300 touch-manipulation ${
+        className={`self-end pointer-events-auto min-h-[48px] min-w-[48px] w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-all duration-300 touch-manipulation ${
           open ? 'rotate-45 bg-gray-800' : 'bg-brand-blue hover:bg-[#2338e0] active:scale-95 sm:hover:scale-110'
         }`}
       >
