@@ -106,11 +106,11 @@ function ServiceRow({ s, index }) {
       <p className="text-gray-600 font-normal text-[19px] sm:text-[21px] lg:text-[22px] leading-[1.85] mb-8">
         {s.desc}
       </p>
-      <ul className="space-y-3 mb-8">
+      <ul className="space-y-3.5 sm:space-y-4 mb-8">
         {s.points.map((pt) => (
-          <li key={pt} className="flex items-center gap-3">
-            <span className="w-1.5 h-1.5 rounded-full bg-brand-blue flex-shrink-0" />
-            <span className="text-gray-700 font-medium text-[14px]">{pt}</span>
+          <li key={pt} className="flex items-center gap-3 sm:gap-3.5">
+            <span className="w-2 h-2 rounded-full bg-brand-blue flex-shrink-0" />
+            <span className="text-gray-800 font-medium text-[16px] sm:text-[17px] lg:text-[18px] leading-snug">{pt}</span>
           </li>
         ))}
       </ul>
