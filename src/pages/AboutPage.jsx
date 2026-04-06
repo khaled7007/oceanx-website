@@ -273,7 +273,7 @@ export default function AboutPage() {
                   key={v.title}
                   initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }} transition={{ duration: 0.55, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                  className="rounded-2xl border border-gray-100 bg-gray-50/40 p-7 sm:p-8 flex flex-col gap-4 sm:gap-5 text-center items-center hover:border-brand-blue/15 hover:shadow-lg hover:bg-white transition-all duration-300"
+                  className="p-7 sm:p-8 flex flex-col gap-4 sm:gap-5 text-center items-center"
                 >
                   <div className="w-14 h-14 sm:w-[3.75rem] sm:h-[3.75rem] flex-shrink-0">
                     <img src={v.icon} alt="" className="w-full h-full object-contain" />
