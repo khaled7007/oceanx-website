@@ -11,6 +11,16 @@ const NAV_LINKS = [
   { label: 'تواصل معنا', to: '/contact' },
 ]
 
+/** صفحات تبدأ بهيرو داكن — الشريط الشفاف القديم كان يخلّي الروابط رمادية فوق أزرق ويختفي الوضوح */
+function hasDarkHeroRoute(pathname) {
+  if (pathname === '/') return true
+  const exact = ['/about', '/services', '/news', '/jobs', '/contact', '/competencies']
+  if (exact.includes(pathname)) return true
+  if (pathname.startsWith('/insight')) return true
+  if (pathname.startsWith('/practices')) return true
+  return false
+}
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -44,12 +54,14 @@ export default function Navbar() {
     return () => window.removeEventListener('resize', sync)
   }, [menuOpen, scrolled])
 
-  const isDark = pathname === '/' || pathname === '/services'
-  const isScrolledOrLight = scrolled || !isDark
+  const immersiveDark = hasDarkHeroRoute(pathname) && !scrolled && !menuOpen
+  const solidLightBar = !immersiveDark
 
-  const logoFilter = isScrolledOrLight ? '' : 'brightness-0 invert'
-  const linkColor = isScrolledOrLight ? 'text-gray-700 hover:text-brand-blue' : 'text-white/80 hover:text-white'
-  const activeLinkColor = isScrolledOrLight ? 'text-brand-blue' : 'text-white'
+  const logoFilter = solidLightBar ? '' : 'brightness-0 invert'
+  const linkColor = solidLightBar
+    ? 'text-gray-800 hover:text-brand-blue'
+    : 'text-white hover:text-white [text-shadow:0_1px_2px_rgba(0,0,0,0.65)]'
+  const activeLinkColor = solidLightBar ? 'text-brand-blue' : 'text-brand-blue-light'
 
   return (
     <motion.header
@@ -59,9 +71,9 @@ export default function Navbar() {
       className={`fixed inset-x-0 top-0 transition-all duration-300 pt-[env(safe-area-inset-top,0px)] ${
         menuOpen ? 'z-[80]' : 'z-50'
       } ${
-        isScrolledOrLight
-          ? 'bg-white/97 backdrop-blur-md shadow-[0_1px_20px_rgba(0,0,0,0.07)]'
-          : 'bg-transparent'
+        solidLightBar
+          ? 'bg-white border-b border-gray-200/90 shadow-[0_4px_24px_rgba(0,0,0,0.06)]'
+          : 'bg-[#050816]/92 backdrop-blur-xl border-b border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.45)]'
       }`}
     >
       <nav ref={headerRef} className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 min-h-[4.5rem] sm:min-h-[5rem] py-2 sm:py-0 flex items-center justify-between gap-3">
@@ -88,7 +100,7 @@ export default function Navbar() {
                   }`}
                 >
                   {link.label}
-                  <span className={`absolute bottom-0 right-0 h-px bg-brand-blue transition-all duration-250 ${
+                  <span className={`absolute bottom-0 right-0 h-0.5 rounded-full bg-brand-blue transition-all duration-250 ${
                     isActive ? 'w-full' : 'w-0 group-hover:w-full'
                   }`} />
                 </Link>
@@ -101,7 +113,7 @@ export default function Navbar() {
         <button
           type="button"
           className={`md:hidden min-h-[44px] min-w-[44px] flex flex-col items-center justify-center gap-[5px] rounded-xl transition-colors touch-manipulation ${
-            isScrolledOrLight ? 'hover:bg-gray-100 active:bg-gray-100/80' : 'hover:bg-white/10 active:bg-white/15'
+            solidLightBar ? 'hover:bg-gray-100 active:bg-gray-100/80' : 'hover:bg-white/15 active:bg-white/20'
           }`}
           onClick={() => setMenuOpen(v => !v)}
           aria-label="القائمة"
@@ -111,7 +123,7 @@ export default function Navbar() {
             <span
               key={pos}
               className={`block w-5 h-px transition-all duration-300 ${
-                isScrolledOrLight ? 'bg-gray-800' : 'bg-white'
+                solidLightBar ? 'bg-gray-800' : 'bg-white shadow-[0_0_1px_rgba(0,0,0,0.5)]'
               } ${
                 pos === 'top' && menuOpen ? 'rotate-45 translate-y-[6px]' :
                 pos === 'mid' && menuOpen ? 'opacity-0 scale-x-0' :
