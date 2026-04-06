@@ -184,7 +184,7 @@ export default function AboutPage() {
           <div className="w-full h-full overflow-hidden shadow-2xl"
             style={{ borderRadius: '0 2rem 2rem 0' }}
           >
-            <img src="/office-hero.png" alt="مكتب أوشن إكس" className="w-full h-full object-cover object-center" />
+            <img src="/about-hero-anniversary.png" alt="فريق أوشن إكس — الذكرى السنوية العاشرة" className="w-full h-full object-cover object-center" />
             <div className="absolute inset-y-0 right-0 w-24 pointer-events-none"
               style={{ background: 'linear-gradient(to left, rgba(12,16,48,0.6), transparent)' }} />
           </div>
@@ -200,7 +200,7 @@ export default function AboutPage() {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="block lg:hidden w-full aspect-[5/3] max-h-[220px] sm:max-h-none sm:h-56 rounded-2xl overflow-hidden mb-6 sm:mb-8 shadow-lg"
             >
-              <img src="/office-hero.png" alt="مكتب أوشن إكس" className="w-full h-full object-cover object-center" />
+              <img src="/about-hero-anniversary.png" alt="فريق أوشن إكس — الذكرى السنوية العاشرة" className="w-full h-full object-cover object-center" />
             </motion.div>
 
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-2 text-xs text-white/30 mb-6">
