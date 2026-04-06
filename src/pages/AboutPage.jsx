@@ -331,15 +331,24 @@ export default function AboutPage() {
       </section>
 
       {/* ══ دورنا في رؤية 2030 ══════════════════════════════ */}
-      <section className="py-14 lg:py-20 bg-white border-t border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
-          <div className="grid lg:grid-cols-[180px_1fr] gap-6 lg:gap-16 items-center">
-            <h3 className="text-brand-blue text-2xl font-black flex-shrink-0">دورنا في رؤية 2030</h3>
-            <motion.p {...fadeUp(0.08)} className="text-gray-600 font-light text-[18px] leading-relaxed">
+      <section className="border-t border-gray-200/90 bg-white">
+        <motion.div
+          {...fadeUp(0)}
+          className="relative py-14 sm:py-20 lg:py-24 overflow-hidden"
+        >
+          <div
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_85%_70%_at_100%_30%,rgba(47,72,245,0.08),transparent_55%)]"
+            aria-hidden
+          />
+          <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 flex flex-col lg:flex-row lg:items-start gap-6 lg:gap-16 xl:gap-20">
+            <h3 className="text-brand-blue text-2xl sm:text-3xl lg:text-[2rem] font-black leading-[1.2] shrink-0 border-s-[4px] border-brand-blue ps-5 sm:ps-6 lg:max-w-[14rem] xl:max-w-[16rem]">
+              دورنا في رؤية 2030
+            </h3>
+            <p className="text-gray-800 font-normal text-[17px] sm:text-[19px] lg:text-[21px] leading-[1.9] lg:pt-1 flex-1 min-w-0">
               أولت المملكة العربية السعودية اهتمامًا بالشركات المحلية في مختلف المجالات، وحرصت على تطويرها لتصبح شركات رائدة إقليميًا وعالميًا؛ من خلال تعزيز دورهم في تحقيق مستهدفات برامج رؤية المملكة 2030. ومن هذا المنطلق؛ نسعى بدورنا كأحد الشركات الاستشارية المحلية الرائدة في المملكة إلى تقديم حلول نوعية تساهم بشكل رئيسي في تنمية الاقتصاد المحلي، وتعزيز التنمية المجتمعية، ودعم قطاع الأعمال والمنشآت المحلية الصغيرة والمتوسطة.
-            </motion.p>
+            </p>
           </div>
-        </div>
+        </motion.div>
       </section>
 
       {/* ══ NEWSLETTER ══════════════════════════════════════ */}
