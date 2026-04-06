@@ -293,24 +293,6 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ══ بيئة عملنا ══════════════════════════════════════ */}
-      <section className="py-20 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
-          <motion.div {...fadeUp(0)} className="flex flex-col lg:flex-row items-center gap-10 lg:gap-20">
-            <img src="/gptw-badge.png" alt="Great Place To Work Certified" loading="lazy" decoding="async" className="w-56 flex-shrink-0" />
-            <div>
-              <motion.span {...fadeUp(0.06)} className="section-label block mb-3 text-base">بيئة عملنا</motion.span>
-              <motion.h2 {...fadeUp(0.1)} className="text-3xl lg:text-4xl font-black text-gray-900 mb-3">
-                حاصلون على جائزة <span className="text-brand-blue">أفضل بيئة عمل</span>
-              </motion.h2>
-              <motion.p {...fadeUp(0.14)} className="text-gray-500 font-light text-[18px] leading-relaxed max-w-xl">
-                حاصل على جائزة أفضل بيئة عمل 2023-2024 من Great Place To Work® تقديراً لثقافتنا المؤسسية التي تضع الإنسان في قلب العمل.
-              </motion.p>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
       {/* ══ مجلس الإدارة + المؤسسون ════════════════════════ */}
       <section className="py-14 lg:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
