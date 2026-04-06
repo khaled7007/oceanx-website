@@ -224,37 +224,40 @@ export default function AboutPage() {
         </div>
       </div>
 
-      {/* ══ رؤيتنا + رسالتنا ════════════════════════════════ */}
+      {/* ══ رؤيتنا + رسالتنا (تحريري — صفان بعرض كامل) ═════════ */}
 
-      <section className="py-14 sm:py-20 lg:py-24 bg-gradient-to-b from-gray-50/70 via-white to-white">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-10">
-          <div className="grid gap-6 sm:gap-8 lg:grid-cols-2 lg:gap-10">
-            <motion.article
-              {...fadeUp(0)}
-              className="relative rounded-2xl border border-gray-200/70 bg-white p-8 sm:p-10 shadow-[0_2px_24px_-4px_rgba(15,23,42,0.08)] hover:shadow-[0_8px_32px_-6px_rgba(15,23,42,0.1)] transition-shadow duration-300 overflow-hidden"
-            >
-              <div className="absolute inset-y-0 right-0 w-1 bg-gradient-to-b from-brand-blue via-brand-blue/80 to-brand-blue/30 rounded-l-sm" aria-hidden />
-              <h3 className="text-brand-blue text-[1.65rem] sm:text-3xl font-black leading-tight mb-5 sm:mb-6 pr-1">
-                رؤيتنا
-              </h3>
-              <p className="text-gray-800 font-normal text-[17px] sm:text-[19px] lg:text-[20px] leading-[1.9] pr-2">
-                أن نكون ضمن الجهات الاستشارية التي تُحدث فرقًا حقيقيًا في قطاع الأعمال بالمملكة، من خلال استشارات ترتبط بالنتائج وتنعكس أثرًا ملموسًا ومستدامًا.
-              </p>
-            </motion.article>
-            <motion.article
-              {...fadeUp(0.08)}
-              className="relative rounded-2xl border border-gray-200/70 bg-white p-8 sm:p-10 shadow-[0_2px_24px_-4px_rgba(15,23,42,0.08)] hover:shadow-[0_8px_32px_-6px_rgba(15,23,42,0.1)] transition-shadow duration-300 overflow-hidden"
-            >
-              <div className="absolute inset-y-0 right-0 w-1 bg-gradient-to-b from-brand-blue via-brand-blue/80 to-brand-blue/30 rounded-l-sm" aria-hidden />
-              <h3 className="text-brand-blue text-[1.65rem] sm:text-3xl font-black leading-tight mb-5 sm:mb-6 pr-1">
-                رسالتنا
-              </h3>
-              <p className="text-gray-800 font-normal text-[17px] sm:text-[19px] lg:text-[20px] leading-[1.9] pr-2">
-                المساهمة في تطوير قطاع الأعمال في المملكة عبر خدمات استشارية نوعية تمكّن المنظمات من تحقيق أهدافها وتعزيز استدامة نموها، من خلال حلول عملية ترتكز على الفهم العميق والتخطيط الاستراتيجي والتنفيذ الفعّال.
-              </p>
-            </motion.article>
+      <section className="bg-white">
+        <motion.div
+          {...fadeUp(0)}
+          className="relative py-14 sm:py-20 lg:py-24 overflow-hidden"
+        >
+          <div
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_90%_80%_at_100%_20%,rgba(47,72,245,0.11),transparent_58%)]"
+            aria-hidden
+          />
+          <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 flex flex-col lg:flex-row lg:items-start gap-6 lg:gap-16 xl:gap-20">
+            <h3 className="text-brand-blue text-2xl sm:text-3xl lg:text-[2rem] font-black leading-[1.15] shrink-0 border-s-[4px] border-brand-blue ps-5 sm:ps-6 lg:max-w-[11rem]">
+              رؤيتنا
+            </h3>
+            <p className="text-gray-800 font-normal text-[17px] sm:text-[19px] lg:text-[21px] leading-[1.9] lg:pt-1 flex-1 min-w-0">
+              أن نكون ضمن الجهات الاستشارية التي تُحدث فرقًا حقيقيًا في قطاع الأعمال بالمملكة، من خلال استشارات ترتبط بالنتائج وتنعكس أثرًا ملموسًا ومستدامًا.
+            </p>
           </div>
-        </div>
+        </motion.div>
+
+        <motion.div
+          {...fadeUp(0.08)}
+          className="border-t border-gray-200/90 py-14 sm:py-20 lg:py-24 bg-white"
+        >
+          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 flex flex-col lg:flex-row lg:items-start gap-6 lg:gap-16 xl:gap-20">
+            <h3 className="text-brand-blue text-2xl sm:text-3xl lg:text-[2rem] font-black leading-[1.15] shrink-0 border-s-[4px] border-brand-blue ps-5 sm:ps-6 lg:max-w-[11rem]">
+              رسالتنا
+            </h3>
+            <p className="text-gray-800 font-normal text-[17px] sm:text-[19px] lg:text-[21px] leading-[1.9] lg:pt-1 flex-1 min-w-0">
+              المساهمة في تطوير قطاع الأعمال في المملكة عبر خدمات استشارية نوعية تمكّن المنظمات من تحقيق أهدافها وتعزيز استدامة نموها، من خلال حلول عملية ترتكز على الفهم العميق والتخطيط الاستراتيجي والتنفيذ الفعّال.
+            </p>
+          </div>
+        </motion.div>
       </section>
 
       {/* ══ قيمنا ═══════════════════════════════════════════ */}
