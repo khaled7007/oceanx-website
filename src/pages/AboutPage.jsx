@@ -96,8 +96,7 @@ function BoardCard({ m, i }) {
         <Avatar photo={m.photo} initials={m.initials} size="lg" />
         <div className="flex-1 min-w-0 w-full">
           <p className="font-bold text-gray-900 text-base leading-snug">{m.name}</p>
-          <p className="text-[12px] text-gray-400 font-light mt-1">{m.nameEn}</p>
-          <p className="text-brand-blue text-sm font-semibold mt-3 leading-snug">{m.title}</p>
+          <p className="text-brand-blue text-sm font-semibold mt-2 leading-snug">{m.title}</p>
           {m.subtitle && <p className="text-gray-400 text-[12px] mt-1 font-light">{m.subtitle}</p>}
         </div>
         <a
@@ -294,8 +293,10 @@ export default function AboutPage() {
       <section className="py-14 lg:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
           <SectionDivider label="مجلس الإدارة" />
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8 max-w-6xl mx-auto w-full">
-            {BOARD.map((m, i) => <BoardCard key={m.nameEn} m={m} i={i} />)}
+          <div className="w-full overflow-x-auto overscroll-x-contain [-webkit-overflow-scrolling:touch] pb-1">
+            <div className="grid grid-cols-5 gap-2 sm:gap-3 lg:gap-5 w-full min-w-[32rem] max-w-7xl mx-auto">
+              {BOARD.map((m, i) => <BoardCard key={m.nameEn} m={m} i={i} />)}
+            </div>
           </div>
         </div>
       </section>

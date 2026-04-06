@@ -156,7 +156,6 @@ function BoardCard({ m, i }) {
         <Avatar photo={m.photo} initials={m.initials} size="md" />
         <div className="flex-1">
           <p className="font-bold text-gray-900 text-sm leading-snug">{m.name}</p>
-          <p className="text-[11px] text-gray-400 font-light mt-0.5">{m.nameEn}</p>
           <p className="text-brand-blue text-xs font-semibold mt-2 leading-snug">{m.title}</p>
           {m.subtitle && <p className="text-gray-400 text-[11px] mt-0.5 font-light">{m.subtitle}</p>}
         </div>
@@ -259,8 +258,10 @@ export default function Competencies() {
         {/* ══ 1. مجلس الإدارة ══ */}
         <div className="mb-14 sm:mb-20">
           <SectionDivider label="مجلس الإدارة" />
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-5 max-w-5xl">
-            {BOARD.map((m, i) => <BoardCard key={m.nameEn} m={m} i={i} />)}
+          <div className="w-full overflow-x-auto overscroll-x-contain [-webkit-overflow-scrolling:touch] pb-1">
+            <div className="grid grid-cols-5 gap-2 sm:gap-3 lg:gap-5 w-full min-w-[32rem] max-w-7xl mx-auto">
+              {BOARD.map((m, i) => <BoardCard key={m.nameEn} m={m} i={i} />)}
+            </div>
           </div>
         </div>
 
