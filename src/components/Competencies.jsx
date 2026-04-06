@@ -3,8 +3,25 @@ import { motion } from 'framer-motion'
 
 /* ─── Data ──────────────────────────────────────────────── */
 
-/* مجلس الإدارة — بدون المؤسسَين */
 const BOARD = [
+  {
+    name: 'م. إبراهيم الزهيميل',
+    nameEn: 'Eng. Ibrahim Alzuhaimeel',
+    title: 'رئيس مجلس الإدارة',
+    subtitle: 'شريك مؤسس',
+    photo: 'https://oceanx.sa/wp-content/uploads/2022/03/Ibraheem-Alzuhaimeel-500x500.jpg',
+    initials: 'إز',
+    linkedin: 'https://www.linkedin.com/in/ibraheem-alzuhimeel-a61a8416/',
+  },
+  {
+    name: 'عبدالله العساف',
+    nameEn: 'Abdullah Alassaf',
+    title: 'نائب رئيس مجلس الإدارة',
+    subtitle: 'شريك مؤسس',
+    photo: 'https://oceanx.sa/wp-content/uploads/2022/03/Abdullah-Alassaf-500x500.jpg',
+    initials: 'عع',
+    linkedin: 'https://www.linkedin.com/in/abdullah-alassaf-080a0422/',
+  },
   {
     name: 'طارق القرعاوي',
     nameEn: 'Tareq Al-Garawy',
@@ -28,34 +45,6 @@ const BOARD = [
     photo: 'https://oceanx.sa/wp-content/uploads/2024/08/1609695295564-500x500.png',
     initials: 'أز',
     linkedin: 'https://www.linkedin.com/in/ahmed-alzohimeel-9aa63a84/',
-  },
-]
-
-/* المؤسسون */
-const FOUNDERS = [
-  {
-    name: 'م. إبراهيم الزهيميل',
-    nameEn: 'Eng. Ibrahim Alzuhaimeel',
-    title: 'رئيس مجلس الإدارة',
-    subtitle: 'شريك مؤسس',
-    photo: 'https://oceanx.sa/wp-content/uploads/2022/03/Ibraheem-Alzuhaimeel-500x500.jpg',
-    initials: 'إز',
-    experience: '+18',
-    expLabel: 'سنة خبرة',
-    bio: 'بخبرة تزيد عن 18 عامًا في الاستشارات الاستراتيجية والإدارية، توسعت لتشمل الاستثمار الملائكي وإدارة الأعمال والاستشارات المالية. يتميز بفهمه العميق لتوجهات السوق والابتكار، وساهم بشكل بارز في تعزيز منظومة الابتكار في المملكة العربية السعودية.',
-    linkedin: 'https://www.linkedin.com/in/ibraheem-alzuhimeel-a61a8416/',
-  },
-  {
-    name: 'عبدالله العساف',
-    nameEn: 'Abdullah Alassaf',
-    title: 'نائب رئيس مجلس الإدارة',
-    subtitle: 'شريك مؤسس',
-    photo: 'https://oceanx.sa/wp-content/uploads/2022/03/Abdullah-Alassaf-500x500.jpg',
-    initials: 'عع',
-    experience: '+15',
-    expLabel: 'سنة خبرة',
-    bio: 'شريك مؤسس لأوشن إكس ونائب رئيس مجلس الإدارة، يمتلك خبرة واسعة في قيادة الأعمال وبناء الشراكات الاستراتيجية، وساهم في تشكيل هوية الشركة ورؤيتها منذ تأسيسها.',
-    linkedin: 'https://www.linkedin.com/in/abdullah-alassaf-080a0422/',
   },
 ]
 
@@ -270,20 +259,12 @@ export default function Competencies() {
         {/* ══ 1. مجلس الإدارة ══ */}
         <div className="mb-14 sm:mb-20">
           <SectionDivider label="مجلس الإدارة" />
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-5 max-w-2xl">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-3 sm:gap-5 max-w-5xl">
             {BOARD.map((m, i) => <BoardCard key={m.nameEn} m={m} i={i} />)}
           </div>
         </div>
 
-        {/* ══ 2. المؤسسون ══ */}
-        <div className="mb-14 sm:mb-20">
-          <SectionDivider label="المؤسسون" />
-          <div className="grid sm:grid-cols-2 gap-4 sm:gap-6 max-w-2xl">
-            {FOUNDERS.map((m, i) => <TeamCard key={m.nameEn} m={m} i={i} />)}
-          </div>
-        </div>
-
-        {/* ══ 3. الكفاءات ══ */}
+        {/* ══ 2. الكفاءات ══ */}
         <div>
           <SectionDivider label="الكفاءات" />
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
