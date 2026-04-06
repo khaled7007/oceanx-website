@@ -16,14 +16,14 @@ function PartnerLogo({ name, src, index }) {
   return (
     <motion.div
       {...fadeUp(0.04 * (index % 8))}
-      className="flex items-center justify-center min-h-[5.5rem] sm:min-h-[6.25rem] px-3 py-4 sm:px-5 sm:py-5 rounded-xl sm:rounded-2xl bg-white border border-gray-100 hover:border-brand-blue/20 hover:shadow-md transition-all duration-300"
+      className="flex items-center justify-center min-h-[6rem] sm:min-h-[7rem] px-3 py-4 sm:px-4 sm:py-5 rounded-xl sm:rounded-2xl bg-white border border-gray-100 hover:border-brand-blue/20 hover:shadow-md transition-all duration-300"
     >
       <img
         src={src}
         alt={name}
         loading="lazy"
         decoding="async"
-        className="max-h-11 sm:max-h-14 w-auto max-w-[min(100%,9.5rem)] sm:max-w-[11rem] object-contain opacity-90 hover:opacity-100 transition-opacity"
+        className="max-h-12 sm:max-h-16 w-full max-w-[min(100%,11rem)] sm:max-w-[13rem] object-contain object-center opacity-95 hover:opacity-100 transition-opacity"
         onError={() => setFailed(true)}
       />
     </motion.div>
@@ -48,7 +48,7 @@ export default function SuccessPartners() {
             {...fadeUp(0.12)}
             className="mt-4 text-gray-600 text-[15px] sm:text-base font-normal leading-relaxed"
           >
-            نفتخر بثقة جهات وطنية واعتمادات دولية في مجال الأبحاث والجودة.
+            نفتخر بثقة جهات حكومية ومؤسسات وطنية نعمل معها لتحقيق أثر ملموس.
           </motion.p>
         </div>
 
