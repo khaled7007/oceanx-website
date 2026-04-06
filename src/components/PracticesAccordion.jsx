@@ -43,7 +43,7 @@ function AccordionItem({ practice, isOpen, onToggle }) {
             className="overflow-hidden"
           >
             <div className="pb-6 sm:pb-8 pr-2 sm:pr-11 pl-1">
-              <p className="text-gray-500 font-light leading-[1.8] sm:leading-[1.85] text-[16px] sm:text-[19px]">
+              <p className="text-gray-600 font-normal leading-[1.85] text-[17px] sm:text-[20px]">
                   {practice.subtitle}
                 </p>
               <Link

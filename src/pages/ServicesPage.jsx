@@ -103,7 +103,7 @@ function ServiceRow({ s, index }) {
       <h2 className="text-3xl lg:text-4xl font-black text-gray-900 leading-tight mb-2">
         {s.title}
       </h2>
-      <p className="text-gray-500 font-light text-[18px] leading-[1.9] mb-8">
+      <p className="text-gray-600 font-normal text-[19px] sm:text-[21px] lg:text-[22px] leading-[1.85] mb-8">
         {s.desc}
       </p>
       <ul className="space-y-3 mb-8">
