@@ -293,10 +293,8 @@ export default function AboutPage() {
       <section className="py-14 lg:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
           <SectionDivider label="مجلس الإدارة" />
-          <div className="w-full overflow-x-auto overscroll-x-contain [-webkit-overflow-scrolling:touch] pb-1">
-            <div className="grid grid-cols-5 gap-2 sm:gap-3 lg:gap-5 w-full min-w-[32rem] max-w-7xl mx-auto">
-              {BOARD.map((m, i) => <BoardCard key={m.nameEn} m={m} i={i} />)}
-            </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 lg:gap-5 w-full max-w-7xl mx-auto">
+            {BOARD.map((m, i) => <BoardCard key={m.nameEn} m={m} i={i} />)}
           </div>
         </div>
       </section>
