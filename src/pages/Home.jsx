@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Hero from '../components/Hero'
 import PracticesAccordion from '../components/PracticesAccordion'
+import SuccessPartners from '../components/SuccessPartners'
 import NewsletterBanner from '../components/NewsletterBanner'
 import { ARTICLES, REPORTS, PODCASTS, TAG_COLORS } from '../data/insight'
 
@@ -242,6 +243,9 @@ export default function Home() {
 
       {/* 3. الخدمات */}
       <PracticesAccordion />
+
+      {/* 3b. شركاء النجاح */}
+      <SuccessPartners />
 
       {/* 4. أحدث الإصدارات — إنسايت + أخبار */}
       <LatestReleases />
