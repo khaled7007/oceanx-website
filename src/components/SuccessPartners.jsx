@@ -16,14 +16,14 @@ function PartnerLogo({ name, src, index }) {
   return (
     <motion.div
       {...fadeUp(0.04 * (index % 8))}
-      className="flex items-center justify-center min-h-[6rem] sm:min-h-[7rem] px-3 py-4 sm:px-4 sm:py-5 rounded-xl sm:rounded-2xl bg-white border border-gray-100 hover:border-brand-blue/20 hover:shadow-md transition-all duration-300"
+      className="flex items-center justify-center min-h-[7.25rem] sm:min-h-[9.5rem] lg:min-h-[10.5rem] p-2 sm:p-3 lg:p-4 rounded-xl sm:rounded-2xl bg-white border border-gray-100 hover:border-brand-blue/20 hover:shadow-md transition-all duration-300"
     >
       <img
         src={src}
         alt={name}
         loading="lazy"
         decoding="async"
-        className="max-h-12 sm:max-h-16 w-full max-w-[min(100%,11rem)] sm:max-w-[13rem] object-contain object-center opacity-95 hover:opacity-100 transition-opacity"
+        className="w-full max-h-[4.75rem] sm:max-h-[7rem] lg:max-h-[8.25rem] max-w-full object-contain object-center opacity-95 hover:opacity-100 transition-opacity"
         onError={() => setFailed(true)}
       />
     </motion.div>
