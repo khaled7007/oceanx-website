@@ -261,21 +261,25 @@ export default function AboutPage() {
       </section>
 
       {/* ══ قيمنا ═══════════════════════════════════════════ */}
-      <section className="py-14 lg:py-20 bg-white border-t border-gray-100">
+      <section className="py-14 sm:py-20 lg:py-24 bg-white border-t border-gray-200/90">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
-          <motion.div {...fadeUp(0)} className="grid lg:grid-cols-[180px_1fr] gap-6 lg:gap-16 lg:items-start">
-            <h3 className="text-brand-blue text-2xl font-black flex-shrink-0">قيمنا</h3>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          <motion.div {...fadeUp(0)} className="grid lg:grid-cols-[minmax(0,11rem)_1fr] gap-8 lg:gap-14 xl:gap-16 lg:items-start">
+            <h3 className="text-brand-blue text-2xl sm:text-3xl font-black leading-tight shrink-0 border-s-[4px] border-brand-blue ps-5 sm:ps-6">
+              قيمنا
+            </h3>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
               {VALUES.map((v, i) => (
                 <motion.div
                   key={v.title}
                   initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }} transition={{ duration: 0.55, delay: i * 0.1, ease: [0.22, 1, 0.36, 1] }}
-                  className="bg-white rounded-2xl p-7 flex flex-col gap-5 hover:shadow-xl transition-all duration-300"
+                  className="rounded-2xl border border-gray-100 bg-gray-50/40 p-7 sm:p-8 flex flex-col gap-4 sm:gap-5 text-center items-center hover:border-brand-blue/15 hover:shadow-lg hover:bg-white transition-all duration-300"
                 >
-                  <div className="w-12 h-12"><img src={v.icon} alt={v.title} className="w-full h-full object-contain" /></div>
-                  <h3 className="text-gray-900 font-bold text-[17px] leading-snug">{v.title}</h3>
-                  <p className="text-gray-500 text-[15px] font-light leading-relaxed">"{v.desc}"</p>
+                  <div className="w-14 h-14 sm:w-[3.75rem] sm:h-[3.75rem] flex-shrink-0">
+                    <img src={v.icon} alt="" className="w-full h-full object-contain" />
+                  </div>
+                  <h3 className="text-gray-900 font-bold text-[17px] sm:text-lg leading-snug">{v.title}</h3>
+                  <p className="text-gray-700 font-normal text-[15px] sm:text-[16px] leading-[1.85]">{v.desc}</p>
                 </motion.div>
               ))}
             </div>
