@@ -14,13 +14,13 @@ function PartnerCard({ name, src }) {
   if (failed) return null
 
   return (
-    <div className="flex items-center justify-center shrink-0 w-[9.5rem] sm:w-[11.5rem] lg:w-[12.5rem] min-h-[6.5rem] sm:min-h-[8rem] lg:min-h-[9rem] px-3 sm:px-4 py-3 rounded-xl sm:rounded-2xl bg-white border border-gray-100 shadow-sm hover:border-brand-blue/20 hover:shadow-md transition-all duration-300">
+    <div className="flex items-center justify-center shrink-0 px-5 sm:px-7 lg:px-9 py-2">
       <img
         src={src}
         alt={name}
         loading="lazy"
         decoding="async"
-        className="w-full max-h-[3.5rem] sm:max-h-[5.25rem] lg:max-h-[6rem] max-w-full object-contain object-center opacity-95"
+        className="block h-[3.25rem] w-auto max-h-[3.25rem] sm:h-[4.5rem] sm:max-h-[4.5rem] lg:h-[5.75rem] lg:max-h-[5.75rem] max-w-[11rem] sm:max-w-[14rem] lg:max-w-[17rem] object-contain object-center opacity-90 hover:opacity-100 transition-opacity duration-300"
         onError={() => setFailed(true)}
       />
     </div>
@@ -37,7 +37,7 @@ function MarqueeRow({ items, reverse }) {
         [-webkit-mask-image:linear-gradient(90deg,transparent,black_6%,black_94%,transparent)]"
     >
       <div
-        className={`flex w-max gap-3 sm:gap-4 motion-safe:animate-partners-marquee motion-reduce:animate-none hover:[animation-play-state:paused] ${
+        className={`flex w-max gap-2 sm:gap-3 lg:gap-4 motion-safe:animate-partners-marquee motion-reduce:animate-none hover:[animation-play-state:paused] ${
           reverse ? 'motion-safe:[animation-direction:reverse]' : ''
         }`}
       >
