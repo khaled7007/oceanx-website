@@ -21,8 +21,13 @@ export default {
         'float-alt': 'floatYAlt 18s ease-in-out infinite',
         'mesh-pulse': 'meshPulse 10s ease-in-out infinite',
         'bounce-soft': 'bounceSoft 2s ease-in-out infinite',
+        'partners-marquee': 'partnersMarquee 52s linear infinite',
       },
       keyframes: {
+        partnersMarquee: {
+          from: { transform: 'translateX(0)' },
+          to: { transform: 'translateX(-50%)' },
+        },
         floatY: {
           '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
           '50%': { transform: 'translateY(-22px) rotate(4deg)' },
