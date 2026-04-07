@@ -13,7 +13,12 @@ export const SUCCESS_PARTNERS = [
   { name: 'وزارة التجارة', logo: '/partners/ministry-of-commerce.svg' },
   { name: 'الشركة الوطنية للشراء الموحد للأدوية والمعدات الطبية — نوبكو', logo: '/partners/nupco.svg' },
   { name: 'برنامج تجربة الحجاج', logo: '/partners/pilgrims-experience-program.svg' },
-  { name: 'الهيئة السعودية للتخصصات الصحية', logo: '/partners/saudi-commission-health-specialties.svg' },
+  {
+    name: 'الهيئة السعودية للتخصصات الصحية',
+    logo: '/partners/saudi-commission-health-specialties.svg',
+    /** شعار أفقي (أيقونة + نص) — عرض أكبر في السلايدر */
+    lockup: true,
+  },
   { name: 'الاتحاد السعودي للأمن السيبراني والبرمجة والدرونز', logo: '/partners/saudi-federation-cybersecurity-programming-drones.svg' },
   { name: 'الهيئة السعودية للبيانات والذكاء الاصطناعي — سدايا', logo: '/partners/sdaia.svg' },
   { name: 'الهيئة العامة للنقل', logo: '/partners/tga.svg' },

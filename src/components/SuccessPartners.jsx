@@ -9,9 +9,16 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] },
 })
 
-function PartnerCard({ name, src }) {
+const LOGO_SIZES_DEFAULT =
+  'h-[4.25rem] max-h-[4.25rem] sm:h-[5.75rem] sm:max-h-[5.75rem] lg:h-[7.25rem] lg:max-h-[7.25rem] max-w-[13.5rem] sm:max-w-[17.5rem] lg:max-w-[21rem]'
+const LOGO_SIZES_LOCKUP =
+  'h-[4.5rem] max-h-[4.5rem] sm:h-[6.25rem] sm:max-h-[6.25rem] lg:h-[8rem] lg:max-h-[8rem] max-w-[18rem] sm:max-w-[26rem] lg:max-w-[32rem]'
+
+function PartnerCard({ name, src, lockup }) {
   const [failed, setFailed] = useState(false)
   if (failed) return null
+
+  const sizeCls = lockup ? LOGO_SIZES_LOCKUP : LOGO_SIZES_DEFAULT
 
   return (
     <div className="flex items-center justify-center shrink-0 px-5 sm:px-8 lg:px-10 py-2 sm:py-2.5">
@@ -20,7 +27,7 @@ function PartnerCard({ name, src }) {
         alt={name}
         loading="lazy"
         decoding="async"
-        className="block h-[4.25rem] w-auto max-h-[4.25rem] sm:h-[5.75rem] sm:max-h-[5.75rem] lg:h-[7.25rem] lg:max-h-[7.25rem] max-w-[13.5rem] sm:max-w-[17.5rem] lg:max-w-[21rem] object-contain object-center opacity-90 hover:opacity-100 transition-opacity duration-300"
+        className={`block w-auto object-contain object-center opacity-90 hover:opacity-100 transition-opacity duration-300 ${sizeCls}`}
         onError={() => setFailed(true)}
       />
     </div>
@@ -42,7 +49,7 @@ function MarqueeRow({ items, reverse }) {
         }`}
       >
         {doubled.map((p, i) => (
-          <PartnerCard key={`${p.logo}-${i}`} name={p.name} src={p.logo} />
+          <PartnerCard key={`${p.logo}-${i}`} name={p.name} src={p.logo} lockup={p.lockup} />
         ))}
       </div>
     </div>
