@@ -13,9 +13,9 @@ const LOGO_SIZES_DEFAULT =
   'h-[5rem] max-h-[5rem] sm:h-[6.75rem] sm:max-h-[6.75rem] lg:h-[8.5rem] lg:max-h-[8.5rem] max-w-[16rem] sm:max-w-[20.5rem] lg:max-w-[25rem]'
 const LOGO_SIZES_LOCKUP =
   'h-[5.25rem] max-h-[5.25rem] sm:h-[7.25rem] sm:max-h-[7.25rem] lg:h-[9.5rem] lg:max-h-[9.5rem] max-w-[21rem] sm:max-w-[30rem] lg:max-w-[38rem]'
-/** برنامج تجربة الحجاج (ضيوف الرحمن) */
+/** برنامج تجربة الحجاج (ضيوف الرحمن) — ارتفاع ثابت ١٦٨px */
 const LOGO_SIZES_LARGE =
-  'h-[6.25rem] max-h-[6.25rem] sm:h-[8.25rem] sm:max-h-[8.25rem] lg:h-[10.5rem] lg:max-h-[10.5rem] max-w-[19rem] sm:max-w-[26rem] lg:max-w-[34rem]'
+  'h-[168px] max-h-[168px] w-auto max-w-[19rem] sm:max-w-[26rem] lg:max-w-[34rem]'
 
 function PartnerCard({ name, src, lockup, large }) {
   const [failed, setFailed] = useState(false)
