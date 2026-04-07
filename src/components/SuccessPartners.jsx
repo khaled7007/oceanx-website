@@ -13,12 +13,15 @@ const LOGO_SIZES_DEFAULT =
   'h-[5rem] max-h-[5rem] sm:h-[6.75rem] sm:max-h-[6.75rem] lg:h-[8.5rem] lg:max-h-[8.5rem] max-w-[16rem] sm:max-w-[20.5rem] lg:max-w-[25rem]'
 const LOGO_SIZES_LOCKUP =
   'h-[5.25rem] max-h-[5.25rem] sm:h-[7.25rem] sm:max-h-[7.25rem] lg:h-[9.5rem] lg:max-h-[9.5rem] max-w-[21rem] sm:max-w-[30rem] lg:max-w-[38rem]'
+/** برنامج تجربة الحجاج (ضيوف الرحمن) */
+const LOGO_SIZES_LARGE =
+  'h-[6.25rem] max-h-[6.25rem] sm:h-[8.25rem] sm:max-h-[8.25rem] lg:h-[10.5rem] lg:max-h-[10.5rem] max-w-[19rem] sm:max-w-[26rem] lg:max-w-[34rem]'
 
-function PartnerCard({ name, src, lockup }) {
+function PartnerCard({ name, src, lockup, large }) {
   const [failed, setFailed] = useState(false)
   if (failed) return null
 
-  const sizeCls = lockup ? LOGO_SIZES_LOCKUP : LOGO_SIZES_DEFAULT
+  const sizeCls = lockup ? LOGO_SIZES_LOCKUP : large ? LOGO_SIZES_LARGE : LOGO_SIZES_DEFAULT
 
   return (
     <div className="flex items-center justify-center shrink-0 px-5 sm:px-9 lg:px-11 py-2 sm:py-3">
@@ -49,7 +52,7 @@ function MarqueeRow({ items, reverse }) {
         }`}
       >
         {doubled.map((p, i) => (
-          <PartnerCard key={`${p.logo}-${i}`} name={p.name} src={p.logo} lockup={p.lockup} />
+          <PartnerCard key={`${p.logo}-${i}`} name={p.name} src={p.logo} lockup={p.lockup} large={p.large} />
         ))}
       </div>
     </div>

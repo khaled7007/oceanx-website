@@ -12,7 +12,12 @@ export const SUCCESS_PARTNERS = [
   { name: 'وزارة الاتصالات وتقنية المعلومات', logo: '/partners/ministry-communications-it.svg' },
   { name: 'وزارة التجارة', logo: '/partners/ministry-of-commerce.svg' },
   { name: 'الشركة الوطنية للشراء الموحد للأدوية والمعدات الطبية — نوبكو', logo: '/partners/nupco.svg' },
-  { name: 'برنامج تجربة الحجاج', logo: '/partners/pilgrims-experience-program.svg' },
+  {
+    name: 'برنامج تجربة الحجاج',
+    logo: '/partners/pilgrims-experience-program.svg',
+    /** شعار ضيوف الرحمن — أكبر من الشعارات الافتراضية */
+    large: true,
+  },
   {
     name: 'الهيئة السعودية للتخصصات الصحية',
     logo: '/partners/saudi-commission-health-specialties.svg',
