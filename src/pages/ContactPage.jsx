@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import NewsletterBanner from '../components/NewsletterBanner'
 
-const SERVICES = ['الابتكار', 'الاستشارات الإدارية', 'أبحاث السوق']
+const SERVICES = ['الابتكار', 'الاستشارات الإدارية', 'أبحاث السوق واستراتيجيات التواصل']
 const SOURCES = ['وسائل التواصل الاجتماعي', 'النشرة البريدية', 'صديق أو زميل', 'أخرى']
 
 export default function ContactPage() {

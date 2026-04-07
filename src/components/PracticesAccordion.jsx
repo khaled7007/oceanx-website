@@ -44,8 +44,8 @@ function AccordionItem({ practice, isOpen, onToggle }) {
           >
             <div className="pb-6 sm:pb-8 pr-2 sm:pr-11 pl-1">
               <p className="text-gray-600 font-normal leading-[1.85] text-[17px] sm:text-[20px]">
-                  {practice.subtitle}
-                </p>
+                {practice.subtitle}
+              </p>
               <Link
                 to={`/services#practice-${practice.slug}`}
                 className="inline-flex items-center gap-2 text-brand-blue text-sm font-semibold mt-6 no-underline hover:gap-3 transition-all duration-200 group"

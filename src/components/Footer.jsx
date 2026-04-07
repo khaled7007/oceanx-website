@@ -9,7 +9,7 @@ const COL_ABOUT = [
 const COL_PRACTICES = [
   { label: 'الابتكار', to: '/practices/innovation' },
   { label: 'الاستشارات الإدارية', to: '/practices/organization' },
-  { label: 'أبحاث السوق', to: '/practices/market-research' },
+  { label: 'أبحاث السوق واستراتيجيات التواصل', to: '/practices/market-research' },
 ]
 
 const COL_INSIGHT = [

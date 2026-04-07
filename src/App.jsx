@@ -21,7 +21,7 @@ function ScrollToTop() {
   return null
 }
 
-const CONTACT_SERVICES = ['الابتكار', 'الاستشارات الإدارية', 'أبحاث السوق']
+const CONTACT_SERVICES = ['الابتكار', 'الاستشارات الإدارية', 'أبحاث السوق واستراتيجيات التواصل']
 
 function FloatingContact() {
   const [open, setOpen] = useState(false)
@@ -175,9 +175,7 @@ function Layout() {
           <Route path="/insight/read/:kind/:itemId" element={<InsightReaderPage />} />
           <Route path="/insight/article/:itemId" element={<InsightReaderPage forcedKind="article" />} />
           <Route path="/insight/report/:itemId" element={<InsightReaderPage forcedKind="report" />} />
-          <Route path="/practices/innovation" element={<PracticePage />} />
-          <Route path="/practices/organization" element={<PracticePage />} />
-          <Route path="/practices/market-research" element={<PracticePage />} />
+          <Route path="/practices/:slug" element={<PracticePage />} />
           <Route path="/practices" element={<Navigate to="/practices/innovation" replace />} />
           <Route path="/news" element={<NewsPage />} />
           <Route path="/jobs" element={<JobsPage />} />

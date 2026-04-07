@@ -74,7 +74,7 @@ export const PRACTICES = [
     id: 'market-research',
     slug: 'market-research',
     title: 'أبحاث السوق واستراتيجيات التواصل',
-    titleEn: 'Market-Research',
+    titleEn: 'Market Research & Communication',
     subtitle: 'نوفّر رؤى قائمة على البيانات، ونبني استراتيجيات تواصل فعّالة تمكّن المنظمات من فهم جمهورها واتخاذ قرارات أكثر دقة وتأثيرًا.',
     image: '/market-research-hero.jpg',
     primaryCard: {

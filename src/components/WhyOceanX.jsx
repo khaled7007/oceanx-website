@@ -38,11 +38,11 @@ const PRACTICES = [
   {
     id: 'research',
     num: '03',
-    label: 'Market Research',
-    title: 'أبحاث السوق',
+    label: 'Market Research & Communication',
+    title: 'أبحاث السوق واستراتيجيات التواصل',
     description:
-      'نُجري دراسات وتحليلات السوق بمنهجيات علمية متقدمة. نفخر بعضوية ESOMAR الأوروبية وشهادة Insights Association الأمريكية، ضمانًا لأعلى معايير الجودة.',
-    services: ['أبحاث وتحليلات السوق', 'البحث الأولي', 'البحث المكتبي', 'تحليل البيانات'],
+      'نُجري دراسات وتحليلات السوق بمنهجيات علمية متقدمة، وندعم تواصلك المؤسسي برسائل وقنوات واضحة. نفخر بعضوية ESOMAR وشهادة Insights Association.',
+    services: ['أبحاث وتحليلات السوق', 'البحث الكمي والنوعي', 'استراتيجيات التواصل', 'الحملات الرقمية'],
     badge: ['ESOMAR Member', 'Insights Association'],
     icon: (
       <svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="currentColor" strokeWidth="1.4">
@@ -90,7 +90,7 @@ export default function WhyOceanX() {
             className="text-gray-500 text-[16px] font-light leading-relaxed max-w-xl lg:pb-1"
           >
             ثلاث ممارسات متكاملة تُغطي احتياجاتكم الاستراتيجية — من الابتكار وتمكين الأعمال
-            حتى البحث والتحليل المتخصص.
+            حتى أبحاث السوق واستراتيجيات التواصل.
           </motion.p>
         </div>
 
