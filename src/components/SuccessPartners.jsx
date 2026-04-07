@@ -10,9 +10,9 @@ const fadeUp = (delay = 0) => ({
 })
 
 const LOGO_SIZES_DEFAULT =
-  'h-[4.25rem] max-h-[4.25rem] sm:h-[5.75rem] sm:max-h-[5.75rem] lg:h-[7.25rem] lg:max-h-[7.25rem] max-w-[13.5rem] sm:max-w-[17.5rem] lg:max-w-[21rem]'
+  'h-[5rem] max-h-[5rem] sm:h-[6.75rem] sm:max-h-[6.75rem] lg:h-[8.5rem] lg:max-h-[8.5rem] max-w-[16rem] sm:max-w-[20.5rem] lg:max-w-[25rem]'
 const LOGO_SIZES_LOCKUP =
-  'h-[4.5rem] max-h-[4.5rem] sm:h-[6.25rem] sm:max-h-[6.25rem] lg:h-[8rem] lg:max-h-[8rem] max-w-[18rem] sm:max-w-[26rem] lg:max-w-[32rem]'
+  'h-[5.25rem] max-h-[5.25rem] sm:h-[7.25rem] sm:max-h-[7.25rem] lg:h-[9.5rem] lg:max-h-[9.5rem] max-w-[21rem] sm:max-w-[30rem] lg:max-w-[38rem]'
 
 function PartnerCard({ name, src, lockup }) {
   const [failed, setFailed] = useState(false)
@@ -21,7 +21,7 @@ function PartnerCard({ name, src, lockup }) {
   const sizeCls = lockup ? LOGO_SIZES_LOCKUP : LOGO_SIZES_DEFAULT
 
   return (
-    <div className="flex items-center justify-center shrink-0 px-5 sm:px-8 lg:px-10 py-2 sm:py-2.5">
+    <div className="flex items-center justify-center shrink-0 px-5 sm:px-9 lg:px-11 py-2 sm:py-3">
       <img
         src={src}
         alt={name}
