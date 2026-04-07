@@ -210,7 +210,7 @@ export default function AboutPage() {
               transition={{ duration: 0.85, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
               className="text-[1.65rem] sm:text-3xl lg:text-4xl xl:text-5xl font-black text-white leading-[1.25] sm:leading-[1.2] mb-5 sm:mb-6"
             >
-              أعوامنا من المعرفة جعلتنا كياناً{' '}
+              أعوام من المعرفة جعلتنا كياناً{' '}
               <span className="text-brand-blue">يمكنك الوثوق به</span>
             </motion.h1>
             <motion.p
@@ -218,7 +218,7 @@ export default function AboutPage() {
               transition={{ duration: 0.6, delay: 0.35 }}
               className="text-white/60 text-[15px] sm:text-[15px] font-light leading-[1.85]"
             >
-              أوشن إكس لحلول الأعمال شركة استشارية سعودية تأسست عام 2012، تقدم خدماتها للقطاعين الحكومي والخاص. نُسهم في تطوير المنظمات عبر الابتكار، الاستشارات الإدارية، الاستشارات المالية، وأبحاث السوق — بأحدث المنهجيات وأعلى معايير الجودة.
+              أوشن إكس لحلول الأعمال شركة استشارية سعودية تأسست عام 2012، تقدم خدماتها للقطاعين الحكومي والخاص. نُسهم في تطوير المنظمات عبر الابتكار، الاستشارات الإدارية، وأبحاث السوق — بأحدث المنهجيات وأعلى معايير الجودة.
             </motion.p>
           </div>
         </div>
