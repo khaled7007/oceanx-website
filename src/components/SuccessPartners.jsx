@@ -14,13 +14,13 @@ function PartnerCard({ name, src }) {
   if (failed) return null
 
   return (
-    <div className="flex items-center justify-center shrink-0 px-5 sm:px-7 lg:px-9 py-2">
+    <div className="flex items-center justify-center shrink-0 px-5 sm:px-8 lg:px-10 py-2 sm:py-2.5">
       <img
         src={src}
         alt={name}
         loading="lazy"
         decoding="async"
-        className="block h-[3.25rem] w-auto max-h-[3.25rem] sm:h-[4.5rem] sm:max-h-[4.5rem] lg:h-[5.75rem] lg:max-h-[5.75rem] max-w-[11rem] sm:max-w-[14rem] lg:max-w-[17rem] object-contain object-center opacity-90 hover:opacity-100 transition-opacity duration-300"
+        className="block h-[4.25rem] w-auto max-h-[4.25rem] sm:h-[5.75rem] sm:max-h-[5.75rem] lg:h-[7.25rem] lg:max-h-[7.25rem] max-w-[13.5rem] sm:max-w-[17.5rem] lg:max-w-[21rem] object-contain object-center opacity-90 hover:opacity-100 transition-opacity duration-300"
         onError={() => setFailed(true)}
       />
     </div>
