@@ -260,14 +260,14 @@ export default function AboutPage() {
         </motion.div>
       </section>
 
-      {/* ══ قيمنا ═══════════════════════════════════════════ */}
+      {/* ══ قيمنا (نفس عرض/تخطيط رؤيتنا ورسالتنا لمحاذاة العناوين) ══ */}
       <section className="py-14 sm:py-20 lg:py-24 bg-white border-t border-gray-200/90">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
-          <motion.div {...fadeUp(0)} className="grid lg:grid-cols-[minmax(0,11rem)_1fr] gap-8 lg:gap-14 xl:gap-16 lg:items-start">
-            <h3 className="text-brand-blue text-2xl sm:text-3xl font-black leading-tight shrink-0 border-s-[4px] border-brand-blue ps-5 sm:ps-6">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-10">
+          <motion.div {...fadeUp(0)} className="flex flex-col lg:flex-row lg:items-start gap-6 lg:gap-16 xl:gap-20">
+            <h3 className="text-brand-blue text-2xl sm:text-3xl lg:text-[2rem] font-black leading-[1.15] shrink-0 border-s-[4px] border-brand-blue ps-5 sm:ps-6 lg:max-w-[11rem]">
               قيمنا
             </h3>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 flex-1 min-w-0 w-full">
               {VALUES.map((v, i) => (
                 <motion.div
                   key={v.title}

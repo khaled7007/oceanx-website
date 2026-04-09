@@ -58,7 +58,7 @@ export default function NewsletterBanner() {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 required
-                className="flex-1 min-h-[48px] bg-white/8 border border-white/15 text-white placeholder-white/35 text-base sm:text-sm rounded-lg px-4 py-3 outline-none focus:border-brand-blue/60 focus:bg-white/12 transition-all duration-200"
+                className="flex-1 min-h-[48px] bg-white text-gray-900 placeholder:text-gray-500 border border-white/25 text-base sm:text-sm rounded-lg px-4 py-3 outline-none focus:border-brand-blue focus:ring-2 focus:ring-brand-blue/25 transition-all duration-200 [color-scheme:light]"
               />
               <button type="submit" className="btn-primary text-sm px-6 py-3 min-h-[48px] whitespace-nowrap w-full sm:w-auto touch-manipulation">
                 اشترك
