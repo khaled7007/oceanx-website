@@ -24,7 +24,7 @@ function PartnerCard({ name, src, lockup, large }) {
   const sizeCls = lockup ? LOGO_SIZES_LOCKUP : large ? LOGO_SIZES_LARGE : LOGO_SIZES_DEFAULT
 
   return (
-    <div className="flex items-center justify-center shrink-0 px-5 sm:px-9 lg:px-11 py-2 sm:py-3">
+    <div className="flex items-center justify-center shrink-0 px-1 sm:px-1.5 lg:px-2 py-2 sm:py-3">
       <img
         src={src}
         alt={name}
@@ -47,7 +47,7 @@ function MarqueeRow({ items, reverse }) {
         [-webkit-mask-image:linear-gradient(90deg,transparent,black_6%,black_94%,transparent)]"
     >
       <div
-        className={`flex w-max gap-2 sm:gap-3 lg:gap-4 motion-safe:animate-partners-marquee motion-reduce:animate-none hover:[animation-play-state:paused] ${
+        className={`flex w-max gap-0 motion-safe:animate-partners-marquee motion-reduce:animate-none hover:[animation-play-state:paused] ${
           reverse ? 'motion-safe:[animation-direction:reverse]' : ''
         }`}
       >
@@ -86,7 +86,7 @@ export default function SuccessPartners() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-4 sm:gap-5">
+      <div className="flex flex-col gap-0 sm:gap-0">
         <MarqueeRow items={rowA} reverse={false} />
         <MarqueeRow items={rowB} reverse />
       </div>
