@@ -60,10 +60,6 @@ function MarqueeRow({ items, reverse }) {
 }
 
 export default function SuccessPartners() {
-  const mid = Math.ceil(SUCCESS_PARTNERS.length / 2)
-  const rowA = SUCCESS_PARTNERS.slice(0, mid)
-  const rowB = SUCCESS_PARTNERS.slice(mid)
-
   return (
     <section id="partners" className="py-14 sm:py-20 lg:py-24 bg-gray-50 border-y border-gray-100 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
@@ -86,10 +82,7 @@ export default function SuccessPartners() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-0 sm:gap-0">
-        <MarqueeRow items={rowA} reverse={false} />
-        <MarqueeRow items={rowB} reverse />
-      </div>
+      <MarqueeRow items={SUCCESS_PARTNERS} />
     </section>
   )
 }

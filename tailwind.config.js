@@ -21,7 +21,7 @@ export default {
         'float-alt': 'floatYAlt 18s ease-in-out infinite',
         'mesh-pulse': 'meshPulse 10s ease-in-out infinite',
         'bounce-soft': 'bounceSoft 2s ease-in-out infinite',
-        'partners-marquee': 'partnersMarquee 52s linear infinite',
+        'partners-marquee': 'partnersMarquee 90s linear infinite',
       },
       keyframes: {
         partnersMarquee: {
