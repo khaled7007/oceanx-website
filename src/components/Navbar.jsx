@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useI18n } from '../i18n/I18nContext'
 
 function LanguageToggle() {
-  const { locale, setLocale, t } = useI18n()
+  const { locale, setLocale } = useI18n()
   return (
     <div
       className="flex items-center gap-1 rounded-lg border px-1 py-0.5 text-[11px] font-bold shrink-0"
@@ -13,7 +13,7 @@ function LanguageToggle() {
         background: 'rgba(255,255,255,0.06)',
       }}
       role="group"
-      aria-label={locale === 'ar' ? 'Language' : 'اللغة'}
+      aria-label="Language"
     >
       <button
         type="button"
@@ -22,7 +22,7 @@ function LanguageToggle() {
           locale === 'ar' ? 'bg-white/20 text-white' : 'text-white/55 hover:text-white/90'
         }`}
       >
-        {t('langName')}
+        العربية
       </button>
       <button
         type="button"
