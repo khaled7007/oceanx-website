@@ -152,7 +152,7 @@ export default function Navbar() {
         <Link to="/" className="flex items-center no-underline shrink-0">
           <img
             src="/logo.png"
-            alt="OceanX"
+            alt={t('meta.logoAlt')}
             className={`h-11 sm:h-12 md:h-14 w-auto object-contain transition-all duration-300 ${logoFilter}`}
           />
         </Link>

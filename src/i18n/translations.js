@@ -7,9 +7,10 @@ export const translations = {
   ar: {
     langName: 'العربية',
     meta: {
-      title: 'أوشن إكس لحلول الأعمال | OceanX Business Solutions',
+      title: 'أوشن إكس لحلول الأعمال | OCEANX Business Solutions',
       description:
         'شركة استشارية سعودية تأسست 2012، تخدم القطاعين الحكومي والخاص بخبرة عميقة وشراكة حقيقية.',
+      logoAlt: 'أوشن إكس',
     },
     nav: {
       about: 'من نحن',
@@ -153,6 +154,7 @@ export const translations = {
       hoursValue: 'الأحد – الخميس: 9ص – 5م',
       mapName: 'أوشن إكس',
       mapCity: 'الرياض، المملكة العربية السعودية',
+      mapIframeTitle: 'موقع أوشن إكس',
       faqTitle: 'الأسئلة الشائعة',
       faqBody: 'قد تجد إجابتك في قائمة الأسئلة الشائعة لدينا.',
       faqCta: 'استعرض الأسئلة',
@@ -240,9 +242,10 @@ export const translations = {
   en: {
     langName: 'English',
     meta: {
-      title: 'OceanX Business Solutions | أوشن إكس لحلول الأعمال',
+      title: 'OCEANX Business Solutions | أوشن إكس لحلول الأعمال',
       description:
         'Saudi consulting firm since 2012, serving public and private sectors with deep expertise and a true partnership mindset.',
+      logoAlt: 'OCEANX',
     },
     nav: {
       about: 'About',
@@ -260,7 +263,7 @@ export const translations = {
       company: 'Company',
       practices: 'Practices',
       insightCol: 'Insight',
-      rights: '© 2026 OceanX Business Solutions. All rights reserved.',
+      rights: '© 2026 OCEANX Business Solutions. All rights reserved.',
       privacy: 'Privacy policy',
       terms: 'Terms & conditions',
       about: 'About',
@@ -277,14 +280,14 @@ export const translations = {
     hero: {
       subtitle:
         'A Saudi consulting firm delivering advisory services to the public and private sectors.',
-      cta: 'Discover OceanX',
+      cta: 'Discover OCEANX',
     },
     home: {
       identityLabel: 'About us',
       identityTitle1: 'A sea of',
       identityTitle2: 'solutions',
       identityBody:
-        'OceanX is a Saudi consulting firm founded in 2012. We deliver integrated services to the public and private sectors—helping organizations grow through innovation, management consulting, financial advisory, and market research & communication, using leading methodologies and quality standards.',
+        'OCEANX is a Saudi consulting firm founded in 2012. We deliver integrated services to the public and private sectors—helping organizations grow through innovation, management consulting, financial advisory, and market research & communication, using leading methodologies and quality standards.',
       statProjects: 'projects delivered',
       statClients: 'public & private clients',
       statPartners: 'global & local partners',
@@ -305,7 +308,7 @@ export const translations = {
       label: 'Our practices',
       title: 'Our ',
       titleAccent: 'core services',
-      aboutLink: 'About OceanX',
+      aboutLink: 'About OCEANX',
       discoverMore: 'Discover more',
     },
     partners: {
@@ -315,10 +318,10 @@ export const translations = {
       body: 'We are proud to work with trusted government bodies and national organizations to deliver measurable impact.',
     },
     newsletter: {
-      title: 'OceanX ',
+      title: 'OCEANX ',
       titleAccent: 'Insight',
       titleSuffix: ' newsletter',
-      subtitle: 'Subscribe for the latest OceanX Insight releases.',
+      subtitle: 'Subscribe for the latest OCEANX Insight releases.',
       emailPh: 'Your email',
       subscribe: 'Subscribe',
       thanks: 'Thank you! You will hear from us soon.',
@@ -378,14 +381,15 @@ export const translations = {
       srcNewsletter: 'Newsletter',
       srcFriend: 'Friend or colleague',
       srcOther: 'Other',
-      sourceQuestion: 'How did you hear about OceanX?',
+      sourceQuestion: 'How did you hear about OCEANX?',
       infoTitle: 'Contact details',
       emailLabel: 'Email',
       phoneLabel: 'Phone',
       hoursLabel: 'Business hours',
       hoursValue: 'Sun–Thu: 9am–5pm',
-      mapName: 'OceanX',
+      mapName: 'OCEANX',
       mapCity: 'Riyadh, Saudi Arabia',
+      mapIframeTitle: 'OCEANX Location',
       faqTitle: 'FAQ',
       faqBody: 'You may find your answer in our frequently asked questions.',
       faqCta: 'Browse questions',
@@ -406,13 +410,13 @@ export const translations = {
       explore: 'Explore practice',
     },
     aboutPage: {
-      heroImgAlt: 'OceanX team — 10th anniversary',
+      heroImgAlt: 'OCEANX team — 10th anniversary',
       crumb: 'About',
       label: 'About us',
       heroTitle: 'Years of knowledge made us ',
       heroTitleAccent: 'an organization you can trust',
       heroBody:
-        'OceanX Business Solutions is a Saudi consulting firm founded in 2012. We serve the public and private sectors—advancing organizations through innovation, management consulting, and market research & communication, with leading methodologies and quality standards.',
+        'OCEANX Business Solutions is a Saudi consulting firm founded in 2012. We serve the public and private sectors—advancing organizations through innovation, management consulting, and market research & communication, with leading methodologies and quality standards.',
       vision: 'Vision',
       visionBody:
         'To be among the consulting firms that make a real difference in Saudi business—through outcomes-led advisory that creates lasting, tangible impact.',
@@ -422,7 +426,7 @@ export const translations = {
       valuesTitle: 'Our values',
       diffLabel: 'What sets us apart',
       diffTitle1: 'Why',
-      diffTitle2: 'OceanX?',
+      diffTitle2: 'OCEANX?',
       vision2030: 'Our role in Vision 2030',
       vision2030Body:
         'Saudi Arabia has prioritized local companies across sectors to become regional and global leaders—supporting Vision 2030 programs. As a leading local consulting firm, we aim to deliver quality solutions that strengthen the local economy, support community development, and empower SMEs.',

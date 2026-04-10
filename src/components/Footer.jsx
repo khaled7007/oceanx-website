@@ -110,7 +110,7 @@ export default function Footer() {
             <Link to="/" className="inline-flex mb-5 no-underline">
               <img
                 src="/logo.png"
-                alt="OceanX"
+                alt={t('meta.logoAlt')}
                 className="h-16 w-auto object-contain brightness-0 invert opacity-80 hover:opacity-100 transition-opacity duration-200"
               />
             </Link>
