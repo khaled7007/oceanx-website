@@ -1,12 +1,18 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion } from 'framer-motion'
 import {
-  REPORTS, ARTICLES, TAG_COLORS,
-  REPORT_YEARS, ARTICLE_TOPICS,
-  PODCASTS, PODCAST_META,
+  REPORTS,
+  ARTICLES,
+  TAG_COLORS,
+  REPORT_YEARS,
+  ARTICLE_TOPICS,
+  PODCASTS,
+  PODCAST_META,
+  ARTICLE_TAG_EN,
 } from '../data/insight'
-import { articleRoute, reportRoute, isInsightDirectEntry } from '../utils/insightLinks'
+import { articleRoute, reportRoute } from '../utils/insightLinks'
+import { useI18n } from '../i18n/I18nContext'
 
 function ExternalArrow() {
   return (
@@ -20,9 +26,31 @@ function tagCls(tag) {
   return TAG_COLORS[tag] ?? 'bg-gray-100 text-gray-600 border-gray-200'
 }
 
+function reportTitle(r, locale) {
+  return locale === 'en' && r.titleEn ? r.titleEn : r.title
+}
+
+function articleTagLabel(tag, locale) {
+  if (locale !== 'en') return tag
+  return ARTICLE_TAG_EN[tag] ?? tag
+}
+
+const TOPIC_I18N = {
+  'الكل': 'insightPage.topicAll',
+  'تقنية': 'insightPage.topicTech',
+  'اقتصاد': 'insightPage.topicEconomy',
+  'استراتيجية': 'insightPage.topicStrategy',
+  'استدامة': 'insightPage.topicSustainability',
+}
+
+function topicFilterLabel(arTopic, t) {
+  const key = TOPIC_I18N[arTopic]
+  return key ? t(key) : arTopic
+}
+
 /* ── Featured strip ──────────────────────────────────── */
 function FeaturedStrip() {
-  const featured = REPORTS.find(r => r.featured)
+  const { t, locale } = useI18n()
   const report2 = REPORTS.filter(r => !r.featured && r.image)[0]
   const report3 = REPORTS.filter(r => !r.featured && r.image)[1]
 
@@ -32,10 +60,14 @@ function FeaturedStrip() {
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
           {/* Blue CTA */}
           <Link to="/insight#reports" className="bg-brand-blue rounded-xl p-6 sm:p-8 flex flex-col justify-between min-h-[180px] sm:min-h-[220px] no-underline group touch-manipulation active:opacity-95">
-            <span className="text-white/60 text-[11px] font-semibold tracking-widest uppercase">إنسايت</span>
+            <span className="text-white/60 text-[11px] font-semibold tracking-widest uppercase">{t('insightPage.featuredEyebrow')}</span>
             <div>
               <p className="text-white font-bold text-xl leading-snug mb-5">
-                اكتشف<br />أحدث<br />الإنسايت
+                {t('insightPage.featuredCtaLine1')}
+                <br />
+                {t('insightPage.featuredCtaLine2')}
+                <br />
+                {t('insightPage.featuredCtaLine3')}
               </p>
               <div className="w-9 h-9 rounded-full border border-white/30 flex items-center justify-center group-hover:border-white transition-colors">
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round">
@@ -48,11 +80,11 @@ function FeaturedStrip() {
           {/* Report 2 */}
           {report2 && (() => { const idx = REPORTS.indexOf(report2); return (
             <Link to={reportRoute(idx)} className="relative rounded-xl overflow-hidden no-underline group min-h-[200px] sm:min-h-[220px] touch-manipulation active:opacity-95 block">
-              <img src={report2.image} alt={report2.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <img src={report2.image} alt={reportTitle(report2, locale)} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
               <div className="absolute bottom-0 p-5 z-10">
-                <span className="text-white/50 text-[10px] font-semibold tracking-widest uppercase block mb-1">تقرير</span>
-                <p className="text-white font-bold text-sm leading-snug">{report2.title}</p>
+                <span className="text-white/50 text-[10px] font-semibold tracking-widest uppercase block mb-1">{t('insightPage.kindReport')}</span>
+                <p className="text-white font-bold text-sm leading-snug">{reportTitle(report2, locale)}</p>
               </div>
             </Link>
           )})()}
@@ -60,11 +92,11 @@ function FeaturedStrip() {
           {/* Report 3 */}
           {report3 && (() => { const idx = REPORTS.indexOf(report3); return (
             <Link to={reportRoute(idx)} className="relative rounded-xl overflow-hidden no-underline group min-h-[200px] sm:min-h-[220px] touch-manipulation active:opacity-95 block">
-              <img src={report3.image} alt={report3.title} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <img src={report3.image} alt={reportTitle(report3, locale)} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
               <div className="absolute bottom-0 p-5 z-10">
-                <span className="text-white/50 text-[10px] font-semibold tracking-widest uppercase block mb-1">تقرير</span>
-                <p className="text-white font-bold text-sm leading-snug">{report3.title}</p>
+                <span className="text-white/50 text-[10px] font-semibold tracking-widest uppercase block mb-1">{t('insightPage.kindReport')}</span>
+                <p className="text-white font-bold text-sm leading-snug">{reportTitle(report3, locale)}</p>
               </div>
             </Link>
           )})()}
@@ -92,8 +124,14 @@ function FeaturedStrip() {
             {/* Watch / Listen / Inspired */}
             <div className="bg-white rounded-xl p-4 flex flex-row sm:flex-col justify-between items-center sm:items-stretch gap-3 sm:gap-0 min-h-[52px] sm:min-h-0">
               <p className="text-gray-900 font-bold text-[13px] leading-snug flex-1 sm:flex-none">
-                <span className="sm:hidden">استمع وتلهّم بالمحتوى</span>
-                <span className="hidden sm:block">استمع<br />وتلهّم<br />بالمحتوى</span>
+                <span className="sm:hidden">{t('insightPage.listenInspireMobile')}</span>
+                <span className="hidden sm:block">
+                  {t('insightPage.listenInspireD1')}
+                  <br />
+                  {t('insightPage.listenInspireD2')}
+                  <br />
+                  {t('insightPage.listenInspireD3')}
+                </span>
               </p>
               <Link to="/insight#podcast" className="min-h-[44px] min-w-[44px] sm:min-h-0 sm:min-w-0 w-11 h-11 sm:w-7 sm:h-7 shrink-0 rounded-full border border-gray-200 flex items-center justify-center hover:border-brand-blue hover:text-brand-blue transition-colors no-underline text-gray-400 self-start sm:mt-2 touch-manipulation active:bg-gray-50">
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
@@ -110,8 +148,9 @@ function FeaturedStrip() {
 
 /* ── Trending Topics ──────────────────────────────────── */
 function TrendingTopics() {
+  const { t, locale } = useI18n()
   const [activeTopic, setActiveTopic] = useState('الكل')
-  const topics = ['الكل', ...ARTICLE_TOPICS.filter(t => t !== 'الكل').slice(0, 4)]
+  const topics = ['الكل', ...ARTICLE_TOPICS.filter(topic => topic !== 'الكل').slice(0, 4)]
 
   const filteredWithIndex = (activeTopic === 'الكل' ? ARTICLES : ARTICLES.filter(a => a.tag === activeTopic))
     .map(a => ({ ...a, articleIndex: ARTICLES.indexOf(a) }))
@@ -124,26 +163,27 @@ function TrendingTopics() {
       <div className="max-w-7xl mx-auto px-6 lg:px-10">
         {/* Header + filter */}
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-xl font-bold text-gray-900">المواضيع الرائجة</h2>
+          <h2 className="text-xl font-bold text-gray-900">{t('insightPage.trendingTitle')}</h2>
           <div className="flex items-center gap-3">
-            {topics.map(t => (
+            {topics.map(topicAr => (
               <button
-                key={t}
-                onClick={() => setActiveTopic(t)}
+                key={topicAr}
+                type="button"
+                onClick={() => setActiveTopic(topicAr)}
                 className={`text-[12px] font-semibold px-3 py-1.5 rounded-full border transition-all duration-150 ${
-                  activeTopic === t
+                  activeTopic === topicAr
                     ? 'bg-brand-blue text-white border-brand-blue'
                     : 'text-gray-500 border-gray-200 hover:border-brand-blue/40'
                 }`}
               >
-                {t}
+                {topicFilterLabel(topicAr, t)}
               </button>
             ))}
             <div className="flex gap-2 mr-2">
-              <button className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-blue hover:text-brand-blue transition-colors">
+              <button type="button" className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-blue hover:text-brand-blue transition-colors">
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M2 6h8M6 2l4 4-4 4" /></svg>
               </button>
-              <button className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-blue hover:text-brand-blue transition-colors">
+              <button type="button" className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-blue hover:text-brand-blue transition-colors">
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M10 6H2M6 2L2 6l4 4" /></svg>
               </button>
             </div>
@@ -160,7 +200,7 @@ function TrendingTopics() {
             <div className="grid lg:grid-cols-[1fr_auto] items-center gap-6 p-8 lg:p-10">
               <div>
                 <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${tagCls(featuredArticle.tag)} inline-block mb-3`}>
-                  {featuredArticle.tag}
+                  {articleTagLabel(featuredArticle.tag, locale)}
                 </span>
                 <h3 className="text-white font-bold text-xl lg:text-2xl leading-snug mb-2 group-hover:text-brand-blue-light transition-colors">
                   {featuredArticle.title}
@@ -196,7 +236,7 @@ function TrendingTopics() {
                 }
               </div>
               <div className="p-5">
-                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${tagCls(a.tag)} inline-block mb-2`}>{a.tag}</span>
+                <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${tagCls(a.tag)} inline-block mb-2`}>{articleTagLabel(a.tag, locale)}</span>
                 <h4 className="text-gray-900 font-bold text-[13px] leading-snug mb-3 group-hover:text-brand-blue transition-colors line-clamp-2">{a.title}</h4>
                 <div className="flex items-center justify-between pt-3 border-t border-gray-50">
                   <span className="text-gray-400 text-[11px]">{a.date}</span>
@@ -216,6 +256,7 @@ function TrendingTopics() {
 
 /* ── Reports section ──────────────────────────────────── */
 function ReportsSection() {
+  const { t, locale } = useI18n()
   const [activeYear, setActiveYear] = useState(2025)
   const filtered = REPORTS.filter(r => r.year === activeYear)
 
@@ -225,7 +266,7 @@ function ReportsSection() {
         {/* Header */}
         <div className="flex items-end justify-between mb-8">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">أحدث التقارير</h2>
+            <h2 className="text-2xl font-bold text-gray-900">{t('insightPage.reportsLatest')}</h2>
           </div>
           <div className="flex items-center gap-3">
             {/* Year filter */}
@@ -233,6 +274,7 @@ function ReportsSection() {
               {REPORT_YEARS.map(yr => (
                 <button
                   key={yr}
+                  type="button"
                   onClick={() => setActiveYear(yr)}
                   className={`text-[12px] font-semibold px-3 py-1.5 rounded-full border transition-all ${
                     activeYear === yr
@@ -245,10 +287,10 @@ function ReportsSection() {
               ))}
             </div>
             <div className="flex gap-2">
-              <button className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-blue hover:text-brand-blue transition-colors">
+              <button type="button" className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-blue hover:text-brand-blue transition-colors">
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M2 6h8M6 2l4 4-4 4" /></svg>
               </button>
-              <button className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-blue hover:text-brand-blue transition-colors">
+              <button type="button" className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-blue hover:text-brand-blue transition-colors">
                 <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M10 6H2M6 2L2 6l4 4" /></svg>
               </button>
             </div>
@@ -267,16 +309,16 @@ function ReportsSection() {
             >
               <div className="h-36 overflow-hidden bg-gray-100">
                 {r.image
-                  ? <img src={r.image} alt={r.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                  ? <img src={r.image} alt={reportTitle(r, locale)} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                   : <div className="w-full h-full bg-gradient-to-br from-brand-navy to-brand-blue" />
                 }
               </div>
               <div className="p-4">
-                <p className="text-gray-800 font-bold text-[13px] leading-snug mb-3 group-hover:text-brand-blue transition-colors line-clamp-2">{r.title}</p>
+                <p className="text-gray-800 font-bold text-[13px] leading-snug mb-3 group-hover:text-brand-blue transition-colors line-clamp-2">{reportTitle(r, locale)}</p>
                 <div className="flex items-center justify-between">
                   <span className="text-gray-400 text-[11px]">{r.date}</span>
                   <span className="text-brand-blue text-[11px] font-semibold flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    اقرأ المزيد <ExternalArrow />
+                    {t('insightPage.readMore')} <ExternalArrow />
                   </span>
                 </div>
               </div>
@@ -288,7 +330,7 @@ function ReportsSection() {
         <div className="text-center mt-8">
           <a href="https://insight.oceanx.sa/reports/" target="_blank" rel="noopener noreferrer"
             className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-brand-blue no-underline transition-colors font-medium border border-gray-200 hover:border-brand-blue/30 px-5 py-2.5 rounded-lg">
-            عرض جميع التقارير <ExternalArrow />
+            {t('insightPage.viewAllReports')} <ExternalArrow />
           </a>
         </div>
       </div>
@@ -314,8 +356,11 @@ function AppleIcon() {
 }
 
 function PodcastSection() {
+  const { t, locale } = useI18n()
   const [activeSeason, setActiveSeason] = useState(2)
   const filtered = PODCASTS.filter(p => p.season === activeSeason)
+  const podcastTitle = locale === 'en' ? PODCAST_META.titleEn : PODCAST_META.title
+  const podcastDesc = locale === 'en' ? PODCAST_META.descriptionEn : PODCAST_META.description
 
   return (
     <div id="podcast" className="py-14 bg-gray-50 border-t border-gray-100">
@@ -324,15 +369,16 @@ function PodcastSection() {
         {/* Header row */}
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div>
-            <span className="section-label block mb-2">البودكاست</span>
-            <h2 className="text-2xl font-bold text-gray-900">{PODCAST_META.title}</h2>
-            <p className="text-gray-400 text-[13px] mt-1 max-w-md">{PODCAST_META.description}</p>
+            <span className="section-label block mb-2">{t('insightPage.podcastSectionLabel')}</span>
+            <h2 className="text-2xl font-bold text-gray-900">{podcastTitle}</h2>
+            <p className="text-gray-400 text-[13px] mt-1 max-w-md">{podcastDesc}</p>
           </div>
           <div className="flex items-center gap-3 flex-shrink-0">
             {/* Season filter */}
             {[2, 1].map(s => (
               <button
                 key={s}
+                type="button"
                 onClick={() => setActiveSeason(s)}
                 className={`text-[12px] font-semibold px-3 py-1.5 rounded-full border transition-all ${
                   activeSeason === s
@@ -340,7 +386,7 @@ function PodcastSection() {
                     : 'text-gray-500 border-gray-200 hover:border-brand-blue/40'
                 }`}
               >
-                الموسم {s}
+                {t('insightPage.seasonPrefix')} {s}
               </button>
             ))}
           </div>
@@ -350,7 +396,7 @@ function PodcastSection() {
           {/* Left — cover + platform links */}
           <div className="flex flex-col gap-4">
             <div className="rounded-2xl overflow-hidden aspect-square w-full max-w-[280px]">
-              <img src={PODCAST_META.cover} alt={PODCAST_META.title} className="w-full h-full object-cover" />
+              <img src={PODCAST_META.cover} alt={podcastTitle} className="w-full h-full object-cover" />
             </div>
             <div className="flex flex-col gap-2">
               <a
@@ -360,7 +406,7 @@ function PodcastSection() {
                 className="flex items-center gap-3 bg-[#1DB954] text-white rounded-xl px-4 py-3 no-underline hover:opacity-90 transition-opacity"
               >
                 <SpotifyIcon />
-                <span className="text-[13px] font-semibold">استمع على Spotify</span>
+                <span className="text-[13px] font-semibold">{t('insightPage.listenSpotify')}</span>
               </a>
               <a
                 href={PODCAST_META.apple}
@@ -369,14 +415,14 @@ function PodcastSection() {
                 className="flex items-center gap-3 bg-[#872EC4] text-white rounded-xl px-4 py-3 no-underline hover:opacity-90 transition-opacity"
               >
                 <AppleIcon />
-                <span className="text-[13px] font-semibold">استمع على Apple Podcasts</span>
+                <span className="text-[13px] font-semibold">{t('insightPage.listenApple')}</span>
               </a>
             </div>
           </div>
 
           {/* Right — episodes list */}
           <div className="flex flex-col divide-y divide-gray-100 bg-white rounded-2xl border border-gray-100 overflow-hidden">
-            {filtered.map((ep, i) => (
+            {filtered.map((ep) => (
               <a
                 key={`s${ep.season}e${ep.ep}`}
                 href={ep.url}
@@ -395,7 +441,7 @@ function PodcastSection() {
                     {ep.title}
                   </p>
                   {ep.guest && (
-                    <p className="text-gray-400 text-[11px] mt-0.5">مع {ep.guest}</p>
+                    <p className="text-gray-400 text-[11px] mt-0.5">{t('insightPage.guestWith')} {ep.guest}</p>
                   )}
                 </div>
 
@@ -421,6 +467,7 @@ function PodcastSection() {
 
 /* ── Membership CTA ───────────────────────────────────── */
 function MembershipCTA() {
+  const { t } = useI18n()
   return (
     <div
       className="py-16"
@@ -429,19 +476,21 @@ function MembershipCTA() {
       <div className="max-w-7xl mx-auto px-6 lg:px-10 flex flex-col sm:flex-row items-center justify-between gap-6">
         <div>
           <h3 className="text-white font-bold text-lg lg:text-xl mb-1">
-            نشرة <span className="italic text-brand-blue-light">أوشن إكس إنسايت</span> البريدية
+            {t('insightPage.membershipHeading1')}
+            <span className="italic text-brand-blue-light">{t('insightPage.membershipBrand')}</span>
+            {t('insightPage.membershipHeading2')}
           </h3>
           <p className="text-white/50 text-sm font-light">
-            اشترك في النشرة البريدية وتعرف على أحدث إصدارات أوشن إكس إنسايت
+            {t('insightPage.membershipBody')}
           </p>
         </div>
         <div className="flex gap-3 flex-shrink-0">
           <input
             type="email"
-            placeholder="بريدك الإلكتروني"
+            placeholder={t('insightPage.membershipPlaceholder')}
             className="bg-white/8 border border-white/15 text-white placeholder-white/30 text-sm rounded-lg px-4 py-2.5 outline-none focus:border-brand-blue/60 w-52"
           />
-          <button className="btn-primary text-sm px-5">اشترك</button>
+          <button type="button" className="btn-primary text-sm px-5">{t('insightPage.membershipSubscribe')}</button>
         </div>
       </div>
     </div>
@@ -450,6 +499,13 @@ function MembershipCTA() {
 
 /* ── Main page ────────────────────────────────────────── */
 export default function InsightPage() {
+  const { t } = useI18n()
+  const stats = [
+    { v: '+41', lKey: 'insightPage.statResearchReports' },
+    { v: '+73', lKey: 'insightPage.statAnalysisArticles' },
+    { v: '2018', lKey: 'insightPage.statSinceYear' },
+  ]
+
   return (
     <>
       {/* ── Dark Hero ──────────────────────────────── */}
@@ -469,9 +525,9 @@ export default function InsightPage() {
             animate={{ opacity: 1 }}
             className="flex items-center gap-2 text-xs text-white/30 mb-10"
           >
-            <Link to="/" className="hover:text-white/50 no-underline transition-colors">الرئيسية</Link>
+            <Link to="/" className="hover:text-white/50 no-underline transition-colors">{t('insightPage.crumbHome')}</Link>
             <span>/</span>
-            <span className="text-white/50">إنسايت</span>
+            <span className="text-white/50">{t('insightPage.crumbInsight')}</span>
           </motion.div>
 
           <div className="grid lg:grid-cols-2 gap-8 items-end">
@@ -482,7 +538,7 @@ export default function InsightPage() {
                 transition={{ duration: 0.7, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
                 className="text-6xl lg:text-8xl font-black text-white italic leading-none mb-5"
               >
-                إنسايت
+                {t('insightPage.heroTitle')}
               </motion.h1>
               <motion.div
                 initial={{ opacity: 0 }}
@@ -495,7 +551,7 @@ export default function InsightPage() {
                   rel="noopener noreferrer"
                   className="btn-outline text-[13px] no-underline"
                 >
-                  اشترك الآن
+                  {t('insightPage.heroSubscribe')}
                 </a>
               </motion.div>
             </div>
@@ -507,14 +563,10 @@ export default function InsightPage() {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="hidden lg:flex justify-end gap-10"
             >
-              {[
-                { v: '+41', l: 'تقرير بحثي' },
-                { v: '+73', l: 'مقالة تحليلية' },
-                { v: '2018', l: 'منذ عام' },
-              ].map(s => (
-                <div key={s.l} className="text-center">
+              {stats.map(s => (
+                <div key={s.lKey} className="text-center">
                   <div className="text-3xl font-bold text-brand-blue">{s.v}</div>
-                  <div className="text-white/30 text-[11px] mt-1">{s.l}</div>
+                  <div className="text-white/30 text-[11px] mt-1">{t(s.lKey)}</div>
                 </div>
               ))}
             </motion.div>
@@ -522,19 +574,14 @@ export default function InsightPage() {
         </div>
       </div>
 
-      {/* ── Featured Strip ──────────────────────────── */}
       <FeaturedStrip />
 
-      {/* ── Reports ────────────────────────────────── */}
       <ReportsSection />
 
-      {/* ── Trending Topics ─────────────────────────── */}
       <TrendingTopics />
 
-      {/* ── Podcast ────────────────────────────────── */}
       <PodcastSection />
 
-      {/* ── Membership CTA ──────────────────────────── */}
       <MembershipCTA />
     </>
   )

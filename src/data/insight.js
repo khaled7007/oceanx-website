@@ -486,11 +486,34 @@ export const TAG_COLORS = {
 export const REPORT_YEARS = [2025, 2024, 2023, 2022, 2021, 2020, 2019, 2018]
 export const ARTICLE_TOPICS = ['الكل', 'تقنية', 'اقتصاد', 'استراتيجية', 'استدامة', 'ذكاء اصطناعي', 'ريادة أعمال', 'قيادة', 'صحة']
 
+/** English labels for article category tags (UI when locale is en) */
+export const ARTICLE_TAG_EN = {
+  'أمن سيبراني': 'Cybersecurity',
+  'استثمار': 'Investment',
+  'استدامة': 'Sustainability',
+  'استراتيجية': 'Strategy',
+  'اقتصاد': 'Economy',
+  'بلوك تشين': 'Blockchain',
+  'تحول رقمي': 'Digital transformation',
+  'تعليم': 'Education',
+  'تقنية': 'Technology',
+  'تقنية مالية': 'FinTech',
+  'ذكاء اصطناعي': 'Artificial intelligence',
+  'ريادة أعمال': 'Entrepreneurship',
+  'صحة': 'Health',
+  'طاقة': 'Energy',
+  'قيادة': 'Leadership',
+  'موارد بشرية': 'Human resources',
+}
+
 /* ─── Podcasts ────────────────────────────────────────────────── */
 
 export const PODCAST_META = {
   title: 'بودكاست أوشن إكس إنسايت',
+  titleEn: 'OCEANX Insight Podcast',
   description: 'نقاشات معمّقة تغطي الإدارة والاستشارات والأعمال، مع ضيوف متخصصين من مختلف القطاعات.',
+  descriptionEn:
+    'In-depth conversations on management, consulting, and business—with expert guests from across sectors.',
   cover: 'https://insight.oceanx.sa/wp-content/uploads/2022/10/72-1-scaled.jpg',
   spotify: 'https://open.spotify.com/show/7GTCRrPMFpFi91Lw817109',
   apple: 'https://podcasts.apple.com/us/podcast/%D8%A8%D9%88%D8%AF%D9%83%D8%A7%D8%B3%D8%AA-%D8%A3%D9%88%D8%B4%D9%86-%D8%A5%D9%83%D8%B3-%D8%A5%D9%86%D8%B3%D8%A7%D9%8A%D8%AA/id1650120887',
