@@ -144,10 +144,12 @@ export default function Navbar() {
           : 'bg-[#050816]/92 backdrop-blur-xl border-b border-white/10 shadow-[0_12px_40px_rgba(0,0,0,0.45)]'
       }`}
     >
-      <nav ref={headerRef} className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 min-h-[4.5rem] sm:min-h-[5rem] py-2 sm:py-0 flex items-center justify-between gap-3">
-
-        {/* Logo */}
-        <Link to="/" className="flex items-center no-underline">
+      <nav
+        ref={headerRef}
+        className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 min-h-[4.5rem] sm:min-h-[5rem] py-2 sm:py-0 flex items-center justify-between gap-3 w-full md:grid md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-center md:gap-3 lg:gap-4"
+      >
+        {/* Logo — عمود أول في الشبكة (في RTL يصبح يمين الشاشة) */}
+        <Link to="/" className="flex items-center no-underline shrink-0">
           <img
             src="/logo.png"
             alt="OceanX"
@@ -155,31 +157,33 @@ export default function Navbar() {
           />
         </Link>
 
-        {/* Language + desktop links */}
-        <div className="hidden md:flex items-center gap-4 lg:gap-6">
-          {solidLightBar ? <LanguageToggleLight /> : <LanguageToggle />}
-          <ul className="flex items-center gap-6 lg:gap-8">
-            {NAV_LINKS.map((link) => {
-              const isActive = pathname === link.to
-              return (
-                <li key={link.to}>
-                  <Link
-                    to={link.to}
-                    className={`text-sm font-medium transition-colors duration-200 no-underline py-1 relative group ${
-                      isActive ? activeLinkColor : linkColor
+        {/* روابط سطح المكتب — عمود وسط فقط؛ المبدّل ليس داخل هذه القائمة */}
+        <ul className="hidden md:flex min-w-0 w-full items-center justify-center gap-6 lg:gap-8">
+          {NAV_LINKS.map((link) => {
+            const isActive = pathname === link.to
+            return (
+              <li key={link.to}>
+                <Link
+                  to={link.to}
+                  className={`text-sm font-medium transition-colors duration-200 no-underline py-1 relative group ${
+                    isActive ? activeLinkColor : linkColor
+                  }`}
+                >
+                  {link.label}
+                  <span
+                    className={`absolute bottom-0 start-0 h-0.5 rounded-full bg-brand-blue transition-all duration-250 ${
+                      isActive ? 'w-full' : 'w-0 group-hover:w-full'
                     }`}
-                  >
-                    {link.label}
-                    <span
-                      className={`absolute bottom-0 start-0 h-0.5 rounded-full bg-brand-blue transition-all duration-250 ${
-                        isActive ? 'w-full' : 'w-0 group-hover:w-full'
-                      }`}
-                    />
-                  </Link>
-                </li>
-              )
-            })}
-          </ul>
+                  />
+                </Link>
+              </li>
+            )
+          })}
+        </ul>
+
+        {/* اللغة — عمود ثالث منفصل؛ في RTL أقصى اليسار، في LTR أقصى اليمين */}
+        <div className="hidden md:flex shrink-0 items-center justify-self-end relative z-20">
+          {solidLightBar ? <LanguageToggleLight /> : <LanguageToggle />}
         </div>
 
         {/* Mobile toggle */}
