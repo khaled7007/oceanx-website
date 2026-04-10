@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { useI18n } from '../i18n/I18nContext'
 import Hero from '../components/Hero'
 import PracticesAccordion from '../components/PracticesAccordion'
 import SuccessPartners from '../components/SuccessPartners'
@@ -17,38 +18,37 @@ const fadeUp = (delay = 0) => ({
 /* ─────────────────────────────────────────────────────────────
    1. Identity — محيط من الحلول + الأرقام الكبيرة
 ───────────────────────────────────────────────────────────── */
-const STATS = [
-  { value: '+763', label: 'مشروع تم العمل عليه' },
-  { value: '+440', label: 'عميل من القطاعين الحكومي والخاص' },
-  { value: '+40',  label: 'شريك عالمي ومحلي' },
-  { value: '+20',  label: 'قطاع خدمناه' },
-  { value: '+13',  label: 'سنوات الخبرة' },
+const STAT_DEFS = [
+  { value: '+763', labelKey: 'statProjects' },
+  { value: '+440', labelKey: 'statClients' },
+  { value: '+40', labelKey: 'statPartners' },
+  { value: '+20', labelKey: 'statSectors' },
+  { value: '+13', labelKey: 'statYears' },
 ]
 
 function IdentitySection() {
+  const { t } = useI18n()
   return (
     <>
       {/* ── Text block ── */}
       <section className="pt-20 sm:pt-24 lg:pt-32 pb-16 sm:pb-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
           <motion.span {...fadeUp(0)} className="section-label block mb-4 sm:mb-5">
-            من نحن
+            {t('home.identityLabel')}
           </motion.span>
           <motion.h2
             {...fadeUp(0.08)}
             className="text-[2rem] sm:text-5xl lg:text-6xl xl:text-7xl font-black text-gray-900 leading-[1.12] sm:leading-tight mb-6 sm:mb-8"
           >
-            محيطٌ من
+            {t('home.identityTitle1')}
             <br />
-            <span className="text-brand-blue">الحلول</span>
+            <span className="text-brand-blue">{t('home.identityTitle2')}</span>
           </motion.h2>
           <motion.p
             {...fadeUp(0.18)}
             className="text-gray-500 text-[17px] sm:text-xl lg:text-2xl font-light leading-[1.8] sm:leading-[1.85] max-w-full"
           >
-            أوشن إكس شركة استشارية سعودية تأسست عام 2012، تقدم خدمات متكاملة للقطاعين
-            الحكومي والخاص. نُسهم في تطوير المنظمات عبر الابتكار، الاستشارات الإدارية،
-            الاستشارات المالية، وأبحاث السوق واستراتيجيات التواصل، بأحدث المنهجيات وأعلى معايير الجودة.
+            {t('home.identityBody')}
           </motion.p>
         </div>
       </section>
@@ -57,9 +57,9 @@ function IdentitySection() {
       <section className="pb-20 sm:pb-24 lg:pb-32 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4">
-            {STATS.map((s, i) => (
+            {STAT_DEFS.map((s, i) => (
               <motion.div
-                key={s.label}
+                key={s.labelKey}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -69,7 +69,9 @@ function IdentitySection() {
                 <span className="text-[1.65rem] sm:text-4xl lg:text-5xl font-black text-brand-blue leading-none tracking-tight tabular-nums">
                   {s.value}
                 </span>
-                <span className="text-gray-500 text-[12px] sm:text-[14px] font-light leading-snug">{s.label}</span>
+                <span className="text-gray-500 text-[12px] sm:text-[14px] font-light leading-snug">
+                  {t(`home.${s.labelKey}`)}
+                </span>
               </motion.div>
             ))}
           </div>
@@ -82,36 +84,76 @@ function IdentitySection() {
 /* ─────────────────────────────────────────────────────────────
    2. Latest Releases — تقارير + مقالات + بودكاست
 ───────────────────────────────────────────────────────────── */
-const reportItems = REPORTS.filter(r => r.image).slice(0, 3).map(r => ({
-  kind: 'تقرير', typeCls: 'bg-indigo-50 text-indigo-700 border-indigo-100',
-  title: r.title, date: r.date, image: r.image, tag: r.tags?.[0] ?? 'تقرير',
-  href: r.url, external: true,
-}))
-
-const articleItems = ARTICLES.filter(a => a.image).slice(0, 3).map(a => ({
-  kind: 'مقالة', typeCls: 'bg-blue-50 text-blue-700 border-blue-100',
-  title: a.title, date: a.date, image: a.image, tag: a.tag,
-  href: a.url, external: true,
-}))
-
-const podcastItems = PODCASTS.slice(0, 3).map(p => ({
-  kind: 'بودكاست', typeCls: 'bg-violet-50 text-violet-700 border-violet-100',
-  title: p.title, date: p.date, image: null, tag: p.guest ? `مع ${p.guest}` : `الموسم ${p.season}`,
-  href: p.url, external: true,
-  excerpt: `${p.duration} — الموسم ${p.season}`,
-}))
-
-const TABS = [
-  { id: 'reports',  label: 'تقارير' },
-  { id: 'articles', label: 'مقالات' },
-  { id: 'podcast',  label: 'بودكاست' },
-]
-
 function LatestReleases() {
+  const { t, isEn } = useI18n()
   const [tab, setTab] = useState('reports')
-  const items = tab === 'reports' ? reportItems
-    : tab === 'articles' ? articleItems
-    : podcastItems
+
+  const reportItems = useMemo(
+    () =>
+      REPORTS.filter((r) => r.image)
+        .slice(0, 3)
+        .map((r) => ({
+          kind: t('home.kindReport'),
+          typeCls: 'bg-indigo-50 text-indigo-700 border-indigo-100',
+          title: r.title,
+          date: r.date,
+          image: r.image,
+          tag: r.tags?.[0] ?? t('home.kindReport'),
+          href: r.url,
+          external: true,
+        })),
+    [t]
+  )
+
+  const articleItems = useMemo(
+    () =>
+      ARTICLES.filter((a) => a.image)
+        .slice(0, 3)
+        .map((a) => ({
+          kind: t('home.kindArticle'),
+          typeCls: 'bg-blue-50 text-blue-700 border-blue-100',
+          title: a.title,
+          date: a.date,
+          image: a.image,
+          tag: a.tag,
+          href: a.url,
+          external: true,
+        })),
+    [t]
+  )
+
+  const podcastItems = useMemo(
+    () =>
+      PODCASTS.slice(0, 3).map((p) => ({
+        kind: t('home.kindPodcast'),
+        typeCls: 'bg-violet-50 text-violet-700 border-violet-100',
+        title: p.title,
+        date: p.date,
+        image: null,
+        tag: p.guest
+          ? isEn
+            ? `with ${p.guest}`
+            : `مع ${p.guest}`
+          : isEn
+            ? `Season ${p.season}`
+            : `الموسم ${p.season}`,
+        href: p.url,
+        external: true,
+        excerpt: isEn ? `${p.duration} — Season ${p.season}` : `${p.duration} — الموسم ${p.season}`,
+      })),
+    [t, isEn]
+  )
+
+  const TABS = useMemo(
+    () => [
+      { id: 'reports', label: t('home.tabReports') },
+      { id: 'articles', label: t('home.tabArticles') },
+      { id: 'podcast', label: t('home.tabPodcast') },
+    ],
+    [t]
+  )
+
+  const items = tab === 'reports' ? reportItems : tab === 'articles' ? articleItems : podcastItems
 
   return (
     <section className="py-16 sm:py-24 lg:py-32 bg-gray-50">
@@ -121,7 +163,8 @@ function LatestReleases() {
         <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-end sm:justify-between gap-4 sm:gap-5 mb-8 sm:mb-12">
           <div>
             <motion.h2 {...fadeUp(0.08)} className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900">
-              أحدث<span className="text-brand-blue"> الإصدارات</span>
+              {t('home.latestTitle')}
+              <span className="text-brand-blue">{t('home.latestHighlight')}</span>
             </motion.h2>
           </div>
 
@@ -130,18 +173,18 @@ function LatestReleases() {
             {...fadeUp(0.12)}
             className="flex items-center gap-2 overflow-x-auto overscroll-x-contain pb-1 -mx-1 px-1 sm:mx-0 sm:px-0 sm:overflow-visible snap-x snap-mandatory sm:snap-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           >
-            {TABS.map(t => (
+            {TABS.map((tabDef) => (
               <button
-                key={t.id}
+                key={tabDef.id}
                 type="button"
-                onClick={() => setTab(t.id)}
+                onClick={() => setTab(tabDef.id)}
                 className={`shrink-0 snap-start min-h-[44px] px-5 py-2.5 rounded-full text-sm font-semibold border transition-all duration-150 touch-manipulation ${
-                  tab === t.id
+                  tab === tabDef.id
                     ? 'bg-brand-blue text-white border-brand-blue'
                     : 'bg-white text-gray-500 border-gray-200 hover:border-brand-blue/40'
                 }`}
               >
-                {t.label}
+                {tabDef.label}
               </button>
             ))}
           </motion.div>
@@ -204,7 +247,7 @@ function LatestReleases() {
                       </p>
                     )}
                     <span className="text-brand-blue text-xs font-semibold inline-flex items-center gap-1.5 group-hover:gap-2.5 transition-all duration-200">
-                      اقرأ المزيد
+                      {t('home.readMore')}
                       <svg width="11" height="11" viewBox="0 0 11 11" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                         <path d="M9 5.5H2M6 2.5L9 5.5 6 8.5" />
                       </svg>
@@ -219,7 +262,7 @@ function LatestReleases() {
         {/* Bottom CTA */}
         <div className="flex justify-center mt-8 sm:mt-10">
           <Link to="/insight" className="inline-flex items-center justify-center gap-2 min-h-[48px] text-sm text-gray-500 hover:text-brand-blue no-underline transition-colors font-medium border border-gray-200 hover:border-brand-blue/30 px-5 py-2.5 rounded-lg bg-white touch-manipulation w-full sm:w-auto max-w-xs sm:max-w-none">
-            عرض كل الإصدارات
+            {t('home.viewAll')}
           </Link>
         </div>
 

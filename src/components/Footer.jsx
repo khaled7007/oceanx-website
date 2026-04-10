@@ -1,23 +1,6 @@
 import { Link } from 'react-router-dom'
-
-const COL_ABOUT = [
-  { label: 'من نحن', to: '/about' },
-  { label: 'وظائف', to: '/jobs' },
-  { label: 'تواصل معنا', to: '/contact' },
-]
-
-const COL_PRACTICES = [
-  { label: 'الابتكار', to: '/practices/innovation' },
-  { label: 'الاستشارات الإدارية', to: '/practices/organization' },
-  { label: 'أبحاث السوق واستراتيجيات التواصل', to: '/practices/market-research' },
-]
-
-const COL_INSIGHT = [
-  { label: 'التقارير', href: 'https://insight.oceanx.sa/reports/', external: true },
-  { label: 'المقالات', href: 'https://insight.oceanx.sa/articles/', external: true },
-  { label: 'البودكاست', href: 'https://insight.oceanx.sa/بودكاست-2/', external: true },
-  { label: 'إنسايت', to: '/insight' },
-]
+import { useMemo } from 'react'
+import { useI18n } from '../i18n/I18nContext'
 
 const SOCIALS = [
   {
@@ -90,6 +73,33 @@ function FooterCol({ title, links }) {
 }
 
 export default function Footer() {
+  const { t } = useI18n()
+  const COL_ABOUT = useMemo(
+    () => [
+      { label: t('footer.about'), to: '/about' },
+      { label: t('footer.jobs'), to: '/jobs' },
+      { label: t('footer.contact'), to: '/contact' },
+    ],
+    [t]
+  )
+  const COL_PRACTICES = useMemo(
+    () => [
+      { label: t('footer.practiceInnovation'), to: '/practices/innovation' },
+      { label: t('footer.practiceOrg'), to: '/practices/organization' },
+      { label: t('footer.practiceMr'), to: '/practices/market-research' },
+    ],
+    [t]
+  )
+  const COL_INSIGHT = useMemo(
+    () => [
+      { label: t('footer.insightReports'), href: 'https://insight.oceanx.sa/reports/', external: true },
+      { label: t('footer.insightArticles'), href: 'https://insight.oceanx.sa/articles/', external: true },
+      { label: t('footer.insightPodcast'), href: 'https://insight.oceanx.sa/بودكاست-2/', external: true },
+      { label: t('footer.insightHome'), to: '/insight' },
+    ],
+    [t]
+  )
+
   return (
     <footer className="bg-brand-dark border-t border-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-12 sm:pt-16 pb-8 pb-[max(2rem,env(safe-area-inset-bottom,0px))]">
@@ -105,7 +115,7 @@ export default function Footer() {
               />
             </Link>
             <p className="text-white/35 text-sm font-light leading-relaxed max-w-xs mb-6">
-              محيطٌ من الحلول — شركة استشارية سعودية تأسست 2012، تخدم القطاعين الحكومي والخاص بخبرة محلية ودولية.
+              {t('footer.tagline')}
             </p>
             {/* Socials */}
             <div className="flex items-center gap-3">
@@ -124,19 +134,23 @@ export default function Footer() {
             </div>
           </div>
 
-          <FooterCol title="الشركة" links={COL_ABOUT} />
-          <FooterCol title="الممارسات" links={COL_PRACTICES} />
-          <FooterCol title="إنسايت" links={COL_INSIGHT} />
+          <FooterCol title={t('footer.company')} links={COL_ABOUT} />
+          <FooterCol title={t('footer.practices')} links={COL_PRACTICES} />
+          <FooterCol title={t('footer.insightCol')} links={COL_INSIGHT} />
         </div>
 
         {/* Bottom */}
         <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-white/25 text-xs">
-            © 2026 أوشن إكس لحلول الأعمال. جميع الحقوق محفوظة.
+            {t('footer.rights')}
           </p>
           <div className="flex items-center gap-5">
-            <a href="#" className="text-white/25 hover:text-white/50 text-xs transition-colors no-underline">سياسة الخصوصية</a>
-            <a href="#" className="text-white/25 hover:text-white/50 text-xs transition-colors no-underline">الشروط والأحكام</a>
+            <a href="#" className="text-white/25 hover:text-white/50 text-xs transition-colors no-underline">
+              {t('footer.privacy')}
+            </a>
+            <a href="#" className="text-white/25 hover:text-white/50 text-xs transition-colors no-underline">
+              {t('footer.terms')}
+            </a>
           </div>
         </div>
       </div>

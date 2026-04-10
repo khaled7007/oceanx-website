@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import NewsletterBanner from '../components/NewsletterBanner'
+import { useI18n } from '../i18n/I18nContext'
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 24 },
@@ -18,12 +19,15 @@ const SERVICES = [
     title: 'الابتكار',
     titleEn: 'Innovation',
     desc: 'نقدم استشارات في مجال الابتكار وتمكين قطاع الأعمال للجهات الحكومية والخاصة، وذلك من خلال خبراء ومختصصين وشبكة متنوعة من الشركاء لتلبية الاحتياجات وتحويل الأفكار إلى واقع.',
+    descEn:
+      'Innovation and business enablement consulting for public and private sectors—experts and partners that turn ideas into reality.',
     points: [
       'الاستشارات في مجال الابتكار',
       'تنفيذ وإدارة البرامج الابتكارية',
       'تطوير استراتيجيات الابتكار',
       'منظومة الشركاء',
     ],
+    pointsEn: ['Innovation consulting', 'Program delivery & management', 'Innovation strategy', 'Partner ecosystem'],
   },
   {
     num: '02',
@@ -32,6 +36,8 @@ const SERVICES = [
     title: 'الاستشارات الإدارية',
     titleEn: 'Management Consulting',
     desc: 'نقدم الاستشارات الإدارية عبر خدمات تطويرية تستهدف المنظمات، من خلال تحسين كفاءتها وتوفير تجربة مميزة للعميل عبر تقديم حلول بأحدث المنهجيات العلمية والعملية، واستخدام أفضل الممارسات والأدوات التي تساعد في رفع قدرات المنظمة وضمان استدامة التميز المؤسسي لها.',
+    descEn:
+      'Management consulting that improves organizational performance and customer experience—using leading methodologies, tools, and best practices for sustainable excellence.',
     points: [
       'التطوير التنظيمي',
       'التطوير الاستراتيجي',
@@ -41,6 +47,15 @@ const SERVICES = [
       'بناء الهياكل التنظيمية',
       'توفير الكفاءات البشرية',
     ],
+    pointsEn: [
+      'Organizational development',
+      'Strategic development',
+      'Project management',
+      'Outsourcing & operations',
+      'Policies & procedures',
+      'Organizational design',
+      'Human capability',
+    ],
   },
   {
     num: '03',
@@ -49,6 +64,8 @@ const SERVICES = [
     title: 'أبحاث السوق واستراتيجيات التواصل',
     titleEn: 'Market Research & Communication',
     desc: 'نُقدّم حلولاً بحثية رقمية متكاملة مع استراتيجيات تواصل تُمكّنك من الاطلاع على أحدث الاتجاهات والبيانات وربط رسالتك بجمهورك في القطاعين الحكومي والخاص، بأحدث الأساليب العلمية والدولية.',
+    descEn:
+      'Integrated digital research and communication strategies—trends, data, and messaging that connect you with audiences in the public and private sectors.',
     points: [
       'أبحاث السوق والتحليل',
       'البحث الكمي',
@@ -58,6 +75,16 @@ const SERVICES = [
       'تحليل الاتجاهات والتوقعات',
       'استراتيجيات التواصل والرسائل',
       'الحملات والقنوات الرقمية',
+    ],
+    pointsEn: [
+      'Market research & analytics',
+      'Quantitative research',
+      'Qualitative research',
+      'Competitor analysis',
+      'Customer satisfaction',
+      'Trends & forecasting',
+      'Communication strategy',
+      'Campaigns & digital channels',
     ],
   },
 ]
@@ -82,19 +109,23 @@ function DummyImage({ index }) {
 
 /* ─── Single service row (alternating) ─────────────────── */
 function ServiceRow({ s, index }) {
+  const { isEn } = useI18n()
   const isEven = index % 2 === 0
+  const title = isEn ? s.titleEn || s.title : s.title
+  const desc = isEn ? s.descEn || s.desc : s.desc
+  const points = isEn ? s.pointsEn || s.points : s.points
 
   const imageEl = (
     <motion.div {...fadeUp(isEven ? 0 : 0.1)}>
       {s.image
-        ? <img src={s.image} alt={s.title} loading="lazy" decoding="async" fetchPriority="low" className="w-full rounded-2xl object-cover min-h-[360px]" style={{ maxHeight: 420 }} />
+        ? <img src={s.image} alt={title} loading="lazy" decoding="async" fetchPriority="low" className="w-full rounded-2xl object-cover min-h-[360px]" style={{ maxHeight: 420 }} />
         : <DummyImage index={index} />
       }
     </motion.div>
   )
 
   const textEl = (
-    <motion.div dir="rtl" {...fadeUp(isEven ? 0.1 : 0)}>
+    <motion.div {...fadeUp(isEven ? 0.1 : 0)}>
       <div className="flex items-center gap-3 mb-5">
         <span className="text-brand-blue font-black text-[18px] tabular-nums tracking-widest">
           {s.num}
@@ -102,13 +133,13 @@ function ServiceRow({ s, index }) {
         <div className="h-px flex-1 bg-brand-blue/20" />
       </div>
       <h2 className="text-3xl lg:text-4xl font-black text-gray-900 leading-tight mb-2">
-        {s.title}
+        {title}
       </h2>
       <p className="text-gray-600 font-normal text-[19px] sm:text-[21px] lg:text-[22px] leading-[1.85] mb-8">
-        {s.desc}
+        {desc}
       </p>
       <ul className="space-y-3.5 sm:space-y-4 mb-8">
-        {s.points.map((pt) => (
+        {points.map((pt) => (
           <li key={pt} className="flex items-center gap-3 sm:gap-3.5">
             <span className="w-2 h-2 rounded-full bg-brand-blue flex-shrink-0" />
             <span className="text-gray-800 font-medium text-[16px] sm:text-[17px] lg:text-[18px] leading-snug">{pt}</span>
@@ -139,6 +170,7 @@ function ServiceRow({ s, index }) {
 
 /* ─── Page ──────────────────────────────────────────────── */
 export default function ServicesPage() {
+  const { t } = useI18n()
   return (
     <>
       {/* ══ HERO ════════════════════════════════════════════ */}
@@ -155,9 +187,9 @@ export default function ServicesPage() {
             animate={{ opacity: 1 }}
             className="flex items-center gap-2 text-xs text-white/30 mb-8 sm:mb-12"
           >
-            <Link to="/" className="hover:text-white/60 no-underline transition-colors">الرئيسية</Link>
+            <Link to="/" className="hover:text-white/60 no-underline transition-colors">{t('breadcrumb.home')}</Link>
             <span>/</span>
-            <span className="text-white/50">خدماتنا</span>
+            <span className="text-white/50">{t('servicesPage.crumb')}</span>
           </motion.div>
 
           <div className="grid lg:grid-cols-2 gap-12 items-end">
@@ -168,7 +200,7 @@ export default function ServicesPage() {
                 transition={{ duration: 0.85, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
                 className="text-[2.25rem] sm:text-5xl lg:text-7xl font-black text-white leading-[1.05] sm:leading-none"
               >
-                خدماتنا
+                {t('servicesPage.title')}
               </motion.h1>
             </div>
           </div>

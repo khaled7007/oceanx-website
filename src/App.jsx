@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { useI18n } from './i18n/I18nContext'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Home from './pages/Home'
@@ -21,9 +22,10 @@ function ScrollToTop() {
   return null
 }
 
-const CONTACT_SERVICES = ['الابتكار', 'الاستشارات الإدارية', 'أبحاث السوق واستراتيجيات التواصل']
+const CONTACT_SERVICE_IDS = ['svcInnovation', 'svcOrg', 'svcMr']
 
 function FloatingContact() {
+  const { t } = useI18n()
   const [open, setOpen] = useState(false)
   const [sent, setSent] = useState(false)
   const [form, setForm] = useState({ name: '', phone: '', service: '', message: '' })
@@ -58,8 +60,8 @@ function FloatingContact() {
             style={{ background: 'linear-gradient(135deg, #06081e, #1a2055)' }}
           >
             <div>
-              <p className="text-white font-bold text-[15px]">تواصل معنا</p>
-              <p className="text-white/40 text-[11px] font-light">سنرد عليك في أقرب وقت</p>
+              <p className="text-white font-bold text-[15px]">{t('floating.title')}</p>
+              <p className="text-white/40 text-[11px] font-light">{t('floating.subtitle')}</p>
             </div>
             <button
               onClick={handleClose}
@@ -80,56 +82,56 @@ function FloatingContact() {
                     <path d="M4 11l5 5L18 6" />
                   </svg>
                 </div>
-                <p className="text-gray-900 font-bold text-[15px] mb-1">تم إرسال رسالتك!</p>
-                <p className="text-gray-400 text-sm font-light">سيتواصل معك فريقنا قريباً.</p>
+                <p className="text-gray-900 font-bold text-[15px] mb-1">{t('floating.sentTitle')}</p>
+                <p className="text-gray-400 text-sm font-light">{t('floating.sentBody')}</p>
                 <button
                   onClick={handleClose}
                   className="mt-5 text-brand-blue text-sm font-semibold hover:underline"
                 >
-                  إغلاق
+                  {t('floating.close')}
                 </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-3.5">
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1.5">الاسم *</label>
-                  <input required className={inputCls} placeholder="اسمك الكامل" value={form.name} onChange={set('name')} />
+                  <label className="block text-xs font-medium text-gray-600 mb-1.5">{t('floating.name')}</label>
+                  <input required className={inputCls} placeholder={t('floating.namePh')} value={form.name} onChange={set('name')} />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1.5">رقم الجوال *</label>
+                  <label className="block text-xs font-medium text-gray-600 mb-1.5">{t('floating.phone')}</label>
                   <input required className={inputCls} placeholder="+966 5X XXX XXXX" value={form.phone} onChange={set('phone')} />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-2">الخدمة</label>
+                  <label className="block text-xs font-medium text-gray-600 mb-2">{t('floating.service')}</label>
                   <div className="flex flex-wrap gap-1.5">
-                    {CONTACT_SERVICES.map(s => (
+                    {CONTACT_SERVICE_IDS.map((id) => (
                       <button
-                        key={s}
+                        key={id}
                         type="button"
-                        onClick={() => setForm(f => ({ ...f, service: s }))}
+                        onClick={() => setForm(f => ({ ...f, service: id }))}
                         className={`px-3 py-1 rounded-full text-[11px] font-medium border transition-all duration-150 ${
-                          form.service === s
+                          form.service === id
                             ? 'bg-brand-blue text-white border-brand-blue'
                             : 'bg-white text-gray-500 border-gray-200 hover:border-brand-blue/40'
                         }`}
                       >
-                        {s}
+                        {t(`floating.${id}`)}
                       </button>
                     ))}
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-600 mb-1.5">رسالتك</label>
+                  <label className="block text-xs font-medium text-gray-600 mb-1.5">{t('floating.message')}</label>
                   <textarea
                     rows={3}
                     className={inputCls + ' resize-none'}
-                    placeholder="كيف يمكننا مساعدتك؟"
+                    placeholder={t('floating.messagePh')}
                     value={form.message}
                     onChange={set('message')}
                   />
                 </div>
                 <button type="submit" className="btn-primary w-full text-sm py-3">
-                  إرسال الرسالة
+                  {t('floating.submit')}
                 </button>
               </form>
             )}
@@ -141,7 +143,7 @@ function FloatingContact() {
       <button
         type="button"
         onClick={() => setOpen(v => !v)}
-        aria-label="تواصل معنا"
+        aria-label={t('floating.aria')}
         className={`self-end pointer-events-auto min-h-[48px] min-w-[48px] w-14 h-14 rounded-full flex items-center justify-center shadow-xl transition-all duration-300 touch-manipulation ${
           open ? 'rotate-45 bg-gray-800' : 'bg-brand-blue hover:bg-[#2338e0] active:scale-95 sm:hover:scale-110'
         }`}

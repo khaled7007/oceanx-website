@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { SUCCESS_PARTNERS } from '../data/successPartners'
+import { useI18n } from '../i18n/I18nContext'
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 22 },
@@ -56,24 +57,26 @@ function MarqueeRow({ items }) {
 }
 
 export default function SuccessPartners() {
+  const { t } = useI18n()
   return (
     <section id="partners" className="py-14 sm:py-20 lg:py-24 bg-gray-50 border-y border-gray-100 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
         <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
           <motion.span {...fadeUp(0)} className="section-label block mb-3">
-            نثق بالشراكة
+            {t('partners.label')}
           </motion.span>
           <motion.h2
             {...fadeUp(0.06)}
             className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight"
           >
-            شركاء <span className="text-brand-blue">النجاح</span>
+            {t('partners.title')}
+            <span className="text-brand-blue">{t('partners.titleAccent')}</span>
           </motion.h2>
           <motion.p
             {...fadeUp(0.12)}
             className="mt-4 text-gray-600 text-[15px] sm:text-base font-normal leading-relaxed"
           >
-            نفتخر بثقة جهات حكومية ومؤسسات وطنية نعمل معها لتحقيق أثر ملموس.
+            {t('partners.body')}
           </motion.p>
         </div>
       </div>

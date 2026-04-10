@@ -2,11 +2,13 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import NewsletterBanner from '../components/NewsletterBanner'
+import { useI18n } from '../i18n/I18nContext'
 
-const SERVICES = ['الابتكار', 'الاستشارات الإدارية', 'أبحاث السوق واستراتيجيات التواصل']
-const SOURCES = ['وسائل التواصل الاجتماعي', 'النشرة البريدية', 'صديق أو زميل', 'أخرى']
+const SERVICE_IDS = ['svcInnovation', 'svcOrg', 'svcMr']
+const SOURCE_IDS = ['srcSocial', 'srcNewsletter', 'srcFriend', 'srcOther']
 
 export default function ContactPage() {
+  const { t } = useI18n()
   const [form, setForm] = useState({ firstName: '', lastName: '', email: '', phone: '', service: '', source: '', message: '' })
   const [sent, setSent] = useState(false)
 
@@ -27,9 +29,11 @@ export default function ContactPage() {
             transition={{ duration: 0.4 }}
             className="flex items-center gap-2 text-sm text-white/30 mb-6"
           >
-            <Link to="/" className="hover:text-white/60 no-underline transition-colors">الرئيسية</Link>
+            <Link to="/" className="hover:text-white/60 no-underline transition-colors">
+              {t('breadcrumb.home')}
+            </Link>
             <span>/</span>
-            <span className="text-white/60">تواصل معنا</span>
+            <span className="text-white/60">{t('contactPage.title')}</span>
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 24 }}
@@ -37,7 +41,7 @@ export default function ContactPage() {
             transition={{ duration: 0.65, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
             className="text-5xl lg:text-6xl font-bold text-white"
           >
-            تواصل معنا
+            {t('contactPage.title')}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
@@ -45,7 +49,7 @@ export default function ContactPage() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-white/40 text-[15px] font-light mt-4 max-w-md"
           >
-            يسعدنا سماع طلبك — سنتواصل معك في أقرب وقت ممكن.
+            {t('contactPage.heroSub')}
           </motion.p>
         </div>
       </div>
@@ -63,79 +67,79 @@ export default function ContactPage() {
                     <path d="M5 14l6 6L23 8" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">شكرًا لتواصلك!</h3>
-                <p className="text-gray-500 font-light">سيتواصل معك فريقنا في أقرب وقت ممكن.</p>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">{t('contactPage.thanksTitle')}</h3>
+                <p className="text-gray-500 font-light">{t('contactPage.thanksBody')}</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">الاسم الأول *</label>
-                    <input required className={inputCls} placeholder="محمد" value={form.firstName} onChange={set('firstName')} />
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('contactPage.firstName')}</label>
+                    <input required className={inputCls} placeholder={t('contactPage.firstNamePh')} value={form.firstName} onChange={set('firstName')} />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">الاسم الأخير *</label>
-                    <input required className={inputCls} placeholder="العمري" value={form.lastName} onChange={set('lastName')} />
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('contactPage.lastName')}</label>
+                    <input required className={inputCls} placeholder={t('contactPage.lastNamePh')} value={form.lastName} onChange={set('lastName')} />
                   </div>
                 </div>
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">البريد الإلكتروني *</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('contactPage.email')}</label>
                     <input required type="email" className={inputCls} placeholder="example@email.com" value={form.email} onChange={set('email')} />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1.5">رقم الجوال *</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('contactPage.phone')}</label>
                     <input required className={inputCls} placeholder="+966 5X XXX XXXX" value={form.phone} onChange={set('phone')} />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">نحن هنا للمساعدة — ما الذي تحتاجه؟ *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{t('contactPage.needLabel')}</label>
                   <div className="flex flex-wrap gap-2">
-                    {SERVICES.map((s) => (
+                    {SERVICE_IDS.map((id) => (
                       <button
-                        key={s}
+                        key={id}
                         type="button"
-                        onClick={() => setForm(f => ({ ...f, service: s }))}
+                        onClick={() => setForm(f => ({ ...f, service: id }))}
                         className={`px-4 py-2 rounded-full text-sm font-medium border transition-all duration-150 ${
-                          form.service === s
+                          form.service === id
                             ? 'bg-brand-blue text-white border-brand-blue'
                             : 'bg-white text-gray-600 border-gray-200 hover:border-brand-blue/40'
                         }`}
                       >
-                        {s}
+                        {t(`contactPage.${id}`)}
                       </button>
                     ))}
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">كيف سمعت عن أوشن إكس؟</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">{t('contactPage.sourceQuestion')}</label>
                   <div className="flex flex-wrap gap-2">
-                    {SOURCES.map((s) => (
+                    {SOURCE_IDS.map((id) => (
                       <button
-                        key={s}
+                        key={id}
                         type="button"
-                        onClick={() => setForm(f => ({ ...f, source: s }))}
+                        onClick={() => setForm(f => ({ ...f, source: id }))}
                         className={`px-4 py-2 rounded-full text-sm font-medium border transition-all duration-150 ${
-                          form.source === s
+                          form.source === id
                             ? 'bg-brand-blue text-white border-brand-blue'
                             : 'bg-white text-gray-600 border-gray-200 hover:border-brand-blue/40'
                         }`}
                       >
-                        {s}
+                        {t(`contactPage.${id}`)}
                       </button>
                     ))}
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1.5">رسالتك *</label>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">{t('contactPage.message')}</label>
                   <textarea
                     required
                     rows={5}
                     className={inputCls}
-                    placeholder="أخبرنا عن مشروعك أو استفسارك..."
+                    placeholder={t('contactPage.messagePh')}
                     value={form.message}
                     onChange={set('message')}
                   />
@@ -143,7 +147,7 @@ export default function ContactPage() {
 
                 <div className="flex justify-end">
                   <button type="submit" className="btn-primary px-8 py-3.5">
-                    إرسال الرسالة
+                    {t('contactPage.submit')}
                   </button>
                 </div>
               </form>
@@ -152,7 +156,7 @@ export default function ContactPage() {
             {/* Contact info */}
             <div className="space-y-6">
               <div className="rounded-2xl bg-gray-50 border border-gray-100 p-7">
-                <h3 className="font-bold text-gray-900 mb-5 text-[15px]">معلومات التواصل</h3>
+                <h3 className="font-bold text-gray-900 mb-5 text-[15px]">{t('contactPage.infoTitle')}</h3>
                 {[
                   {
                     icon: (
@@ -161,7 +165,7 @@ export default function ContactPage() {
                         <path d="M1 7l8 5 8-5" strokeLinecap="round" />
                       </svg>
                     ),
-                    label: 'البريد الإلكتروني',
+                    label: t('contactPage.emailLabel'),
                     value: 'info@oceanx.sa',
                     href: 'mailto:info@oceanx.sa',
                   },
@@ -171,7 +175,7 @@ export default function ContactPage() {
                         <path d="M15.5 12.5l-3-1.5-1.5 1.5C9 11.5 6.5 9 5.5 7l1.5-1.5-1.5-3-3 .5C2 7.5 4 13.5 10.5 16l.5-3.5z" strokeLinejoin="round" />
                       </svg>
                     ),
-                    label: 'الهاتف',
+                    label: t('contactPage.phoneLabel'),
                     value: '0512488182',
                     href: 'tel:0512488182',
                   },
@@ -182,8 +186,8 @@ export default function ContactPage() {
                         <circle cx="9" cy="7" r="2" />
                       </svg>
                     ),
-                    label: 'ساعات العمل',
-                    value: 'الأحد – الخميس: 9ص – 5م',
+                    label: t('contactPage.hoursLabel'),
+                    value: t('contactPage.hoursValue'),
                   },
                 ].map((item) => (
                   <div key={item.label} className="flex items-start gap-3 mb-4 last:mb-0">
@@ -206,12 +210,12 @@ export default function ContactPage() {
 
               {/* FAQ CTA */}
               <div className="rounded-2xl bg-brand-dark p-7 text-center">
-                <h4 className="text-white font-bold mb-2 text-[15px]">الأسئلة الشائعة</h4>
+                <h4 className="text-white font-bold mb-2 text-[15px]">{t('contactPage.faqTitle')}</h4>
                 <p className="text-white/40 text-sm font-light mb-4">
-                  قد تجد إجابتك في قائمة الأسئلة الشائعة لدينا.
+                  {t('contactPage.faqBody')}
                 </p>
-                <button className="btn-outline text-sm w-full">
-                  استعرض الأسئلة
+                <button type="button" className="btn-outline text-sm w-full">
+                  {t('contactPage.faqCta')}
                 </button>
               </div>
             </div>
@@ -239,8 +243,8 @@ export default function ContactPage() {
                 </svg>
               </div>
               <div>
-                <p className="text-gray-900 text-xs font-bold">أوشن إكس</p>
-                <p className="text-gray-400 text-[11px]">الرياض، المملكة العربية السعودية</p>
+                <p className="text-gray-900 text-xs font-bold">{t('contactPage.mapName')}</p>
+                <p className="text-gray-400 text-[11px]">{t('contactPage.mapCity')}</p>
               </div>
             </div>
           </div>
@@ -256,23 +260,23 @@ export default function ContactPage() {
           >
             <div>
               <span className="text-white/30 text-xs font-mono uppercase tracking-widest block mb-3">Self-Support</span>
-              <h3 className="text-2xl lg:text-3xl font-bold text-white mb-2">الأسئلة الشائعة</h3>
+              <h3 className="text-2xl lg:text-3xl font-bold text-white mb-2">{t('contactPage.faqBanner')}</h3>
               <p className="text-white/40 font-light leading-relaxed max-w-lg">
-                اطلع على دليل الأسئلة الشائعة للحصول على إجابات فورية دون الحاجة للتواصل المباشر.
+                {t('contactPage.faqBannerBody')}
               </p>
             </div>
             <div className="flex gap-3 flex-shrink-0">
-              <button className="btn-outline inline-flex items-center gap-2 whitespace-nowrap">
+              <button type="button" className="btn-outline inline-flex items-center gap-2 whitespace-nowrap">
                 <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
                   <path d="M2.5 2h10a1 1 0 011 1v8a1 1 0 01-1 1H9l-1.5 2L6 12H2.5a1 1 0 01-1-1V3a1 1 0 011-1z" />
                 </svg>
-                استعرض الأسئلة
+                {t('contactPage.faqBannerBtn1')}
               </button>
-              <button className="btn-primary inline-flex items-center gap-2 whitespace-nowrap">
+              <button type="button" className="btn-primary inline-flex items-center gap-2 whitespace-nowrap">
                 <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
                   <path d="M2.5 1.5h10v12l-5-3-5 3V1.5z" />
                 </svg>
-                تحميل PDF
+                {t('contactPage.faqBannerBtn2')}
               </button>
             </div>
           </div>

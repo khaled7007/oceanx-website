@@ -5,6 +5,8 @@ export const PRACTICES = [
     title: 'الابتكار',
     titleEn: 'Innovation',
     subtitle: 'نقود تطوير منظومات الابتكار وتصميم برامج نوعية تعزّز قدرة المنظمات على خلق حلول جديدة وتحويل الأفكار إلى أثر ملموس.',
+    subtitleEn:
+      'We develop innovation ecosystems and design high-impact programs that help organizations create new solutions and turn ideas into measurable outcomes.',
     image: '/innovation-hero.jpg',
     // Hero card (blue) + description card (gray)
     primaryCard: {
@@ -36,8 +38,10 @@ export const PRACTICES = [
     id: 'organization',
     slug: 'organization',
     title: 'الاستشارات الإدارية',
-    titleEn: 'Organizations',
+    titleEn: 'Management consulting',
     subtitle: 'نقدّم حلولًا استشارية متكاملة تدعم تطوير المنظمات، وتعزّز كفاءتها التشغيلية، وتمكّنها من تحقيق أهدافها الاستراتيجية بكفاءة واستدامة.',
+    subtitleEn:
+      'Integrated consulting that strengthens organizations, improves operational performance, and enables strategic goals—efficiently and sustainably.',
     image: '/org-hero.jpg',
     primaryCard: {
       title: 'حلول الاستشارات',
@@ -76,6 +80,8 @@ export const PRACTICES = [
     title: 'أبحاث السوق واستراتيجيات التواصل',
     titleEn: 'Market Research & Communication',
     subtitle: 'نوفّر رؤى قائمة على البيانات، ونبني استراتيجيات تواصل فعّالة تمكّن المنظمات من فهم جمهورها واتخاذ قرارات أكثر دقة وتأثيرًا.',
+    subtitleEn:
+      'Data-led insight and communication strategies that help organizations understand audiences and make sharper, more impactful decisions.',
     image: '/market-research-hero.jpg',
     primaryCard: {
       title: 'اعتماد البحث والتطوير',

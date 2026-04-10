@@ -1,15 +1,71 @@
-import { useState, useEffect, useRef, useLayoutEffect } from 'react'
+import { useState, useEffect, useRef, useLayoutEffect, useMemo } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useI18n } from '../i18n/I18nContext'
 
-const NAV_LINKS = [
-  { label: 'من نحن', to: '/about' },
-  { label: 'خدماتنا', to: '/services' },
-  { label: 'إنسايت', to: '/insight' },
-  { label: 'أخبار', to: '/news' },
-  { label: 'وظائف', to: '/jobs' },
-  { label: 'تواصل معنا', to: '/contact' },
-]
+function LanguageToggle() {
+  const { locale, setLocale, t } = useI18n()
+  return (
+    <div
+      className="flex items-center gap-1 rounded-lg border px-1 py-0.5 text-[11px] font-bold shrink-0"
+      style={{
+        borderColor: 'rgba(255,255,255,0.2)',
+        background: 'rgba(255,255,255,0.06)',
+      }}
+      role="group"
+      aria-label={locale === 'ar' ? 'Language' : 'اللغة'}
+    >
+      <button
+        type="button"
+        onClick={() => setLocale('ar')}
+        className={`px-2 py-1 rounded-md transition-colors ${
+          locale === 'ar' ? 'bg-white/20 text-white' : 'text-white/55 hover:text-white/90'
+        }`}
+      >
+        {t('langName')}
+      </button>
+      <button
+        type="button"
+        onClick={() => setLocale('en')}
+        className={`px-2 py-1 rounded-md transition-colors ${
+          locale === 'en' ? 'bg-white/20 text-white' : 'text-white/55 hover:text-white/90'
+        }`}
+      >
+        English
+      </button>
+    </div>
+  )
+}
+
+function LanguageToggleLight() {
+  const { locale, setLocale } = useI18n()
+  return (
+    <div
+      className="flex items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50/80 px-0.5 py-0.5 text-[11px] font-bold shrink-0"
+      role="group"
+      aria-label="Language"
+    >
+      <button
+        type="button"
+        onClick={() => setLocale('ar')}
+        className={`px-2 py-1 rounded-md transition-colors ${
+          locale === 'ar' ? 'bg-white text-brand-blue shadow-sm' : 'text-gray-500 hover:text-gray-800'
+        }`}
+      >
+        عربي
+      </button>
+      <button
+        type="button"
+        onClick={() => setLocale('en')}
+        className={`px-2 py-1 rounded-md transition-colors ${
+          locale === 'en' ? 'bg-white text-brand-blue shadow-sm' : 'text-gray-500 hover:text-gray-800'
+        }`}
+      >
+        EN
+      </button>
+    </div>
+  )
+}
 
 /** صفحات تبدأ بهيرو داكن — الشريط الشفاف القديم كان يخلّي الروابط رمادية فوق أزرق ويختفي الوضوح */
 function hasDarkHeroRoute(pathname) {
@@ -22,6 +78,18 @@ function hasDarkHeroRoute(pathname) {
 }
 
 export default function Navbar() {
+  const { t } = useI18n()
+  const NAV_LINKS = useMemo(
+    () => [
+      { label: t('nav.about'), to: '/about' },
+      { label: t('nav.services'), to: '/services' },
+      { label: t('nav.insight'), to: '/insight' },
+      { label: t('nav.news'), to: '/news' },
+      { label: t('nav.jobs'), to: '/jobs' },
+      { label: t('nav.contact'), to: '/contact' },
+    ],
+    [t]
+  )
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [menuTop, setMenuTop] = useState(72)
@@ -87,27 +155,32 @@ export default function Navbar() {
           />
         </Link>
 
-        {/* Desktop links */}
-        <ul className="hidden md:flex items-center gap-6 lg:gap-8">
-          {NAV_LINKS.map((link) => {
-            const isActive = pathname === link.to
-            return (
-              <li key={link.label}>
-                <Link
-                  to={link.to}
-                  className={`text-sm font-medium transition-colors duration-200 no-underline py-1 relative group ${
-                    isActive ? activeLinkColor : linkColor
-                  }`}
-                >
-                  {link.label}
-                  <span className={`absolute bottom-0 right-0 h-0.5 rounded-full bg-brand-blue transition-all duration-250 ${
-                    isActive ? 'w-full' : 'w-0 group-hover:w-full'
-                  }`} />
-                </Link>
-              </li>
-            )
-          })}
-        </ul>
+        {/* Language + desktop links */}
+        <div className="hidden md:flex items-center gap-4 lg:gap-6">
+          {solidLightBar ? <LanguageToggleLight /> : <LanguageToggle />}
+          <ul className="flex items-center gap-6 lg:gap-8">
+            {NAV_LINKS.map((link) => {
+              const isActive = pathname === link.to
+              return (
+                <li key={link.to}>
+                  <Link
+                    to={link.to}
+                    className={`text-sm font-medium transition-colors duration-200 no-underline py-1 relative group ${
+                      isActive ? activeLinkColor : linkColor
+                    }`}
+                  >
+                    {link.label}
+                    <span
+                      className={`absolute bottom-0 start-0 h-0.5 rounded-full bg-brand-blue transition-all duration-250 ${
+                        isActive ? 'w-full' : 'w-0 group-hover:w-full'
+                      }`}
+                    />
+                  </Link>
+                </li>
+              )
+            })}
+          </ul>
+        </div>
 
         {/* Mobile toggle */}
         <button
@@ -116,7 +189,7 @@ export default function Navbar() {
             solidLightBar ? 'hover:bg-gray-100 active:bg-gray-100/80' : 'hover:bg-white/15 active:bg-white/20'
           }`}
           onClick={() => setMenuOpen(v => !v)}
-          aria-label="القائمة"
+          aria-label={t('nav.menu')}
           aria-expanded={menuOpen}
         >
           {['top', 'mid', 'bot'].map((pos) => (
@@ -148,7 +221,7 @@ export default function Navbar() {
           >
             <button
               type="button"
-              aria-label="إغلاق القائمة"
+              aria-label={t('nav.closeMenu')}
               className="absolute inset-0 z-0 bg-black/35 backdrop-blur-[1px] pointer-events-auto"
               onClick={() => setMenuOpen(false)}
             />
@@ -163,7 +236,10 @@ export default function Navbar() {
                 paddingBottom: 'max(1rem, env(safe-area-inset-bottom, 0px))',
               }}
             >
-              <div className="px-3 sm:px-5 py-3 flex flex-col gap-0.5">
+              <div className="px-3 sm:px-5 py-3 flex flex-col gap-2">
+                <div className="px-3 pb-2 md:hidden">
+                  <LanguageToggleLight />
+                </div>
                 {NAV_LINKS.map((link) => (
                   <Link
                     key={link.label}

@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
 import NewsletterBanner from '../components/NewsletterBanner'
+import { useI18n } from '../i18n/I18nContext'
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 22 },
@@ -10,57 +11,31 @@ const fadeUp = (delay = 0) => ({
   transition: { duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] },
 })
 
-/* ─── Values ────────────────────────────────────────────── */
-const VALUES = [
-  { title: 'الإنجاز بكفاءة', desc: 'من أولوياتنا تجاه عملائنا أن نقدم لهم خدمات بجودة عالية، وأن نسعى لتحقيق ذلك لكي يبقى الأثر على المدى الطويل', icon: '/values/value-1.png' },
-  { title: 'الإبداع بلا حدود', desc: 'نتخذ من الابتكار أساساً لإبداعنا والذي ينعكس على مخرجاتنا في العمل، فلا نتأثر مهما اختلفت الظروف', icon: '/values/value-4.png' },
-  { title: 'عطاء أكثر لعملاءنا', desc: 'غايتنا هي تحقيق متطلبات العميل، ونحرص دائمًا بأن نقدم المزيد لخلق تجربة تفوق توقعاته', icon: '/values/value-3.png' },
-  { title: 'التعلم ومشاركة المعرفة', desc: 'نمتلك شغفًا متجددًا لاكتساب المهارات الجديدة والتعلم من مصادر مختلفة، ودورنا يكمن في نقل ومشاركة المعرفة لزملائنا', icon: '/values/value-2.png' },
+const VALUE_ICONS = ['/values/value-1.png', '/values/value-4.png', '/values/value-3.png', '/values/value-2.png']
+
+/* ─── Why points — icons only (titles/descriptions from i18n) ── */
+const WHY_ICONS = [
+  <svg key="w0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
+  <svg key="w1" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+  <svg key="w2" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>,
+  <svg key="w3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v11m0 0H3m6 0h12m0 0V5M3 7h18M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7"/></svg>,
+  <svg key="w4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>,
 ]
 
-/* ─── Why points ────────────────────────────────────────── */
-const WHY_POINTS = [
-  {
-    title: 'خبرة أكثر من 13 عاماً',
-    desc: 'حضور راسخ في السوق السعودي منذ 2012 مع سجل حافل من المشاريع الناجحة.',
-    icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
-  },
-  {
-    title: 'فريق متعدد التخصصات',
-    desc: 'كفاءات محلية ودولية تجمع بين الاستشارات الإدارية، المالية، الابتكار وأبحاث السوق.',
-    icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
-  },
-  {
-    title: 'اعتماد دولي',
-    desc: 'عضوية ESOMAR الأوروبية وشهادة Insights Association الأمريكية واعتماد هيئة المقيّمين السعوديين.',
-    icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>,
-  },
-  {
-    title: 'منهجية علمية',
-    desc: 'نعتمد أحدث الأساليب العلمية والدولية في التحليل وتقديم الحلول لكل عميل.',
-    icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><path d="M9 3H5a2 2 0 0 0-2 2v4m6-6h10a2 2 0 0 1 2 2v4M9 3v11m0 0H3m6 0h12m0 0V5M3 7h18M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7"/></svg>,
-  },
-  {
-    title: 'نتائج قابلة للقياس',
-    desc: 'كل مشروع نُنجزه يُترجم إلى مؤشرات أداء واضحة وأثر حقيقي على الأعمال.',
-    icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>,
-  },
-]
-
-/* ─── People data ───────────────────────────────────────── */
+/* ─── People data (aligned with Competencies.jsx) ───────── */
 const BOARD = [
-  { name: 'م. إبراهيم الزهيميل', nameEn: 'Eng. Ibrahim Alzuhaimeel', title: 'رئيس مجلس الإدارة', subtitle: 'شريك مؤسس', photo: 'https://oceanx.sa/wp-content/uploads/2022/03/Ibraheem-Alzuhaimeel-500x500.jpg', initials: 'إز', linkedin: 'https://www.linkedin.com/in/ibraheem-alzuhimeel-a61a8416/' },
-  { name: 'عبدالله العساف', nameEn: 'Abdullah Alassaf', title: 'نائب رئيس مجلس الإدارة', subtitle: 'شريك مؤسس', photo: 'https://oceanx.sa/wp-content/uploads/2022/03/Abdullah-Alassaf-500x500.jpg', initials: 'عع', linkedin: 'https://www.linkedin.com/in/abdullah-alassaf-080a0422/' },
-  { name: 'طارق القرعاوي', nameEn: 'Tareq Al-Garawy', title: 'عضو مجلس إدارة', photo: 'https://oceanx.sa/wp-content/uploads/2024/08/Tareq-Al-Garawy.jpg', initials: 'طق', linkedin: 'https://www.linkedin.com/in/tareq-al-garawy-cma-cfm-a491614/' },
-  { name: 'عبدالإله الصعب', nameEn: 'Abdulelah Alsaab', title: 'عضو مجلس إدارة', photo: 'https://oceanx.sa/wp-content/uploads/2024/08/1517627911488.png', initials: 'عص', linkedin: 'https://www.linkedin.com/in/abdulelah-alsaab-7720b62b/' },
-  { name: 'أحمد الزهيميل', nameEn: 'Ahmed Alzohimeel', title: 'عضو مجلس إدارة', photo: 'https://oceanx.sa/wp-content/uploads/2024/08/1609695295564-500x500.png', initials: 'أز', linkedin: 'https://www.linkedin.com/in/ahmed-alzohimeel-9aa63a84/' },
+  { name: 'م. إبراهيم الزهيميل', nameEn: 'Eng. Ibrahim Alzuhaimeel', title: 'رئيس مجلس الإدارة', titleEn: 'Chairman of the Board', subtitle: 'شريك مؤسس', subtitleEn: 'Founding partner', photo: 'https://oceanx.sa/wp-content/uploads/2022/03/Ibraheem-Alzuhaimeel-500x500.jpg', initials: 'إز', linkedin: 'https://www.linkedin.com/in/ibraheem-alzuhimeel-a61a8416/' },
+  { name: 'عبدالله العساف', nameEn: 'Abdullah Alassaf', title: 'نائب رئيس مجلس الإدارة', titleEn: 'Vice Chairman', subtitle: 'شريك مؤسس', subtitleEn: 'Founding partner', photo: 'https://oceanx.sa/wp-content/uploads/2022/03/Abdullah-Alassaf-500x500.jpg', initials: 'عع', linkedin: 'https://www.linkedin.com/in/abdullah-alassaf-080a0422/' },
+  { name: 'طارق القرعاوي', nameEn: 'Tareq Al-Garawy', title: 'عضو مجلس إدارة', titleEn: 'Board member', photo: 'https://oceanx.sa/wp-content/uploads/2024/08/Tareq-Al-Garawy.jpg', initials: 'طق', linkedin: 'https://www.linkedin.com/in/tareq-al-garawy-cma-cfm-a491614/' },
+  { name: 'عبدالإله الصعب', nameEn: 'Abdulelah Alsaab', title: 'عضو مجلس إدارة', titleEn: 'Board member', photo: 'https://oceanx.sa/wp-content/uploads/2024/08/1517627911488.png', initials: 'عص', linkedin: 'https://www.linkedin.com/in/abdulelah-alsaab-7720b62b/' },
+  { name: 'أحمد الزهيميل', nameEn: 'Ahmed Alzohimeel', title: 'عضو مجلس إدارة', titleEn: 'Board member', photo: 'https://oceanx.sa/wp-content/uploads/2024/08/1609695295564-500x500.png', initials: 'أز', linkedin: 'https://www.linkedin.com/in/ahmed-alzohimeel-9aa63a84/' },
 ]
 
 const TEAM = [
-  { name: 'ديفيد كابيتانيو', nameEn: 'Davide Capitanio', title: 'الرئيس التنفيذي', photo: 'https://oceanx.sa/wp-content/uploads/2023/01/Davide-pic500_500-12.jpg', initials: 'DC', experience: '+16', expLabel: 'سنة خبرة', bio: 'مستشار استراتيجي بخبرة تزيد عن 16 عامًا في التقنية واستراتيجية الأعمال والابتكار في أوروبا والولايات المتحدة والشرق الأوسط. قاد استراتيجيات ابتكار كبرى وبرامج تنظيم وقيادة.', linkedin: 'https://www.linkedin.com/in/davide-capitanio-2b39432a/' },
-  { name: 'سارة الزهيميل', nameEn: 'Sara Alzuhimeel', title: 'شريك — إدارة الابتكار', photo: 'https://oceanx.sa/wp-content/uploads/2022/03/Sara-Alzuhaimeel-500x500.jpg', initials: 'سز', experience: '+11', expLabel: 'سنة خبرة', bio: 'مستشار في الابتكار وريادة الأعمال بخبرة تتجاوز 11 عامًا، ساهمت في تأسيس أكثر من 35 مشروعًا بما فيها حاضنات ومسرعات الأعمال، وقدّمت أكثر من 50 ورشة عمل في الابتكار.', linkedin: 'https://www.linkedin.com/in/sara-alzuhimeel-a80a9ab6/' },
-  { name: 'أسماء المطيري', nameEn: 'Asma Almutairi', title: 'مدير عام — الاستشارات الإدارية', photo: 'https://oceanx.sa/wp-content/uploads/2022/03/Asma-Almutairi-500x500.jpg', initials: 'أم', experience: '+9', expLabel: 'سنة خبرة', bio: 'مستشار إداري بخبرة تتجاوز 9 سنوات في تطوير الاستراتيجيات وتحول المنظمات، متخصصة في حلول إدارية مبتكرة تلبّي احتياجات مختلف القطاعات وتدعم رؤية 2030.', linkedin: 'https://www.linkedin.com/in/asma-almutairi-470743141/' },
-  { name: 'فينتشنزو ميركوريو', nameEn: 'Vincenzo Mercurio', title: 'مدير عام — الاستشارات الإدارية', photo: 'https://oceanx.sa/wp-content/uploads/2024/11/Vincenzo-Mercurio-4-500x500.jpg', initials: 'VM', experience: '+9', expLabel: 'سنة خبرة', bio: 'مستشار إداري بخبرة تزيد عن 9 سنوات في الاستشارات الاستراتيجية. خبرة في لندن وليماسول وميلانو، يتخصص في صياغة الاستراتيجيات ودفع النمو والابتكار في القطاعين العام والخاص.', linkedin: 'https://www.linkedin.com/in/vincenzo-mercurio-6893b2a5/' },
+  { name: 'ديفيد كابيتانيو', nameEn: 'Davide Capitanio', title: 'الرئيس التنفيذي', titleEn: 'Chief Executive Officer', photo: 'https://oceanx.sa/wp-content/uploads/2023/01/Davide-pic500_500-12.jpg', initials: 'DC', experience: '+16', bio: 'مستشار استراتيجي بخبرة تزيد عن 16 عامًا في التقنية واستراتيجية الأعمال والابتكار في أوروبا والولايات المتحدة والشرق الأوسط. قاد استراتيجيات ابتكار كبرى وبرامج تنظيم وقيادة.', bioEn: 'Strategic advisor with 16+ years in technology, business strategy, and innovation across Europe, the US, and the Middle East—leading major innovation strategies and leadership programs.', linkedin: 'https://www.linkedin.com/in/davide-capitanio-2b39432a/' },
+  { name: 'سارة الزهيميل', nameEn: 'Sara Alzuhimeel', title: 'شريك — إدارة الابتكار', titleEn: 'Partner — Innovation', photo: 'https://oceanx.sa/wp-content/uploads/2022/03/Sara-Alzuhaimeel-500x500.jpg', initials: 'سز', experience: '+11', bio: 'مستشار في الابتكار وريادة الأعمال بخبرة تتجاوز 11 عامًا، ساهمت في تأسيس أكثر من 35 مشروعًا بما فيها حاضنات ومسرعات الأعمال، وقدّمت أكثر من 50 ورشة عمل في الابتكار.', bioEn: 'Innovation and entrepreneurship advisor with 11+ years of experience—helped launch 35+ projects including incubators and accelerators, and delivered 50+ innovation workshops.', linkedin: 'https://www.linkedin.com/in/sara-alzuhimeel-a80a9ab6/' },
+  { name: 'أسماء المطيري', nameEn: 'Asma Almutairi', title: 'مدير عام — الاستشارات الإدارية', titleEn: 'General Manager — Management Consulting', photo: 'https://oceanx.sa/wp-content/uploads/2022/03/Asma-Almutairi-500x500.jpg', initials: 'أم', experience: '+9', bio: 'مستشار إداري بخبرة تتجاوز 9 سنوات في تطوير الاستراتيجيات وتحول المنظمات، متخصصة في حلول إدارية مبتكرة تلبّي احتياجات مختلف القطاعات وتدعم رؤية 2030.', bioEn: 'Management consultant with 9+ years in strategy and organizational transformation—innovative solutions across sectors aligned with Vision 2030.', linkedin: 'https://www.linkedin.com/in/asma-almutairi-470743141/' },
+  { name: 'فينتشنزو ميركوريو', nameEn: 'Vincenzo Mercurio', title: 'مدير عام — الاستشارات الإدارية', titleEn: 'General Manager — Management Consulting', photo: 'https://oceanx.sa/wp-content/uploads/2024/11/Vincenzo-Mercurio-4-500x500.jpg', initials: 'VM', experience: '+9', bio: 'مستشار إداري بخبرة تزيد عن 9 سنوات في الاستشارات الاستراتيجية. خبرة في لندن وليماسول وميلانو، يتخصص في صياغة الاستراتيجيات ودفع النمو والابتكار في القطاعين العام والخاص.', bioEn: 'Management consultant with 9+ years in strategic advisory—experience across London, Limassol, and Milan—focused on strategy, growth, and innovation in public and private sectors.', linkedin: 'https://www.linkedin.com/in/vincenzo-mercurio-6893b2a5/' },
 ]
 
 /* ─── Helpers ───────────────────────────────────────────── */
@@ -85,6 +60,11 @@ function LinkedInIcon() {
 }
 
 function BoardCard({ m, i }) {
+  const { isEn } = useI18n()
+  const name = isEn ? m.nameEn : m.name
+  const altName = isEn ? m.name : m.nameEn
+  const title = isEn ? m.titleEn || m.title : m.title
+  const subtitle = m.subtitle ? (isEn ? m.subtitleEn || m.subtitle : m.subtitle) : null
   return (
     <motion.div
       initial={{ opacity: 0, y: 22 }} whileInView={{ opacity: 1, y: 0 }}
@@ -95,9 +75,10 @@ function BoardCard({ m, i }) {
       <div className="card p-6 sm:p-8 flex flex-col items-center text-center gap-4 sm:gap-5 h-full">
         <Avatar photo={m.photo} initials={m.initials} size="lg" />
         <div className="flex-1 min-w-0 w-full">
-          <p className="font-bold text-gray-900 text-base leading-snug">{m.name}</p>
-          <p className="text-brand-blue text-sm font-semibold mt-2 leading-snug">{m.title}</p>
-          {m.subtitle && <p className="text-gray-400 text-[12px] mt-1 font-light">{m.subtitle}</p>}
+          <p className="font-bold text-gray-900 text-base leading-snug">{name}</p>
+          <p className="text-[12px] text-gray-400 font-light mt-0.5">{altName}</p>
+          <p className="text-brand-blue text-sm font-semibold mt-2 leading-snug">{title}</p>
+          {subtitle && <p className="text-gray-400 text-[12px] mt-1 font-light">{subtitle}</p>}
         </div>
         <a
           href={m.linkedin}
@@ -114,6 +95,11 @@ function BoardCard({ m, i }) {
 }
 
 function TeamCard({ m, i }) {
+  const { isEn, t } = useI18n()
+  const name = isEn ? m.nameEn : m.name
+  const altName = isEn ? m.name : m.nameEn
+  const title = isEn ? m.titleEn || m.title : m.title
+  const bio = isEn ? m.bioEn || m.bio : m.bio
   return (
     <motion.div
       initial={{ opacity: 0, y: 28 }} whileInView={{ opacity: 1, y: 0 }}
@@ -124,16 +110,16 @@ function TeamCard({ m, i }) {
         <div className="flex items-start gap-4">
           <Avatar photo={m.photo} initials={m.initials} size="lg" />
           <div className="flex-1 min-w-0 pt-1">
-            <p className="font-bold text-gray-900 leading-snug text-base">{m.name}</p>
-            <p className="text-[12px] text-gray-400 font-light mt-0.5">{m.nameEn}</p>
-            <p className="text-brand-blue text-xs font-semibold mt-2 leading-snug">{m.title}</p>
+            <p className="font-bold text-gray-900 leading-snug text-base">{name}</p>
+            <p className="text-[12px] text-gray-400 font-light mt-0.5">{altName}</p>
+            <p className="text-brand-blue text-xs font-semibold mt-2 leading-snug">{title}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <span className="bg-brand-blue/8 border border-brand-blue/18 text-brand-blue text-sm font-bold px-3 py-1 rounded-full">{m.experience}</span>
-          <span className="text-gray-500 text-sm font-light">{m.expLabel}</span>
+          <span className="text-gray-500 text-sm font-light">{t('competencies.yearsExp')}</span>
         </div>
-        <p className="text-gray-600 text-[14px] font-light leading-relaxed flex-1">{m.bio}</p>
+        <p className="text-gray-600 text-[14px] font-light leading-relaxed flex-1">{bio}</p>
         <div className="pt-4 border-t border-gray-100">
           <a
             href={m.linkedin}
@@ -141,7 +127,7 @@ function TeamCard({ m, i }) {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 min-h-[44px] px-1 -mx-1 rounded-lg text-brand-blue-light hover:text-brand-blue text-xs font-medium transition-colors no-underline touch-manipulation active:bg-brand-blue/8"
           >
-            <LinkedInIcon /> عرض الملف الشخصي
+            <LinkedInIcon /> {t('competencies.viewProfile')}
           </a>
         </div>
       </div>
@@ -161,6 +147,16 @@ function SectionDivider({ label }) {
 
 /* ─── Page ──────────────────────────────────────────────── */
 export default function AboutPage() {
+  const { t, messages } = useI18n()
+  const values = useMemo(
+    () => messages.aboutPage.values.map((v, i) => ({ ...v, icon: VALUE_ICONS[i] })),
+    [messages]
+  )
+  const whyPoints = useMemo(
+    () => messages.aboutPage.why.map((w, i) => ({ ...w, icon: WHY_ICONS[i] })),
+    [messages]
+  )
+
   return (
     <>
       {/* ══ HERO ════════════════════════════════════════════ */}
@@ -180,7 +176,7 @@ export default function AboutPage() {
           <div className="w-full h-full overflow-hidden shadow-2xl"
             style={{ borderRadius: '0 2rem 2rem 0' }}
           >
-            <img src="/about-hero-anniversary.png" alt="فريق أوشن إكس — الذكرى السنوية العاشرة" className="w-full h-full object-cover object-center" />
+            <img src="/about-hero-anniversary.png" alt={t('aboutPage.heroImgAlt')} className="w-full h-full object-cover object-center" />
             <div className="absolute inset-y-0 right-0 w-24 pointer-events-none"
               style={{ background: 'linear-gradient(to left, rgba(12,16,48,0.6), transparent)' }} />
           </div>
@@ -196,29 +192,29 @@ export default function AboutPage() {
               transition={{ duration: 0.7, delay: 0.2 }}
               className="block lg:hidden w-full aspect-[5/3] max-h-[220px] sm:max-h-none sm:h-56 rounded-2xl overflow-hidden mb-6 sm:mb-8 shadow-lg"
             >
-              <img src="/about-hero-anniversary.png" alt="فريق أوشن إكس — الذكرى السنوية العاشرة" className="w-full h-full object-cover object-center" />
+              <img src="/about-hero-anniversary.png" alt={t('aboutPage.heroImgAlt')} className="w-full h-full object-cover object-center" />
             </motion.div>
 
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-2 text-xs text-white/30 mb-6">
-              <Link to="/" className="hover:text-white/60 no-underline transition-colors">الرئيسية</Link>
+              <Link to="/" className="hover:text-white/60 no-underline transition-colors">{t('breadcrumb.home')}</Link>
               <span>/</span>
-              <span className="text-white/50">من نحن</span>
+              <span className="text-white/50">{t('aboutPage.crumb')}</span>
             </motion.div>
-            <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} className="section-label block mb-4">من نحن</motion.span>
+            <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }} className="section-label block mb-4">{t('aboutPage.label')}</motion.span>
             <motion.h1
               initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.85, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
               className="text-[1.65rem] sm:text-3xl lg:text-4xl xl:text-5xl font-black text-white leading-[1.25] sm:leading-[1.2] mb-5 sm:mb-6"
             >
-              أعوام من المعرفة جعلتنا كياناً{' '}
-              <span className="text-brand-blue">يمكنك الوثوق به</span>
+              {t('aboutPage.heroTitle')}
+              <span className="text-brand-blue">{t('aboutPage.heroTitleAccent')}</span>
             </motion.h1>
             <motion.p
               initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.35 }}
               className="text-white/60 text-[15px] sm:text-[15px] font-light leading-[1.85]"
             >
-              أوشن إكس لحلول الأعمال شركة استشارية سعودية تأسست عام 2012، تقدم خدماتها للقطاعين الحكومي والخاص. نُسهم في تطوير المنظمات عبر الابتكار، الاستشارات الإدارية، وأبحاث السوق واستراتيجيات التواصل، بأحدث المنهجيات وأعلى معايير الجودة.
+              {t('aboutPage.heroBody')}
             </motion.p>
           </div>
         </div>
@@ -237,10 +233,10 @@ export default function AboutPage() {
           />
           <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 flex flex-col lg:flex-row lg:items-start gap-6 lg:gap-16 xl:gap-20">
             <h3 className="text-brand-blue text-2xl sm:text-3xl lg:text-[2rem] font-black leading-[1.15] shrink-0 border-s-[4px] border-brand-blue ps-5 sm:ps-6 lg:max-w-[11rem]">
-              رؤيتنا
+              {t('aboutPage.vision')}
             </h3>
             <p className="text-gray-800 font-normal text-[17px] sm:text-[19px] lg:text-[21px] leading-[1.9] lg:pt-1 flex-1 min-w-0">
-              أن نكون ضمن الجهات الاستشارية التي تُحدث فرقًا حقيقيًا في قطاع الأعمال بالمملكة، من خلال استشارات ترتبط بالنتائج وتنعكس أثرًا ملموسًا ومستدامًا.
+              {t('aboutPage.visionBody')}
             </p>
           </div>
         </motion.div>
@@ -251,10 +247,10 @@ export default function AboutPage() {
         >
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 flex flex-col lg:flex-row lg:items-start gap-6 lg:gap-16 xl:gap-20">
             <h3 className="text-brand-blue text-2xl sm:text-3xl lg:text-[2rem] font-black leading-[1.15] shrink-0 border-s-[4px] border-brand-blue ps-5 sm:ps-6 lg:max-w-[11rem]">
-              رسالتنا
+              {t('aboutPage.mission')}
             </h3>
             <p className="text-gray-800 font-normal text-[17px] sm:text-[19px] lg:text-[21px] leading-[1.9] lg:pt-1 flex-1 min-w-0">
-              المساهمة في تطوير قطاع الأعمال في المملكة عبر خدمات استشارية نوعية تمكّن المنظمات من تحقيق أهدافها وتعزيز استدامة نموها، من خلال حلول عملية ترتكز على الفهم العميق والتخطيط الاستراتيجي والتنفيذ الفعّال.
+              {t('aboutPage.missionBody')}
             </p>
           </div>
         </motion.div>
@@ -265,10 +261,10 @@ export default function AboutPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-10">
           <motion.div {...fadeUp(0)} className="flex flex-col lg:flex-row lg:items-start gap-6 lg:gap-16 xl:gap-20">
             <h3 className="text-brand-blue text-2xl sm:text-3xl lg:text-[2rem] font-black leading-[1.15] shrink-0 border-s-[4px] border-brand-blue ps-5 sm:ps-6 lg:max-w-[11rem]">
-              قيمنا
+              {t('aboutPage.valuesTitle')}
             </h3>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6 flex-1 min-w-0 w-full">
-              {VALUES.map((v, i) => (
+              {values.map((v, i) => (
                 <motion.div
                   key={v.title}
                   initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }}
@@ -292,13 +288,15 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
           <div className="grid lg:grid-cols-[1fr_1.4fr] gap-12 items-start">
             <div className="lg:sticky lg:top-28">
-              <motion.span {...fadeUp(0)} className="section-label block mb-4 text-base">تميّزنا</motion.span>
+              <motion.span {...fadeUp(0)} className="section-label block mb-4 text-base">{t('aboutPage.diffLabel')}</motion.span>
               <motion.h2 {...fadeUp(0.08)} className="text-3xl lg:text-4xl xl:text-5xl font-black text-gray-900 leading-tight">
-                لماذا<br /><span className="text-brand-blue">أوشن إكس؟</span>
+                {t('aboutPage.diffTitle1')}
+                <br />
+                <span className="text-brand-blue">{t('aboutPage.diffTitle2')}</span>
               </motion.h2>
             </div>
             <div className="space-y-0 divide-y divide-gray-100">
-              {WHY_POINTS.map((pt, i) => (
+              {whyPoints.map((pt, i) => (
                 <motion.div key={pt.title} {...fadeUp(i * 0.08)} className="py-7 flex gap-5 items-start group">
                   <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-blue-50 text-brand-blue flex items-center justify-center mt-0.5 group-hover:bg-brand-blue group-hover:text-white transition-all duration-300">
                     {pt.icon}
@@ -317,7 +315,7 @@ export default function AboutPage() {
       {/* ══ مجلس الإدارة ═══════════════════════════════════ */}
       <section className="py-14 lg:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
-          <SectionDivider label="مجلس الإدارة" />
+          <SectionDivider label={t('competencies.board')} />
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 lg:gap-5 w-full max-w-7xl mx-auto">
             {BOARD.map((m, i) => <BoardCard key={m.nameEn} m={m} i={i} />)}
           </div>
@@ -327,7 +325,7 @@ export default function AboutPage() {
       {/* ══ الكفاءات ═════════════════════════════════════════ */}
       <section className="py-14 lg:py-20 bg-white border-t border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
-          <SectionDivider label="الكفاءات" />
+          <SectionDivider label={t('competencies.team')} />
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {TEAM.map((m, i) => <TeamCard key={m.nameEn} m={m} i={i} />)}
           </div>
@@ -346,10 +344,10 @@ export default function AboutPage() {
           />
           <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 flex flex-col lg:flex-row lg:items-start gap-6 lg:gap-16 xl:gap-20">
             <h3 className="text-brand-blue text-2xl sm:text-3xl lg:text-[2rem] font-black leading-[1.2] shrink-0 border-s-[4px] border-brand-blue ps-5 sm:ps-6 lg:max-w-[14rem] xl:max-w-[16rem]">
-              دورنا في رؤية 2030
+              {t('aboutPage.vision2030')}
             </h3>
             <p className="text-gray-800 font-normal text-[17px] sm:text-[19px] lg:text-[21px] leading-[1.9] lg:pt-1 flex-1 min-w-0">
-              أولت المملكة العربية السعودية اهتمامًا بالشركات المحلية في مختلف المجالات، وحرصت على تطويرها لتصبح شركات رائدة إقليميًا وعالميًا؛ من خلال تعزيز دورهم في تحقيق مستهدفات برامج رؤية المملكة 2030. ومن هذا المنطلق؛ نسعى بدورنا كأحد الشركات الاستشارية المحلية الرائدة في المملكة إلى تقديم حلول نوعية تساهم بشكل رئيسي في تنمية الاقتصاد المحلي، وتعزيز التنمية المجتمعية، ودعم قطاع الأعمال والمنشآت المحلية الصغيرة والمتوسطة.
+              {t('aboutPage.vision2030Body')}
             </p>
           </div>
         </motion.div>

@@ -1,8 +1,10 @@
 import { useRef, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import { useI18n } from '../i18n/I18nContext'
 
 export default function Hero() {
+  const { t } = useI18n()
   const sectionRef = useRef(null)
   const videoRef = useRef(null)
 
@@ -98,7 +100,7 @@ export default function Hero() {
           transition={{ duration: 0.65, delay: 0.55 }}
           className="text-white/55 text-[15px] sm:text-base font-light leading-[1.75] sm:leading-relaxed max-w-md sm:max-w-lg mx-auto mb-8 sm:mb-10 px-1"
         >
-          شركة استشارية سعوديـة تقدم خدماتها الاستشارية للقطاعين الحكومي والخاص.
+          {t('hero.subtitle')}
         </motion.p>
 
         <motion.div
@@ -107,7 +109,7 @@ export default function Hero() {
           transition={{ duration: 0.5, delay: 0.72 }}
         >
           <Link to="/about" className="btn-primary px-8 py-3.5 text-[14px] min-h-[48px] inline-flex items-center justify-center touch-manipulation">
-            اكتشف أوشن إكس
+            {t('hero.cta')}
           </Link>
         </motion.div>
       </div>

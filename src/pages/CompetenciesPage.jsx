@@ -2,8 +2,10 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import Competencies from '../components/Competencies'
 import NewsletterBanner from '../components/NewsletterBanner'
+import { useI18n } from '../i18n/I18nContext'
 
 export default function CompetenciesPage() {
+  const { t } = useI18n()
   return (
     <>
       <div className="page-hero">
@@ -14,9 +16,11 @@ export default function CompetenciesPage() {
             animate={{ opacity: 1 }}
             className="flex items-center gap-2 text-sm text-white/30 mb-6"
           >
-            <Link to="/" className="hover:text-white/60 no-underline transition-colors">الرئيسية</Link>
+            <Link to="/" className="hover:text-white/60 no-underline transition-colors">
+              {t('breadcrumb.home')}
+            </Link>
             <span>/</span>
-            <span className="text-white/60">الكفاءات</span>
+            <span className="text-white/60">{t('competenciesPage.crumb')}</span>
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 24 }}
@@ -24,7 +28,7 @@ export default function CompetenciesPage() {
             transition={{ duration: 0.65, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
             className="text-5xl lg:text-6xl font-bold text-white mb-4"
           >
-            فريقنا وكفاءاتنا
+            {t('competenciesPage.title')}
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
@@ -32,7 +36,7 @@ export default function CompetenciesPage() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-white/40 text-[15px] font-light max-w-md"
           >
-            نفخر بفريق متنوع الخبرات والتخصصات يجمعهم هدف واحد — نجاح عملائنا.
+            {t('competenciesPage.sub')}
           </motion.p>
         </div>
       </div>
