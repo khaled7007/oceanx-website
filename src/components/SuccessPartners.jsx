@@ -37,7 +37,7 @@ function PartnerCard({ name, src, lockup, large }) {
   )
 }
 
-function MarqueeRow({ items, reverse }) {
+function MarqueeRow({ items }) {
   const doubled = [...items, ...items]
 
   return (
@@ -46,11 +46,7 @@ function MarqueeRow({ items, reverse }) {
         [mask-image:linear-gradient(90deg,transparent,black_6%,black_94%,transparent)]
         [-webkit-mask-image:linear-gradient(90deg,transparent,black_6%,black_94%,transparent)]"
     >
-      <div
-        className={`flex w-max gap-0 motion-safe:animate-partners-marquee motion-reduce:animate-none hover:[animation-play-state:paused] ${
-          reverse ? 'motion-safe:[animation-direction:reverse]' : ''
-        }`}
-      >
+      <div className="flex w-max gap-0 motion-safe:animate-partners-marquee motion-reduce:animate-none hover:[animation-play-state:paused]">
         {doubled.map((p, i) => (
           <PartnerCard key={`${p.logo}-${i}`} name={p.name} src={p.logo} lockup={p.lockup} large={p.large} />
         ))}
