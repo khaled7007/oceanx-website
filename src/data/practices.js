@@ -78,7 +78,7 @@ export const PRACTICES = [
     id: 'market-research',
     slug: 'market-research',
     title: 'أبحاث السوق واستراتيجيات التواصل',
-    titleEn: 'Market Research & Communication',
+    titleEn: 'Market Research & Communication Strategies',
     subtitle: 'نوفّر رؤى قائمة على البيانات، ونبني استراتيجيات تواصل فعّالة تمكّن المنظمات من فهم جمهورها واتخاذ قرارات أكثر دقة وتأثيرًا.',
     subtitleEn:
       'Data-led insight and communication strategies that help organizations understand audiences and make sharper, more impactful decisions.',

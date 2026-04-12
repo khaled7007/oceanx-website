@@ -6,7 +6,7 @@ import Hero from '../components/Hero'
 import PracticesAccordion from '../components/PracticesAccordion'
 import SuccessPartners from '../components/SuccessPartners'
 import NewsletterBanner from '../components/NewsletterBanner'
-import { ARTICLES, REPORTS, PODCASTS, TAG_COLORS } from '../data/insight'
+import { ARTICLES, REPORTS, PODCASTS, TAG_COLORS, TAGS_EN, translateDate } from '../data/insight'
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 28 },
@@ -95,14 +95,15 @@ function LatestReleases() {
         .map((r) => ({
           kind: t('home.kindReport'),
           typeCls: 'bg-indigo-50 text-indigo-700 border-indigo-100',
-          title: r.title,
-          date: r.date,
+          title: isEn && r.titleEn ? r.titleEn : r.title,
+          date: translateDate(r.date, isEn ? 'en' : 'ar'),
           image: r.image,
           tag: r.tags?.[0] ?? t('home.kindReport'),
+          tagDisplay: isEn ? (TAGS_EN[r.tags?.[0]] ?? r.tags?.[0]) : (r.tags?.[0] ?? t('home.kindReport')),
           href: r.url,
           external: true,
         })),
-    [t]
+    [t, isEn]
   )
 
   const articleItems = useMemo(
@@ -234,7 +235,7 @@ function LatestReleases() {
                   <div className="p-5">
                     <div className="flex items-center justify-between mb-3">
                       <span className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-full border ${tagCls}`}>
-                        {item.tag}
+                        {item.tagDisplay ?? item.tag}
                       </span>
                       <span className="text-gray-400 text-xs">{item.date}</span>
                     </div>

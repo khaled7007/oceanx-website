@@ -38,7 +38,7 @@ const PRACTICES = [
   {
     id: 'research',
     num: '03',
-    label: 'Market Research & Communication',
+    label: 'Market Research & Communication Strategies',
     title: 'أبحاث السوق واستراتيجيات التواصل',
     description:
       'نُجري دراسات وتحليلات السوق بمنهجيات علمية متقدمة، وندعم تواصلك المؤسسي برسائل وقنوات واضحة. نفخر بعضوية ESOMAR وشهادة Insights Association.',

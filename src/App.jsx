@@ -25,7 +25,7 @@ function ScrollToTop() {
 const CONTACT_SERVICE_IDS = ['svcInnovation', 'svcOrg', 'svcMr']
 
 function FloatingContact() {
-  const { t } = useI18n()
+  const { t, isEn } = useI18n()
   const [open, setOpen] = useState(false)
   const [sent, setSent] = useState(false)
   const [form, setForm] = useState({ name: '', phone: '', service: '', message: '' })
@@ -38,11 +38,12 @@ function FloatingContact() {
 
   return (
     <div
-      className="fixed z-50 flex flex-col gap-3 items-stretch sm:items-end pointer-events-none
-        bottom-[max(1rem,env(safe-area-inset-bottom,0px))]
-        left-[max(1rem,env(safe-area-inset-left,0px))]
-        right-[max(1rem,env(safe-area-inset-right,0px))]
-        sm:left-6 sm:right-auto sm:w-auto"
+      className={`fixed z-50 flex flex-col gap-3 items-end pointer-events-none w-auto
+        bottom-[max(1.5rem,env(safe-area-inset-bottom,0px))]
+        ${isEn
+          ? 'right-[max(1.5rem,env(safe-area-inset-right,0px))]'
+          : 'left-[max(1.5rem,env(safe-area-inset-left,0px))]'
+        }`}
     >
 
       {/* ── Form panel ── */}
@@ -168,7 +169,7 @@ function Layout() {
     <div className="font-arabic">
       <ScrollToTop />
       <Navbar />
-      <main className="pb-page-mobile">
+      <main>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<AboutPage />} />

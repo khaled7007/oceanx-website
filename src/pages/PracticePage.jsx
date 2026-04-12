@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { PRACTICES } from '../data/practices'
 import { REPORTS } from '../data/insight'
 import NewsletterBanner from '../components/NewsletterBanner'
+import { useI18n } from '../i18n/I18nContext'
 
 /* ── Accordion row ───────────────────────────────────── */
 function AccordionRow({ label }) {
@@ -125,7 +126,7 @@ function InsightStrip({ reports }) {
                 }
               </div>
               <div className="p-4">
-                <p className="text-gray-900 font-bold text-[13px] leading-snug mb-2 group-hover:text-brand-blue transition-colors line-clamp-2">{r.title}</p>
+                <p className="text-gray-900 font-bold text-[13px] leading-snug mb-2 group-hover:text-brand-blue transition-colors line-clamp-2">{isEn && r.titleEn ? r.titleEn : r.title}</p>
                 <span className="text-brand-blue text-[11px] font-semibold">اقرأ التقرير ←</span>
               </div>
             </a>
@@ -158,6 +159,7 @@ const LEADERS = [
 
 export default function PracticePage() {
   const { slug } = useParams()
+  const { isEn } = useI18n()
   const practice = PRACTICES.find(p => p.slug === slug)
   if (!practice) return <Navigate to="/" replace />
 

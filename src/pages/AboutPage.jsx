@@ -24,8 +24,8 @@ const WHY_ICONS = [
 
 /* ─── People data (aligned with Competencies.jsx) ───────── */
 const BOARD = [
-  { name: 'م. إبراهيم الزهيميل', nameEn: 'Eng. Ibrahim Alzuhaimeel', title: 'رئيس مجلس الإدارة', titleEn: 'Chairman of the Board', subtitle: 'شريك مؤسس', subtitleEn: 'Founding partner', photo: 'https://oceanx.sa/wp-content/uploads/2022/03/Ibraheem-Alzuhaimeel-500x500.jpg', initials: 'إز', linkedin: 'https://www.linkedin.com/in/ibraheem-alzuhimeel-a61a8416/' },
-  { name: 'عبدالله العساف', nameEn: 'Abdullah Alassaf', title: 'نائب رئيس مجلس الإدارة', titleEn: 'Vice Chairman', subtitle: 'شريك مؤسس', subtitleEn: 'Founding partner', photo: 'https://oceanx.sa/wp-content/uploads/2022/03/Abdullah-Alassaf-500x500.jpg', initials: 'عع', linkedin: 'https://www.linkedin.com/in/abdullah-alassaf-080a0422/' },
+  { name: 'م. إبراهيم الزهيميل', nameEn: 'Eng. Ibrahim Alzuhaimeel', title: 'رئيس مجلس الإدارة', titleEn: 'Chairman of the Board', subtitle: 'شريك مؤسس', subtitleEn: 'Co-Founder', photo: 'https://oceanx.sa/wp-content/uploads/2022/03/Ibraheem-Alzuhaimeel-500x500.jpg', initials: 'إز', linkedin: 'https://www.linkedin.com/in/ibraheem-alzuhimeel-a61a8416/' },
+  { name: 'عبدالله العساف', nameEn: 'Abdullah Alassaf', title: 'نائب رئيس مجلس الإدارة', titleEn: 'Vice Chairman', subtitle: 'شريك مؤسس', subtitleEn: 'Co-Founder', photo: 'https://oceanx.sa/wp-content/uploads/2022/03/Abdullah-Alassaf-500x500.jpg', initials: 'عع', linkedin: 'https://www.linkedin.com/in/abdullah-alassaf-080a0422/' },
   { name: 'طارق القرعاوي', nameEn: 'Tareq Al-Garawy', title: 'عضو مجلس إدارة', titleEn: 'Board member', photo: 'https://oceanx.sa/wp-content/uploads/2024/08/Tareq-Al-Garawy.jpg', initials: 'طق', linkedin: 'https://www.linkedin.com/in/tareq-al-garawy-cma-cfm-a491614/' },
   { name: 'عبدالإله الصعب', nameEn: 'Abdulelah Alsaab', title: 'عضو مجلس إدارة', titleEn: 'Board member', photo: 'https://oceanx.sa/wp-content/uploads/2024/08/1517627911488.png', initials: 'عص', linkedin: 'https://www.linkedin.com/in/abdulelah-alsaab-7720b62b/' },
   { name: 'أحمد الزهيميل', nameEn: 'Ahmed Alzohimeel', title: 'عضو مجلس إدارة', titleEn: 'Board member', photo: 'https://oceanx.sa/wp-content/uploads/2024/08/1609695295564-500x500.png', initials: 'أز', linkedin: 'https://www.linkedin.com/in/ahmed-alzohimeel-9aa63a84/' },
@@ -34,8 +34,8 @@ const BOARD = [
 const TEAM = [
   { name: 'ديفيد كابيتانيو', nameEn: 'Davide Capitanio', title: 'الرئيس التنفيذي', titleEn: 'Chief Executive Officer', photo: 'https://oceanx.sa/wp-content/uploads/2023/01/Davide-pic500_500-12.jpg', initials: 'DC', experience: '+16', bio: 'مستشار استراتيجي بخبرة تزيد عن 16 عامًا في التقنية واستراتيجية الأعمال والابتكار في أوروبا والولايات المتحدة والشرق الأوسط. قاد استراتيجيات ابتكار كبرى وبرامج تنظيم وقيادة.', bioEn: 'Strategic advisor with 16+ years in technology, business strategy, and innovation across Europe, the US, and the Middle East—leading major innovation strategies and leadership programs.', linkedin: 'https://www.linkedin.com/in/davide-capitanio-2b39432a/' },
   { name: 'سارة الزهيميل', nameEn: 'Sara Alzuhimeel', title: 'شريك — إدارة الابتكار', titleEn: 'Partner — Innovation', photo: 'https://oceanx.sa/wp-content/uploads/2022/03/Sara-Alzuhaimeel-500x500.jpg', initials: 'سز', experience: '+11', bio: 'مستشار في الابتكار وريادة الأعمال بخبرة تتجاوز 11 عامًا، ساهمت في تأسيس أكثر من 35 مشروعًا بما فيها حاضنات ومسرعات الأعمال، وقدّمت أكثر من 50 ورشة عمل في الابتكار.', bioEn: 'Innovation and entrepreneurship advisor with 11+ years of experience—helped launch 35+ projects including incubators and accelerators, and delivered 50+ innovation workshops.', linkedin: 'https://www.linkedin.com/in/sara-alzuhimeel-a80a9ab6/' },
-  { name: 'أسماء المطيري', nameEn: 'Asma Almutairi', title: 'مدير عام — الاستشارات الإدارية', titleEn: 'General Manager — Management Consulting', photo: 'https://oceanx.sa/wp-content/uploads/2022/03/Asma-Almutairi-500x500.jpg', initials: 'أم', experience: '+9', bio: 'مستشار إداري بخبرة تتجاوز 9 سنوات في تطوير الاستراتيجيات وتحول المنظمات، متخصصة في حلول إدارية مبتكرة تلبّي احتياجات مختلف القطاعات وتدعم رؤية 2030.', bioEn: 'Management consultant with 9+ years in strategy and organizational transformation—innovative solutions across sectors aligned with Vision 2030.', linkedin: 'https://www.linkedin.com/in/asma-almutairi-470743141/' },
-  { name: 'فينتشنزو ميركوريو', nameEn: 'Vincenzo Mercurio', title: 'مدير عام — الاستشارات الإدارية', titleEn: 'General Manager — Management Consulting', photo: 'https://oceanx.sa/wp-content/uploads/2024/11/Vincenzo-Mercurio-4-500x500.jpg', initials: 'VM', experience: '+9', bio: 'مستشار إداري بخبرة تزيد عن 9 سنوات في الاستشارات الاستراتيجية. خبرة في لندن وليماسول وميلانو، يتخصص في صياغة الاستراتيجيات ودفع النمو والابتكار في القطاعين العام والخاص.', bioEn: 'Management consultant with 9+ years in strategic advisory—experience across London, Limassol, and Milan—focused on strategy, growth, and innovation in public and private sectors.', linkedin: 'https://www.linkedin.com/in/vincenzo-mercurio-6893b2a5/' },
+  { name: 'أسماء المطيري', nameEn: 'Asma Almutairi', title: 'مدير عام — الاستشارات الإدارية', titleEn: 'Director — Management Consulting', photo: 'https://oceanx.sa/wp-content/uploads/2022/03/Asma-Almutairi-500x500.jpg', initials: 'أم', experience: '+9', bio: 'مستشار إداري بخبرة تتجاوز 9 سنوات في تطوير الاستراتيجيات وتحول المنظمات، متخصصة في حلول إدارية مبتكرة تلبّي احتياجات مختلف القطاعات وتدعم رؤية 2030.', bioEn: 'Management consultant with 9+ years in strategy and organizational transformation—innovative solutions across sectors aligned with Vision 2030.', linkedin: 'https://www.linkedin.com/in/asma-almutairi-470743141/' },
+  { name: 'فينتشنزو ميركوريو', nameEn: 'Vincenzo Mercurio', title: 'مدير عام — الاستشارات الإدارية', titleEn: 'Director — Management Consulting', photo: 'https://oceanx.sa/wp-content/uploads/2024/11/Vincenzo-Mercurio-4-500x500.jpg', initials: 'VM', experience: '+9', bio: 'مستشار إداري بخبرة تزيد عن 9 سنوات في الاستشارات الاستراتيجية. خبرة في لندن وليماسول وميلانو، يتخصص في صياغة الاستراتيجيات ودفع النمو والابتكار في القطاعين العام والخاص.', bioEn: 'Management consultant with 9+ years in strategic advisory—experience across London, Limassol, and Milan—focused on strategy, growth, and innovation in public and private sectors.', linkedin: 'https://www.linkedin.com/in/vincenzo-mercurio-6893b2a5/' },
 ]
 
 /* ─── Helpers ───────────────────────────────────────────── */
@@ -76,7 +76,6 @@ function BoardCard({ m, i }) {
         <Avatar photo={m.photo} initials={m.initials} size="lg" />
         <div className="flex-1 min-w-0 w-full">
           <p className="font-bold text-gray-900 text-base leading-snug">{name}</p>
-          <p className="text-[12px] text-gray-400 font-light mt-0.5">{altName}</p>
           <p className="text-brand-blue text-sm font-semibold mt-2 leading-snug">{title}</p>
           {subtitle && <p className="text-gray-400 text-[12px] mt-1 font-light">{subtitle}</p>}
         </div>
@@ -111,7 +110,6 @@ function TeamCard({ m, i }) {
           <Avatar photo={m.photo} initials={m.initials} size="lg" />
           <div className="flex-1 min-w-0 pt-1">
             <p className="font-bold text-gray-900 leading-snug text-base">{name}</p>
-            <p className="text-[12px] text-gray-400 font-light mt-0.5">{altName}</p>
             <p className="text-brand-blue text-xs font-semibold mt-2 leading-snug">{title}</p>
           </div>
         </div>
@@ -127,7 +125,7 @@ function TeamCard({ m, i }) {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 min-h-[44px] px-1 -mx-1 rounded-lg text-brand-blue-light hover:text-brand-blue text-xs font-medium transition-colors no-underline touch-manipulation active:bg-brand-blue/8"
           >
-            <LinkedInIcon /> {t('competencies.viewProfile')}
+            <LinkedInIcon />
           </a>
         </div>
       </div>
@@ -147,7 +145,7 @@ function SectionDivider({ label }) {
 
 /* ─── Page ──────────────────────────────────────────────── */
 export default function AboutPage() {
-  const { t, messages } = useI18n()
+  const { t, messages, isEn } = useI18n()
   const values = useMemo(
     () => messages.aboutPage.values.map((v, i) => ({ ...v, icon: VALUE_ICONS[i] })),
     [messages]
@@ -171,20 +169,20 @@ export default function AboutPage() {
           initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.9, delay: 0.2 }}
           className="absolute hidden lg:block"
-          style={{ top: '10%', bottom: '10%', left: 0, width: '46%' }}
+          style={{ top: '10%', bottom: '10%', [isEn ? 'right' : 'left']: 0, width: '46%' }}
         >
           <div className="w-full h-full overflow-hidden shadow-2xl"
-            style={{ borderRadius: '0 2rem 2rem 0' }}
+            style={{ borderRadius: isEn ? '2rem 0 0 2rem' : '0 2rem 2rem 0' }}
           >
             <img src="/about-hero-anniversary.png" alt={t('aboutPage.heroImgAlt')} className="w-full h-full object-cover object-center" />
-            <div className="absolute inset-y-0 right-0 w-24 pointer-events-none"
-              style={{ background: 'linear-gradient(to left, rgba(12,16,48,0.6), transparent)' }} />
+            <div className="absolute inset-y-0 w-24 pointer-events-none"
+              style={{ [isEn ? 'left' : 'right']: 0, background: `linear-gradient(to ${isEn ? 'right' : 'left'}, rgba(12,16,48,0.6), transparent)` }} />
           </div>
         </motion.div>
 
         {/* Text content — مثبت على يمين الشاشة (هامش يسار تلقائي) حتى لا يغطي صورة المكتب */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-10 pt-24 sm:pt-28">
-          <div className="w-full max-w-none sm:max-w-lg lg:max-w-xl xl:max-w-2xl sm:ml-auto flex flex-col justify-center py-8 sm:py-10 lg:py-20 text-right">
+          <div className={`w-full flex flex-col justify-center py-8 sm:py-10 lg:py-20 ${isEn ? 'sm:mr-auto sm:max-w-lg lg:max-w-[50%] text-left' : 'sm:ml-auto sm:max-w-lg lg:max-w-xl xl:max-w-2xl text-right'}`}>
 
             {/* Mobile image */}
             <motion.div

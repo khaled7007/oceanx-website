@@ -1,3 +1,60 @@
+/* ─── Date translation ──────────────────────────────────────────── */
+const MONTHS_AR_TO_EN = {
+  'يناير': 'January', 'فبراير': 'February', 'مارس': 'March',
+  'أبريل': 'April', 'مايو': 'May', 'يونيو': 'June',
+  'يوليو': 'July', 'أغسطس': 'August', 'سبتمبر': 'September',
+  'أكتوبر': 'October', 'نوفمبر': 'November', 'ديسمبر': 'December',
+}
+export function translateDate(date, locale) {
+  if (locale !== 'en') return date
+  return date.replace(/[\u0600-\u06FF]+/g, m => MONTHS_AR_TO_EN[m] ?? m)
+}
+export function translateDuration(dur, locale) {
+  if (locale !== 'en') return dur
+  return dur.replace(/دقيقة|دقائق/, 'min')
+}
+
+/* ─── Tag translations ─────────────────────────────────────────── */
+export const TAGS_EN = {
+  'سياحة': 'Tourism',
+  'تحول رقمي': 'Digital Transformation',
+  'رؤية 2030': 'Vision 2030',
+  'عقارات': 'Real Estate',
+  'تمويل': 'Finance',
+  'اقتصاد': 'Economy',
+  'صحة': 'Health',
+  'تعليم': 'Education',
+  'حكومة ذكية': 'Smart Gov',
+  'ذكاء اصطناعي': 'AI',
+  'ابتكار': 'Innovation',
+  'تقنية': 'Technology',
+  'استدامة': 'Sustainability',
+  'بيئة': 'Environment',
+  'مناخ': 'Climate',
+  'تجزئة': 'Retail',
+  'خليج': 'GCC',
+  'استثمار': 'Investment',
+  'قيادة': 'Leadership',
+  'استراتيجية': 'Strategy',
+  'اقتصاد رقمي': 'Digital Economy',
+  'مدن ذكية': 'Smart Cities',
+  'نقل': 'Transport',
+  'بنية تحتية': 'Infrastructure',
+  'رياضة': 'Sports',
+  'ترفيه': 'Entertainment',
+  'تقنية مالية': 'FinTech',
+  'بلوك تشين': 'Blockchain',
+  'موارد بشرية': 'HR',
+  'تمكين': 'Empowerment',
+  'ثقافة': 'Culture',
+  'تجارة إلكترونية': 'E-Commerce',
+  'ريادة أعمال': 'Entrepreneurship',
+  'مالية': 'Finance',
+  'صناعة': 'Industry',
+  'سياحة دينية': 'Religious Tourism',
+  'تجربة': 'Experience',
+}
+
 /* ─── Reports ─────────────────────────────────────────────────── */
 
 export const REPORTS = [
@@ -277,6 +334,7 @@ export const REPORTS = [
 export const ARTICLES = [
   {
     title: 'فهم أهمية البيانات الضخمة في القطاع العام',
+    titleEn: 'Understanding Big Data in the Public Sector',
     date: 'أغسطس 2025', tag: 'تقنية',
     url: 'https://insight.oceanx.sa/فهم-أهمية-البيانات-الضخمة-في-القطاع-العام/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2025/08/%D9%81%D9%87%D9%85-%D8%A3%D9%87%D9%85%D9%8A%D8%A9-%D8%A7%D9%84%D8%A8%D9%8A%D8%A7%D9%86%D8%A7%D8%AA-%D8%A7%D9%84%D8%B6%D8%AE%D9%85%D8%A9-%D9%81%D9%8A-%D8%A7%D9%84%D9%82%D8%B7%D8%A7%D8%B9-%D8%A7%D9%84%D8%B9%D8%A7%D9%85-%D9%85%D9%88%D9%82%D8%B9-scaled.jpg',
@@ -284,156 +342,182 @@ export const ARTICLES = [
   },
   {
     title: 'النمو والتوسع الذكي للأعمال باستخدام بيانات السوق',
+    titleEn: 'Smart Business Growth Using Market Data',
     date: 'أغسطس 2025', tag: 'استراتيجية',
     url: 'https://insight.oceanx.sa/النمو-والتوسع-الذكي-للأعمال-باستخدام-بيانات-السوق/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2025/08/%D8%A7%D9%84%D9%86%D9%85%D9%88-%D9%88%D8%A7%D9%84%D8%AA%D9%88%D8%B3%D8%B9-%D8%A7%D9%84%D8%B0%D9%83%D9%8A-%D9%84%D9%84%D8%A3%D8%B9%D9%85%D8%A7%D9%84-%D8%A8%D8%A7%D8%B3%D8%AA%D8%AE%D8%AF%D8%A7%D9%85-%D8%A8%D9%8A%D8%A7%D9%86%D8%A7%D8%AA-%D8%A7%D9%84%D8%B3%D9%88%D9%82-%D9%85%D9%88%D9%82%D8%B9-scaled.jpg',
   },
   {
     title: 'الحوسبة السحابية وأثرها على المنظمات الحكومية',
+    titleEn: 'Cloud Computing and Its Impact on Government Organizations',
     date: 'أغسطس 2025', tag: 'تقنية',
     url: 'https://insight.oceanx.sa/الحوسبة-السحابية-وأثرها-على-المنظمات-الحكومية/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2025/08/%D8%A7%D9%84%D8%AD%D9%88%D8%B3%D8%A8%D8%A9-%D8%A7%D9%84%D8%B3%D8%AD%D8%A7%D8%A8%D9%8A%D8%A9-%D9%88%D8%A3%D8%AB%D8%B1%D9%87%D8%A7-%D8%B9%D9%84%D9%89-%D8%A7%D9%84%D9%85%D9%86%D8%B8%D9%85%D8%A7%D8%AA-%D8%A7%D9%84%D8%AD%D9%83%D9%88%D9%85%D9%8A%D8%A9-%D9%85%D9%88%D9%82%D8%B9-1-scaled.jpg',
   },
   {
     title: 'مستقبل العملات الرقمية في دول الخليج',
+    titleEn: 'The Future of Digital Currencies in the GCC',
     date: 'أغسطس 2025', tag: 'تقنية مالية',
     url: 'https://insight.oceanx.sa/مستقبل-العملات-الرقمية-في-دول-الخليج/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2025/07/%D9%85%D8%B3%D8%AA%D9%82%D8%A8%D9%84-%D8%A7%D9%84%D8%B9%D9%85%D9%84%D8%A7%D8%AA-%D8%A7%D9%84%D8%B1%D9%82%D9%85%D9%8A%D8%A9-%D9%81%D9%8A-%D8%AF%D9%88%D9%84-%D8%A7%D9%84%D8%AE%D9%84%D9%8A%D8%AC-%D9%85%D9%88%D9%82%D8%B9-scaled.jpg',
   },
   {
     title: 'التعليم الإلكتروني في مواجهة الأزمات: مسار نحو التغيير المستدام',
+    titleEn: 'E-Learning in Crisis: A Path Toward Sustainable Change',
     date: 'أغسطس 2025', tag: 'تعليم',
     url: 'https://insight.oceanx.sa/التعليم-الإلكتروني-في-مواجهة-الأزمات/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2025/07/%D8%A7%D9%84%D8%AA%D8%B9%D9%84%D9%8A%D9%85-%D8%A7%D9%84%D8%A5%D9%84%D9%83%D8%AA%D8%B1%D9%88%D9%86%D9%8A-%D9%81%D9%8A-%D9%85%D9%88%D8%A7%D8%AC%D9%87%D8%A9-%D8%A7%D9%84%D8%A3%D8%B2%D9%85%D8%A7%D8%AA-%D8%A7%D9%84%D9%85%D9%88%D9%82%D8%B9-scaled.jpg',
   },
   {
     title: 'كيف تغيّر دول الخليج العربي مشهد الطاقة العالمي؟',
+    titleEn: 'How GCC Countries Are Reshaping the Global Energy Landscape',
     date: 'أغسطس 2025', tag: 'طاقة',
     url: 'https://insight.oceanx.sa/كيف-تغيّر-دول-الخليج-العربي-مشهد-الطاقة-العالمي/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2025/07/%D9%83%D9%8A%D9%81-%D8%AA%D9%8F%D8%BA%D9%8A%D9%91%D8%B1-%D8%AF%D9%88%D9%84-%D8%A7%D9%84%D8%AE%D9%84%D9%8A%D8%AC-%D8%A7%D9%84%D8%B9%D8%B1%D8%A8%D9%8A-%D9%85%D8%B4%D9%87%D8%AF-%D8%A7%D9%84%D8%B7%D8%A7%D9%82%D8%A9-%D8%A7%D9%84%D8%B9%D8%A7%D9%84%D9%85%D9%8A-%D8%A7%D9%84%D9%85%D9%88%D9%82%D8%B9-scaled.jpg',
   },
   {
     title: 'الاقتصاد السلوكي وكيفية فهم قرارات المستهلك العربي',
+    titleEn: 'Behavioral Economics and Understanding Arab Consumer Decisions',
     date: 'أغسطس 2025', tag: 'اقتصاد',
     url: 'https://insight.oceanx.sa/الاقتصاد-السلوكي-وكيفية-فهم-قرارات-المستهلك-العربي/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2025/07/%D8%A7%D9%84%D8%A7%D9%82%D8%AA%D8%B5%D8%A7%D8%AF-%D8%A7%D9%84%D8%B3%D9%84%D9%88%D9%83%D9%8A-%D9%88%D9%83%D9%8A%D9%81%D9%8A%D8%A9-%D9%81%D9%87%D9%85-%D9%82%D8%B1%D8%A7%D8%B1%D8%A7%D8%AA-%D8%A7%D9%84%D9%85%D8%B3%D8%AA%D9%87%D9%84%D9%83-%D8%A7%D9%84%D8%B9%D8%B1%D8%A8%D9%8A-%D9%85%D9%88%D9%82%D8%B9-scaled.jpg',
   },
   {
     title: 'كيف تساعد تقنيات البلوك تشين في مكافحة الفساد؟',
+    titleEn: 'How Blockchain Technology Helps Combat Corruption',
     date: 'أغسطس 2025', tag: 'بلوك تشين',
     url: 'https://insight.oceanx.sa/كيف-تساعد-تقنيات-البلوك-تشين-في-مكافحة-الفساد/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2025/07/%D9%83%D9%8A%D9%81-%D8%AA%D8%B3%D8%A7%D8%B9%D8%AF-%D8%AA%D9%82%D9%86%D9%8A%D8%A7%D8%AA-%D8%A7%D9%84%D8%A8%D9%84%D9%88%D9%83-%D8%AA%D8%B4%D9%8A%D9%86-%D9%81%D9%8A-%D9%85%D9%83%D8%A7%D9%81%D8%AD%D8%A9-%D8%A7%D9%84%D9%81%D8%B3%D8%A7%D8%AF-%D8%A7%D9%84%D9%85%D9%88%D9%82%D8%B9-scaled.jpg',
   },
   {
     title: 'دور السياسات الضريبية في جذب الاستثمارات الأجنبية',
+    titleEn: 'The Role of Tax Policies in Attracting Foreign Investment',
     date: 'يوليو 2025', tag: 'اقتصاد',
     url: 'https://insight.oceanx.sa/دور-السياسات-الضريبية-في-جذب-الاستثمارات-الأجنبية/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2025/07/%D8%AF%D9%88%D8%B1-%D8%A7%D9%84%D8%B3%D9%8A%D8%A7%D8%B3%D8%A7%D8%AA-%D8%A7%D9%84%D8%B6%D8%B1%D9%8A%D8%A8%D9%8A%D8%A9-%D9%81%D9%8A-%D8%AC%D8%B0%D8%A8-%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D8%AB%D9%85%D8%A7%D8%B1%D8%A7%D8%AA-%D8%A7%D9%84%D8%A3%D8%AC%D9%86%D8%A8%D9%8A%D8%A9-%D9%85%D9%88%D9%82%D8%B9-scaled.jpg',
   },
   {
     title: 'مستقبل إدارة المواهب في عصر الابتكار الرقمي',
+    titleEn: 'The Future of Talent Management in the Digital Age',
     date: 'يوليو 2025', tag: 'موارد بشرية',
     url: 'https://insight.oceanx.sa/مستقبل-إدارة-المواهب-في-عصر-الابتكار-الرقمي/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2025/06/23-Jun-12-scaled.jpg',
   },
   {
     title: 'القطاع الخاص ودوره في تحقيق الازدهار الاقتصادي',
+    titleEn: 'The Private Sector and Its Role in Economic Prosperity',
     date: 'يونيو 2025', tag: 'اقتصاد',
     url: 'https://insight.oceanx.sa/القطاع-الخاص-ودوره-في-تحقيق-الازدهار-الاقتصادي/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2025/05/28-Apr-10-scaled.jpg',
   },
   {
     title: 'إعادة تشكيل البيئة نحو مستقبل خالٍ من التلوث البلاستيكي',
+    titleEn: 'Reshaping the Environment Toward a Plastic-Free Future',
     date: 'يونيو 2025', tag: 'استدامة',
     url: 'https://insight.oceanx.sa/إعادة-تشكيل-البيئة/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2025/06/%D8%A5%D8%B9%D8%A7%D8%AF%D8%A9-%D8%AA%D8%B4%D9%83%D9%8A%D9%84-%D8%A7%D9%84%D8%A8%D9%8A%D8%A6%D8%A9-%D9%86%D8%AD%D9%88-%D9%85%D8%B3%D8%AA%D9%82%D8%A8%D9%84-%D8%AE%D8%A7%D9%84%D9%8D-%D9%85%D9%86-%D8%A7%D9%84%D8%AA%D9%84%D9%88%D8%AB-%D8%A7%D9%84%D8%A8%D9%84%D8%A7%D8%B3%D8%AA%D9%8A%D9%83%D9%8A-scaled.jpg',
   },
   {
     title: 'تحوّل الكفاءة التشغيلية بتقنيات الروبوتات',
+    titleEn: 'Transforming Operational Efficiency Through Robotics',
     date: 'يونيو 2025', tag: 'تقنية',
     url: 'https://insight.oceanx.sa/تحوّل-الكفاءة/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2025/06/28-May-02-scaled.jpg',
   },
   {
     title: 'موسم الحج: خدمة متكاملة واستثمار اقتصادي واعد',
+    titleEn: 'Hajj Season: Integrated Service and Economic Opportunity',
     date: 'مايو 2025', tag: 'اقتصاد',
     url: 'https://insight.oceanx.sa/موسم-الحج/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2025/05/21-May-03-scaled.jpg',
   },
   {
     title: '10 توجهات تحدد مستقبل الاستثمار في الأسواق الناشئة',
+    titleEn: '10 Trends Shaping the Future of Emerging Market Investment',
     date: 'مايو 2025', tag: 'استثمار',
     url: 'https://insight.oceanx.sa/10-توجهات/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2025/05/28-Apr-07-scaled.jpg',
   },
   {
     title: 'لماذا لم يعد التحول الرقمي خيارًا في عام 2025؟',
+    titleEn: 'Why Digital Transformation Is No Longer Optional in 2025',
     date: 'مايو 2025', tag: 'تحول رقمي',
     url: 'https://insight.oceanx.sa/لماذا-لم-يعد/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2025/05/28-Apr-04-scaled.jpg',
   },
   {
     title: 'الأمن الغذائي والأمن المائي في عصر الذكاء الاصطناعي',
+    titleEn: 'Food and Water Security in the Age of Artificial Intelligence',
     date: 'مايو 2025', tag: 'ذكاء اصطناعي',
     url: 'https://insight.oceanx.sa/الأمن-الغذائي/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2025/04/8-Apr-17-scaled.jpg',
   },
   {
     title: 'تحليل SWOT ودوره في تحقيق النجاح المستدام للمنظمات',
+    titleEn: 'SWOT Analysis and Its Role in Organizational Success',
     date: 'أبريل 2025', tag: 'استراتيجية',
     url: 'https://insight.oceanx.sa/تحليل-swot-ودوره-في-تحقيق-النجاح-المستدام/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2025/04/8-Apr-07-scaled.jpg',
   },
   {
     title: 'ما هي الوظائف الأسرع نموًا في العقد القادم؟',
+    titleEn: 'What Are the Fastest-Growing Jobs in the Next Decade?',
     date: 'أبريل 2025', tag: 'موارد بشرية',
     url: 'https://insight.oceanx.sa/ما-هي-الوظائف-الأسرع-نموًا-في-العقد-الق/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2025/04/18-Feb-06-scaled.jpg',
   },
   {
     title: 'إنترنت الأشياء (IoT) في الصناعات التحويلية',
+    titleEn: 'Internet of Things (IoT) in Manufacturing Industries',
     date: 'مارس 2025', tag: 'تقنية',
     url: 'https://insight.oceanx.sa/إنترنت-الأشياء-iot-في-الصناعات-التحويلية/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2025/02/9-Feb-06-scaled.jpg',
   },
   {
     title: 'أهمية الذكاء العاطفي في القيادة',
+    titleEn: 'The Importance of Emotional Intelligence in Leadership',
     date: 'فبراير 2025', tag: 'قيادة',
     url: 'https://insight.oceanx.sa/أهمية-الذكاء-العاطفي-في-القيادة/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2025/02/3-Feb-04-scaled.jpg',
   },
   {
     title: 'مستقبل الرعاية الصحية في العالم',
+    titleEn: 'The Future of Healthcare Worldwide',
     date: 'فبراير 2025', tag: 'صحة',
     url: 'https://insight.oceanx.sa/مستقبل-الرعاية-الصحية-في-العالم/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2025/02/21-Jan-03-scaled.jpg',
   },
   {
     title: 'الأمن السيبراني في عصر العمل عن بُعد',
+    titleEn: 'Cybersecurity in the Era of Remote Work',
     date: 'يناير 2025', tag: 'أمن سيبراني',
     url: 'https://insight.oceanx.sa/الأمن-السيبراني-في-عصر-العمل-عن-بُعد/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2025/01/13-Jan-02-scaled.jpg',
   },
   {
     title: 'أبرز اتجاهات الأعمال في المملكة لعام 2025',
+    titleEn: 'Key Business Trends in Saudi Arabia for 2025',
     date: 'يناير 2025', tag: 'استراتيجية',
     url: 'https://insight.oceanx.sa/أبرز-اتجاهات-الأعمال-في-المملكة-لعام-2025/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2025/01/19-Dec-02-scaled.jpg',
   },
   {
     title: 'القيادة الفعّالة في فترات عدم الاستقرار الاقتصادي',
+    titleEn: 'Effective Leadership During Economic Uncertainty',
     date: 'ديسمبر 2024', tag: 'قيادة',
     url: 'https://insight.oceanx.sa/القيادة-الفعّالة-في-فترات-عدم-الاستقرار/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2024/12/3-Dec-06-scaled.jpg',
   },
   {
     title: 'مشهد ريادة الأعمال في المملكة العربية السعودية',
+    titleEn: 'The Entrepreneurship Landscape in Saudi Arabia',
     date: 'نوفمبر 2024', tag: 'ريادة أعمال',
     url: 'https://insight.oceanx.sa/مشهد-ريادة-الأعمال/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2024/11/%D9%85%D8%B4%D9%87%D8%AF-%D8%B1%D9%8A%D8%A7%D8%AF%D8%A9-%D8%A7%D9%84%D8%A3%D8%B9%D9%85%D8%A7%D9%84-%D9%81%D9%8A-%D8%A7%D9%84%D9%85%D9%85%D9%84%D9%83%D8%A9-%D8%A7%D9%84%D8%B9%D8%B1%D8%A8%D9%8A%D8%A9-%D8%A7%D9%84%D8%B3%D8%B9%D9%88%D8%AF%D9%8A%D8%A9-scaled.jpg',
   },
   {
     title: 'لماذا تتجه البنوك المركزية نحو حيازة الذهب؟',
+    titleEn: 'Why Are Central Banks Turning to Gold Reserves?',
     date: 'نوفمبر 2024', tag: 'اقتصاد',
     url: 'https://insight.oceanx.sa/البنوك-المركزية/',
     image: 'https://insight.oceanx.sa/wp-content/uploads/2024/10/6-Oct-08-scaled.jpg',
@@ -525,6 +609,7 @@ export const PODCASTS = [
   {
     ep: 12, season: 2,
     title: 'الفعاليات ودورها في تنمية اقتصاد المملكة',
+    titleEn: 'Events and Their Role in Developing Saudi Arabia\'s Economy',
     guest: 'مقرن النشمي',
     date: 'ديسمبر 2024',
     duration: '47 دقيقة',
@@ -533,6 +618,7 @@ export const PODCASTS = [
   {
     ep: 11, season: 2,
     title: 'تأثير الذكاء الاصطناعي على الأعمال',
+    titleEn: 'The Impact of Artificial Intelligence on Business',
     guest: null,
     date: 'سبتمبر 2024',
     duration: '10 دقائق',
@@ -541,6 +627,7 @@ export const PODCASTS = [
   {
     ep: 10, season: 2,
     title: 'الملكية الفكرية',
+    titleEn: 'Intellectual Property',
     guest: 'سالم المطيري',
     date: 'يوليو 2024',
     duration: '46 دقيقة',
@@ -549,6 +636,7 @@ export const PODCASTS = [
   {
     ep: 9, season: 2,
     title: 'تأثير التحول الرقمي على قطاع المطاعم',
+    titleEn: 'The Impact of Digital Transformation on the Restaurant Sector',
     guest: 'عبدالعزيز السعيد',
     date: 'أبريل 2024',
     duration: '47 دقيقة',
@@ -557,6 +645,7 @@ export const PODCASTS = [
   {
     ep: 8, season: 2,
     title: 'التقنية الصحية',
+    titleEn: 'Healthcare Technology',
     guest: null,
     date: 'فبراير 2024',
     duration: '9 دقائق',
@@ -565,6 +654,7 @@ export const PODCASTS = [
   {
     ep: 7, season: 2,
     title: 'الحوكمة واستدامة المنظمات',
+    titleEn: 'Governance and Organizational Sustainability',
     guest: null,
     date: 'يناير 2024',
     duration: '10 دقائق',
@@ -573,6 +663,7 @@ export const PODCASTS = [
   {
     ep: 6, season: 2,
     title: 'عولمة الأعمال والتنوع الثقافي',
+    titleEn: 'Business Globalization and Cultural Diversity',
     guest: null,
     date: 'ديسمبر 2023',
     duration: '10 دقائق',
@@ -581,6 +672,7 @@ export const PODCASTS = [
   {
     ep: 5, season: 2,
     title: 'الحفاظ على البيئة وضمان الاستدامة',
+    titleEn: 'Environmental Conservation and Sustainability',
     guest: null,
     date: 'ديسمبر 2023',
     duration: '14 دقيقة',
@@ -589,6 +681,7 @@ export const PODCASTS = [
   {
     ep: 4, season: 2,
     title: 'الرياضات الإلكترونية',
+    titleEn: 'Esports',
     guest: 'فيصل بن حمران',
     date: 'أكتوبر 2023',
     duration: '45 دقيقة',
@@ -597,6 +690,7 @@ export const PODCASTS = [
   {
     ep: 3, season: 2,
     title: 'خطوط النقل الحديدي في المملكة',
+    titleEn: 'Railway Lines in Saudi Arabia',
     guest: null,
     date: 'أكتوبر 2023',
     duration: '12 دقيقة',
@@ -605,6 +699,7 @@ export const PODCASTS = [
   {
     ep: 2, season: 2,
     title: 'المشاريع الضخمة في المملكة',
+    titleEn: 'Mega Projects in Saudi Arabia',
     guest: null,
     date: 'سبتمبر 2023',
     duration: '11 دقيقة',
@@ -613,6 +708,7 @@ export const PODCASTS = [
   {
     ep: 1, season: 2,
     title: 'التمويل الاستهلاكي',
+    titleEn: 'Consumer Finance',
     guest: 'عبدالله العساف',
     date: 'أغسطس 2023',
     duration: '38 دقيقة',
@@ -622,6 +718,7 @@ export const PODCASTS = [
   {
     ep: 3, season: 1,
     title: 'نحو التقدم',
+    titleEn: 'Toward Progress',
     guest: null,
     date: 'مارس 2023',
     duration: '10 دقائق',
@@ -630,6 +727,7 @@ export const PODCASTS = [
   {
     ep: 2, season: 1,
     title: 'التقنية الخضراء',
+    titleEn: 'Green Technology',
     guest: null,
     date: 'مارس 2023',
     duration: '11 دقيقة',
@@ -638,6 +736,7 @@ export const PODCASTS = [
   {
     ep: 1, season: 1,
     title: 'رحلة إلى المجد والعلياء',
+    titleEn: 'A Journey to Excellence',
     guest: 'د. سلمى هوساوي',
     date: 'فبراير 2023',
     duration: '43 دقيقة',

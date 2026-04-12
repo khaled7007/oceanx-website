@@ -55,7 +55,7 @@ function AccordionItem({ practice, isOpen, onToggle, isEn, discoverMore }) {
               >
                 {discoverMore}
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-                  <path d="M11 7H3M7 3l-4 4 4 4" />
+                  <path d="M3 7h8M7 3l4 4-4 4" />
                 </svg>
               </Link>
             </div>

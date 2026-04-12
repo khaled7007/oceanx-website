@@ -62,7 +62,7 @@ const SERVICES = [
     slug: 'market-research',
     image: '/market-research-hero.jpg',
     title: 'أبحاث السوق واستراتيجيات التواصل',
-    titleEn: 'Market Research & Communication',
+    titleEn: 'Market Research & Communication Strategies',
     desc: 'نُقدّم حلولاً بحثية رقمية متكاملة مع استراتيجيات تواصل تُمكّنك من الاطلاع على أحدث الاتجاهات والبيانات وربط رسالتك بجمهورك في القطاعين الحكومي والخاص، بأحدث الأساليب العلمية والدولية.',
     descEn:
       'Integrated digital research and communication strategies—trends, data, and messaging that connect you with audiences in the public and private sectors.',
@@ -74,7 +74,6 @@ const SERVICES = [
       'قياس رضا العملاء',
       'تحليل الاتجاهات والتوقعات',
       'استراتيجيات التواصل والرسائل',
-      'الحملات والقنوات الرقمية',
     ],
     pointsEn: [
       'Market research & analytics',
@@ -84,7 +83,6 @@ const SERVICES = [
       'Customer satisfaction',
       'Trends & forecasting',
       'Communication strategy',
-      'Campaigns & digital channels',
     ],
   },
 ]
@@ -135,7 +133,7 @@ function ServiceRow({ s, index }) {
       <h2 className="text-3xl lg:text-4xl font-black text-gray-900 leading-tight mb-2">
         {title}
       </h2>
-      <p className="text-gray-600 font-normal text-[19px] sm:text-[21px] lg:text-[22px] leading-[1.85] mb-8">
+      <p className={`text-gray-600 font-normal leading-[1.85] mb-8 ${isEn ? 'text-[19px] sm:text-[21px] lg:text-[22px]' : 'text-[17px] sm:text-[18px] lg:text-[19px]'}`}>
         {desc}
       </p>
       <ul className="space-y-3.5 sm:space-y-4 mb-8">
@@ -151,7 +149,7 @@ function ServiceRow({ s, index }) {
 
   return (
     <div className="py-12 sm:py-16 lg:py-24 border-b border-gray-100 last:border-0">
-      <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-20 items-center" dir="ltr">
+      <div className={`grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-20 items-center ${isEn ? '' : 'text-right'}`}>
         {isEven ? (
           <>
             {textEl}

@@ -207,17 +207,6 @@ export default function ContactPage() {
                   </div>
                 ))}
               </div>
-
-              {/* FAQ CTA */}
-              <div className="rounded-2xl bg-brand-dark p-7 text-center">
-                <h4 className="text-white font-bold mb-2 text-[15px]">{t('contactPage.faqTitle')}</h4>
-                <p className="text-white/40 text-sm font-light mb-4">
-                  {t('contactPage.faqBody')}
-                </p>
-                <button type="button" className="btn-outline text-sm w-full">
-                  {t('contactPage.faqCta')}
-                </button>
-              </div>
             </div>
           </div>
         </div>
@@ -251,37 +240,6 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* Self-Support FAQs dark banner */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-10">
-          <div
-            className="rounded-2xl p-10 lg:p-14 flex flex-col lg:flex-row items-center justify-between gap-8"
-            style={{ background: 'linear-gradient(140deg, #06081e 0%, #0b0e2e 60%, #08061a 100%)' }}
-          >
-            <div>
-              <span className="text-white/30 text-xs font-mono uppercase tracking-widest block mb-3">Self-Support</span>
-              <h3 className="text-2xl lg:text-3xl font-bold text-white mb-2">{t('contactPage.faqBanner')}</h3>
-              <p className="text-white/40 font-light leading-relaxed max-w-lg">
-                {t('contactPage.faqBannerBody')}
-              </p>
-            </div>
-            <div className="flex gap-3 flex-shrink-0">
-              <button type="button" className="btn-outline inline-flex items-center gap-2 whitespace-nowrap">
-                <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-                  <path d="M2.5 2h10a1 1 0 011 1v8a1 1 0 01-1 1H9l-1.5 2L6 12H2.5a1 1 0 01-1-1V3a1 1 0 011-1z" />
-                </svg>
-                {t('contactPage.faqBannerBtn1')}
-              </button>
-              <button type="button" className="btn-primary inline-flex items-center gap-2 whitespace-nowrap">
-                <svg width="15" height="15" viewBox="0 0 15 15" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-                  <path d="M2.5 1.5h10v12l-5-3-5 3V1.5z" />
-                </svg>
-                {t('contactPage.faqBannerBtn2')}
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <NewsletterBanner />
     </>

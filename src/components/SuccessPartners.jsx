@@ -25,7 +25,7 @@ function PartnerCard({ name, src, lockup, large }) {
   const sizeCls = lockup ? LOGO_SIZES_LOCKUP : large ? LOGO_SIZES_LARGE : LOGO_SIZES_DEFAULT
 
   return (
-    <div className="flex items-center justify-center shrink-0 px-1 sm:px-1.5 lg:px-2 py-2 sm:py-3">
+    <div className="flex items-center justify-center shrink-0 px-4 sm:px-6 lg:px-8 py-2 sm:py-3">
       <img
         src={src}
         alt={name}

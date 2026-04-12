@@ -10,6 +10,9 @@ import {
   PODCASTS,
   PODCAST_META,
   ARTICLE_TAG_EN,
+  TAGS_EN,
+  translateDate,
+  translateDuration,
 } from '../data/insight'
 import { articleRoute, reportRoute } from '../utils/insightLinks'
 import { useI18n } from '../i18n/I18nContext'
@@ -28,6 +31,14 @@ function tagCls(tag) {
 
 function reportTitle(r, locale) {
   return locale === 'en' && r.titleEn ? r.titleEn : r.title
+}
+
+function articleTitle(a, locale) {
+  return locale === 'en' && a.titleEn ? a.titleEn : a.title
+}
+
+function episodeTitle(ep, locale) {
+  return locale === 'en' && ep.titleEn ? ep.titleEn : ep.title
 }
 
 function articleTagLabel(tag, locale) {
@@ -116,7 +127,7 @@ function FeaturedStrip() {
                   {a.image && <img src={a.image} alt={a.title} className="w-full h-full object-cover" />}
                 </div>
                 <p className="text-white/60 text-[12px] font-medium leading-snug group-hover:text-white transition-colors line-clamp-3">
-                  {a.title}
+                  {articleTitle(a, locale)}
                 </p>
               </Link>
             ))}
@@ -148,7 +159,7 @@ function FeaturedStrip() {
 
 /* ── Trending Topics ──────────────────────────────────── */
 function TrendingTopics() {
-  const { t, locale } = useI18n()
+  const { t, locale, isEn } = useI18n()
   const [activeTopic, setActiveTopic] = useState('الكل')
   const topics = ['الكل', ...ARTICLE_TOPICS.filter(topic => topic !== 'الكل').slice(0, 4)]
 
@@ -180,12 +191,25 @@ function TrendingTopics() {
               </button>
             ))}
             <div className="flex gap-2 mr-2">
-              <button type="button" className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-blue hover:text-brand-blue transition-colors">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M2 6h8M6 2l4 4-4 4" /></svg>
-              </button>
-              <button type="button" className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-blue hover:text-brand-blue transition-colors">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M10 6H2M6 2L2 6l4 4" /></svg>
-              </button>
+              {isEn ? (
+                <>
+                  <button type="button" className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-blue hover:text-brand-blue transition-colors">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M10 6H2M6 2L2 6l4 4" /></svg>
+                  </button>
+                  <button type="button" className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-blue hover:text-brand-blue transition-colors">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M2 6h8M6 2l4 4-4 4" /></svg>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button type="button" className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-blue hover:text-brand-blue transition-colors">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M2 6h8M6 2l4 4-4 4" /></svg>
+                  </button>
+                  <button type="button" className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-blue hover:text-brand-blue transition-colors">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M10 6H2M6 2L2 6l4 4" /></svg>
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -203,9 +227,9 @@ function TrendingTopics() {
                   {articleTagLabel(featuredArticle.tag, locale)}
                 </span>
                 <h3 className="text-white font-bold text-xl lg:text-2xl leading-snug mb-2 group-hover:text-brand-blue-light transition-colors">
-                  {featuredArticle.title}
+                  {articleTitle(featuredArticle, locale)}
                 </h3>
-                <span className="text-white/40 text-xs">{featuredArticle.date}</span>
+                <span className="text-white/40 text-xs">{translateDate(featuredArticle.date, locale)}</span>
               </div>
               {featuredArticle.image && (
                 <div className="w-48 h-32 rounded-xl overflow-hidden flex-shrink-0 hidden lg:block">
@@ -237,9 +261,9 @@ function TrendingTopics() {
               </div>
               <div className="p-5">
                 <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${tagCls(a.tag)} inline-block mb-2`}>{articleTagLabel(a.tag, locale)}</span>
-                <h4 className="text-gray-900 font-bold text-[13px] leading-snug mb-3 group-hover:text-brand-blue transition-colors line-clamp-2">{a.title}</h4>
+                <h4 className="text-gray-900 font-bold text-[13px] leading-snug mb-3 group-hover:text-brand-blue transition-colors line-clamp-2">{articleTitle(a, locale)}</h4>
                 <div className="flex items-center justify-between pt-3 border-t border-gray-50">
-                  <span className="text-gray-400 text-[11px]">{a.date}</span>
+                  <span className="text-gray-400 text-[11px]">{translateDate(a.date, locale)}</span>
                   <span className="text-brand-blue/60 group-hover:text-brand-blue transition-colors">
                     <ExternalArrow />
                   </span>
@@ -256,7 +280,7 @@ function TrendingTopics() {
 
 /* ── Reports section ──────────────────────────────────── */
 function ReportsSection() {
-  const { t, locale } = useI18n()
+  const { t, locale, isEn } = useI18n()
   const [activeYear, setActiveYear] = useState(2025)
   const filtered = REPORTS.filter(r => r.year === activeYear)
 
@@ -287,12 +311,25 @@ function ReportsSection() {
               ))}
             </div>
             <div className="flex gap-2">
-              <button type="button" className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-blue hover:text-brand-blue transition-colors">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M2 6h8M6 2l4 4-4 4" /></svg>
-              </button>
-              <button type="button" className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-blue hover:text-brand-blue transition-colors">
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M10 6H2M6 2L2 6l4 4" /></svg>
-              </button>
+              {isEn ? (
+                <>
+                  <button type="button" className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-blue hover:text-brand-blue transition-colors">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M10 6H2M6 2L2 6l4 4" /></svg>
+                  </button>
+                  <button type="button" className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-blue hover:text-brand-blue transition-colors">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M2 6h8M6 2l4 4-4 4" /></svg>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button type="button" className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-blue hover:text-brand-blue transition-colors">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M2 6h8M6 2l4 4-4 4" /></svg>
+                  </button>
+                  <button type="button" className="w-7 h-7 rounded-full border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-blue hover:text-brand-blue transition-colors">
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M10 6H2M6 2L2 6l4 4" /></svg>
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -316,7 +353,7 @@ function ReportsSection() {
               <div className="p-4">
                 <p className="text-gray-800 font-bold text-[13px] leading-snug mb-3 group-hover:text-brand-blue transition-colors line-clamp-2">{reportTitle(r, locale)}</p>
                 <div className="flex items-center justify-between">
-                  <span className="text-gray-400 text-[11px]">{r.date}</span>
+                  <span className="text-gray-400 text-[11px]">{translateDate(r.date, locale)}</span>
                   <span className="text-brand-blue text-[11px] font-semibold flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                     {t('insightPage.readMore')} <ExternalArrow />
                   </span>
@@ -438,7 +475,7 @@ function PodcastSection() {
                 {/* Info */}
                 <div className="flex-1 min-w-0">
                   <p className="text-gray-900 font-semibold text-[13px] leading-snug group-hover:text-brand-blue transition-colors truncate">
-                    {ep.title}
+                    {episodeTitle(ep, locale)}
                   </p>
                   {ep.guest && (
                     <p className="text-gray-400 text-[11px] mt-0.5">{t('insightPage.guestWith')} {ep.guest}</p>
@@ -447,8 +484,8 @@ function PodcastSection() {
 
                 {/* Meta */}
                 <div className="flex items-center gap-4 flex-shrink-0 text-gray-400 text-[11px]">
-                  <span>{ep.date}</span>
-                  <span className="hidden sm:block">{ep.duration}</span>
+                  <span>{translateDate(ep.date, locale)}</span>
+                  <span className="hidden sm:block">{translateDuration(ep.duration, locale)}</span>
                   {/* Play icon */}
                   <div className="w-7 h-7 rounded-full border border-gray-200 group-hover:border-brand-blue group-hover:text-brand-blue transition-colors flex items-center justify-center">
                     <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
