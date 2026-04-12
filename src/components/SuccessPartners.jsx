@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { SUCCESS_PARTNERS } from '../data/successPartners'
 import { useI18n } from '../i18n/I18nContext'
@@ -11,7 +10,7 @@ const fadeUp = (delay = 0) => ({
 })
 
 const LOGO_SIZES_DEFAULT =
-  'h-[5rem] max-h-[5rem] sm:h-[6.75rem] sm:max-h-[6.75rem] lg:h-[8.5rem] lg:max-h-[8.5rem] max-w-[16rem] sm:max-w-[20.5rem] lg:max-w-[25rem]'
+  'h-[50px] max-h-[50px] sm:h-[4.5rem] sm:max-h-[4.5rem] lg:h-[5.5rem] lg:max-h-[5.5rem] max-w-[12rem] sm:max-w-[15rem] lg:max-w-[18rem]'
 const LOGO_SIZES_LOCKUP =
   'h-[5.25rem] max-h-[5.25rem] sm:h-[7.25rem] sm:max-h-[7.25rem] lg:h-[9.5rem] lg:max-h-[9.5rem] max-w-[21rem] sm:max-w-[30rem] lg:max-w-[38rem]'
 /** برنامج تجربة الحجاج (ضيوف الرحمن) — ارتفاع ثابت ١٦٨px */
@@ -19,9 +18,6 @@ const LOGO_SIZES_LARGE =
   'h-[168px] max-h-[168px] w-auto max-w-[19rem] sm:max-w-[26rem] lg:max-w-[34rem]'
 
 function PartnerCard({ name, src, lockup, large }) {
-  const [failed, setFailed] = useState(false)
-  if (failed) return null
-
   const sizeCls = lockup ? LOGO_SIZES_LOCKUP : large ? LOGO_SIZES_LARGE : LOGO_SIZES_DEFAULT
 
   return (
@@ -32,7 +28,6 @@ function PartnerCard({ name, src, lockup, large }) {
         loading="lazy"
         decoding="async"
         className={`block w-auto object-contain object-center opacity-90 hover:opacity-100 transition-opacity duration-300 ${sizeCls}`}
-        onError={() => setFailed(true)}
       />
     </div>
   )
@@ -43,6 +38,7 @@ function MarqueeRow({ items }) {
 
   return (
     <div
+      dir="ltr"
       className="relative overflow-hidden py-1
         [mask-image:linear-gradient(90deg,transparent,black_6%,black_94%,transparent)]
         [-webkit-mask-image:linear-gradient(90deg,transparent,black_6%,black_94%,transparent)]"
@@ -62,9 +58,6 @@ export default function SuccessPartners() {
     <section id="partners" className="py-14 sm:py-20 lg:py-24 bg-gray-50 border-y border-gray-100 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
         <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-14">
-          <motion.span {...fadeUp(0)} className="section-label block mb-3">
-            {t('partners.label')}
-          </motion.span>
           <motion.h2
             {...fadeUp(0.06)}
             className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight"
