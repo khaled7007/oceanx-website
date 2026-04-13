@@ -213,7 +213,7 @@ function LatestReleases() {
                   className="group block bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-lg hover:border-brand-blue/15 transition-all duration-300 no-underline h-full"
                 >
                   {/* Image */}
-                  <div className="h-44 overflow-hidden bg-gray-100 relative">
+                  <div className="h-52 overflow-hidden bg-gray-100 relative">
                     {item.image ? (
                       <img
                         src={item.image}

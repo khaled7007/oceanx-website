@@ -52,7 +52,7 @@ export const translations = {
       identityTitle1: 'محيطٌ من',
       identityTitle2: 'الحلول',
       identityBody:
-        'أوشن إكس شركة استشارية سعودية تأسست عام 2012، تقدم خدمات متكاملة للقطاعين الحكومي والخاص. نُسهم في تطوير المنظمات عبر الابتكار، الاستشارات الإدارية، الاستشارات المالية، وأبحاث السوق واستراتيجيات التواصل، بأحدث المنهجيات وأعلى معايير الجودة.',
+        'أوشن إكس شركة استشارية سعودية تأسست عام 2012، تقدم خدمات متكاملة للقطاعين الحكومي والخاص. نُسهم في تطوير المنظمات عبر الابتكار، الاستشارات الإدارية، وأبحاث السوق واستراتيجيات التواصل، بأحدث المنهجيات وأعلى معايير الجودة.',
       statProjects: 'مشروع تم العمل عليه',
       statClients: 'عميل من القطاعين الحكومي والخاص',
       statPartners: 'شريك عالمي ومحلي',
@@ -261,7 +261,7 @@ export const translations = {
         },
         {
           title: 'فريق متعدد التخصصات',
-          desc: 'كفاءات محلية ودولية تجمع بين الاستشارات الإدارية، المالية، الابتكار وأبحاث السوق.',
+          desc: 'كفاءات محلية ودولية تجمع بين الاستشارات الإدارية، الابتكار، أبحاث السوق، واستراتيجيات التواصل.',
         },
         {
           title: 'اعتماد دولي',
@@ -585,7 +585,7 @@ export const translations = {
         },
         {
           title: 'Multidisciplinary team',
-          desc: 'Local and international expertise across consulting, innovation, and research.',
+          desc: 'Local and international expertise across consulting, innovation, market research, and communication strategies.',
         },
         {
           title: 'International credentials',
