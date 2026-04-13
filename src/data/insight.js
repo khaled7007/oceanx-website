@@ -67,7 +67,7 @@ export const REPORTS = [
     excerpt: 'يستعرض التقرير التأثير المحلي والعالمي لقطاع السياحة الرقمية وتجارب السفر المبتكرة والفرص المتاحة في مشهد السياحة السعودية المتحول.',
     tags: ['سياحة', 'تحول رقمي', 'رؤية 2030'],
     url: 'https://insight.oceanx.sa/تقرير-السياحة-الرقمية-ملامح-التحول-وم/',
-    image: 'https://insight.oceanx.sa/wp-content/uploads/2025/11/Digital-Tourism-Cover-scaled.jpg',
+    image: '/images/report-tourism.png',
     featured: true,
   },
   {

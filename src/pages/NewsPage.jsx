@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import NewsletterBanner from '../components/NewsletterBanner'
 import { useI18n } from '../i18n/I18nContext'
@@ -11,6 +11,7 @@ const TAG_MAP_AR = { 'All': 'الكل', 'Partnership': 'شراكة', 'Event': '�
 
 export default function NewsPage() {
   const { t, isEn } = useI18n()
+  const navigate = useNavigate()
   const featured = NEWS.find(n => n.featured)
   const rest = NEWS.filter(n => !n.featured)
 
@@ -58,13 +59,18 @@ export default function NewsPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
               className="group cursor-pointer rounded-2xl overflow-hidden border border-gray-100 grid lg:grid-cols-2"
+              onClick={() => navigate(`/news/${NEWS.indexOf(featured)}`)}
             >
               {/* Image side */}
               <div className={`relative h-64 lg:h-auto min-h-[280px] bg-gradient-to-br from-brand-navy via-[#1a2055] to-brand-blue overflow-hidden ${isEn ? 'lg:order-2' : ''}`}>
-                {featured.image
-                  ? <img src={featured.image} alt={featured.title} className="absolute inset-0 w-full h-full object-cover" />
-                  : <div className="absolute inset-0 ocean-mesh opacity-20" />
-                }
+                {featured.image && (
+                  <img
+                    src={featured.image}
+                    alt={featured.title}
+                    className="absolute inset-0 w-full h-full object-cover"
+                    onError={e => { e.currentTarget.style.display = 'none' }}
+                  />
+                )}
                 <div className="absolute inset-0 flex flex-col items-start justify-end p-10">
                   <span className="text-white/50 text-xs font-mono uppercase tracking-widest mb-3">Featured</span>
                   <div className="w-12 h-0.5 bg-brand-blue mb-4" />
@@ -84,7 +90,7 @@ export default function NewsPage() {
                   </p>
                 </div>
                 <div className="mt-8">
-                  <a href={featured.link} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-brand-blue text-sm font-semibold hover:gap-3 transition-all duration-200 no-underline">
+                  <Link to={`/news/${NEWS.indexOf(featured)}`} className="inline-flex items-center gap-2 text-brand-blue text-sm font-semibold hover:gap-3 transition-all duration-200 no-underline">
                     {t('newsPage.readMore')}
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                       {isEn
@@ -92,7 +98,7 @@ export default function NewsPage() {
                         : <path d="M12 8H4M8 4l-4 4 4 4" />
                       }
                     </svg>
-                  </a>
+                  </Link>
                 </div>
               </div>
             </motion.article>
@@ -119,17 +125,17 @@ export default function NewsPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.06 }}
                 className="card overflow-hidden group cursor-pointer"
+              onClick={() => navigate(`/news/${NEWS.indexOf(item)}`)}
               >
                 {/* Thumbnail */}
-                <div className="relative h-44 bg-gray-100 overflow-hidden">
-                  {item.image ? (
+                <div className="relative h-44 bg-gradient-to-br from-brand-navy via-[#1a2055] to-brand-blue overflow-hidden">
+                  {item.image && (
                     <img
                       src={item.image}
                       alt={item.title}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      onError={e => { e.currentTarget.style.display = 'none' }}
                     />
-                  ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-brand-navy via-[#1a2055] to-brand-blue" />
                   )}
                 </div>
 
@@ -144,7 +150,7 @@ export default function NewsPage() {
                     {newsExcerpt(item)}
                   </p>
                   <div className="border-t border-gray-100 pt-4">
-                    <a href={item.link} target="_blank" rel="noopener noreferrer" className="text-brand-blue text-xs font-semibold inline-flex items-center gap-1.5 group-hover:gap-2.5 transition-all duration-200 no-underline">
+                    <Link to={`/news/${NEWS.indexOf(item)}`} className="text-brand-blue text-xs font-semibold inline-flex items-center gap-1.5 group-hover:gap-2.5 transition-all duration-200 no-underline">
                       {t('newsPage.readMore')}
                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
                         {isEn
@@ -152,7 +158,7 @@ export default function NewsPage() {
                           : <path d="M9 6H3M5 4L3 6l2 2" />
                         }
                       </svg>
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </motion.article>

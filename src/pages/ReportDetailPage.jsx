@@ -1,80 +1,47 @@
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { REPORTS, TAG_COLORS } from '../data/insight'
-import { isInsightDirectEntry, reportRoute } from '../utils/insightLinks'
+import { reportRoute } from '../utils/insightLinks'
 
 function tagCls(tag) {
   return TAG_COLORS[tag] ?? 'bg-gray-100 text-gray-600 border-gray-200'
 }
 
-function ChevronIcon() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M5.5 10.5L9 7L5.5 3.5" />
-    </svg>
-  )
-}
-
-function ExternalArrow() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-      <path d="M3 11L11 3M6 3h5v5" />
-    </svg>
-  )
-}
-
-function Skeleton() {
-  return (
-    <div className="animate-pulse space-y-5 mt-10">
-      <div className="h-5 bg-gray-100 rounded-full w-3/4" />
-      <div className="h-4 bg-gray-100 rounded-full w-full" />
-      <div className="h-4 bg-gray-100 rounded-full w-5/6" />
-      <div className="h-4 bg-gray-100 rounded-full w-full" />
-      <div className="h-4 bg-gray-100 rounded-full w-2/3" />
-      <div className="h-40 bg-gray-100 rounded-2xl w-full mt-8" />
-      <div className="h-4 bg-gray-100 rounded-full w-full" />
-      <div className="h-4 bg-gray-100 rounded-full w-4/5" />
-      <div className="h-4 bg-gray-100 rounded-full w-full" />
-      <div className="h-4 bg-gray-100 rounded-full w-3/4" />
-    </div>
-  )
-}
-
 function RelatedReports({ currentId, report }) {
   const related = REPORTS
-    .map((entry, reportIndex) => ({ ...entry, reportIndex }))
+    .map((entry, i) => ({ ...entry, i }))
     .filter((entry) => {
-      if (entry.reportIndex === currentId) return false
-      if (!isInsightDirectEntry(entry.url)) return false
+      if (entry.i === currentId) return false
+      if (!entry.image) return false
       if (entry.year === report.year) return true
-      return entry.tags.some((tag) => report.tags.includes(tag))
+      return entry.tags?.some((tag) => report.tags?.includes(tag))
     })
     .slice(0, 3)
 
   if (!related.length) return null
 
   return (
-    <div className="mt-16 pt-10 border-t border-gray-100">
-      <h3 className="text-lg font-bold text-gray-900 mb-6">تقارير ذات صلة</h3>
-      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="mt-14 pt-10 border-t border-gray-100">
+      <h3 className="text-base font-bold text-gray-800 mb-6 text-right" dir="rtl">تقارير ذات صلة</h3>
+      <div className="grid sm:grid-cols-3 gap-4">
         {related.map((entry) => (
           <Link
-            key={entry.reportIndex}
-            to={reportRoute(entry.reportIndex)}
-            className="group block bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-brand-blue/20 transition-all duration-300 overflow-hidden no-underline p-5"
+            key={entry.i}
+            to={reportRoute(entry.i)}
+            className="group block bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-brand-blue/20 transition-all duration-300 overflow-hidden no-underline"
           >
-            <div className="flex flex-wrap gap-1.5 mb-3">
-              {entry.tags.slice(0, 2).map((tag) => (
-                <span key={tag} className={`text-[11px] font-medium px-2.5 py-0.5 rounded-full border ${tagCls(tag)}`}>
-                  {tag}
-                </span>
-              ))}
+            <div className="h-32 overflow-hidden bg-gray-100">
+              <img src={entry.image} alt={entry.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
             </div>
-            <h4 className="text-gray-900 font-bold text-sm leading-snug group-hover:text-brand-blue transition-colors duration-200 line-clamp-3">
-              {entry.title}
-            </h4>
-            <p className="text-gray-400 text-xs mt-3">{entry.date}</p>
+            <div className="p-4">
+              <div className="flex flex-wrap gap-1 mb-2">
+                {entry.tags?.slice(0, 1).map((tag) => (
+                  <span key={tag} className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${tagCls(tag)}`}>{tag}</span>
+                ))}
+              </div>
+              <h4 className="text-gray-900 font-bold text-[13px] leading-snug group-hover:text-brand-blue transition-colors line-clamp-2">{entry.title}</h4>
+              <p className="text-gray-400 text-[11px] mt-2">{entry.date}</p>
+            </div>
           </Link>
         ))}
       </div>
@@ -85,224 +52,144 @@ function RelatedReports({ currentId, report }) {
 export default function ReportDetailPage() {
   const { reportId } = useParams()
   const navigate = useNavigate()
-  const [post, setPost] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
 
   const parsedId = Number(reportId)
   const meta = Number.isInteger(parsedId) && parsedId >= 0 ? REPORTS[parsedId] ?? null : null
 
-  useEffect(() => {
-    if (!meta || !isInsightDirectEntry(meta.url)) {
-      setError('not_found')
-      setLoading(false)
-      return
-    }
-
-    setLoading(true)
-    setError(null)
-    setPost(null)
-
-    fetch(`/api/article?url=${encodeURIComponent(meta.url)}`)
-      .then(async (response) => {
-        const data = await response.json().catch(() => ({}))
-        if (!response.ok) {
-          setError(response.status >= 500 ? 'fetch_error' : 'not_found')
-          return
-        }
-
-        if (data.error || !data.content || data.content.trim().length < 50) {
-          setError('not_found')
-          return
-        }
-
-        setPost({ content: data.content })
-      })
-      .catch(() => {
-        setError('fetch_error')
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }, [meta])
-
-  const externalUrl = meta?.url ?? 'https://insight.oceanx.sa/reports/'
+  if (!meta) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="text-center">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">التقرير غير موجود</h2>
+          <button onClick={() => navigate(-1)} className="text-brand-blue text-sm hover:underline">رجوع</button>
+        </div>
+      </div>
+    )
+  }
 
   return (
-    <>
-      <div className="relative bg-brand-dark overflow-hidden pt-36 pb-12">
-        <div
-          className="absolute inset-0 opacity-30"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(47,72,245,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(47,72,245,0.08) 1px, transparent 1px)',
-            backgroundSize: '44px 44px',
-          }}
-        />
+    <div className="bg-[#f8f8fb] min-h-screen pt-28 pb-20">
+      <div className="max-w-2xl mx-auto px-6">
 
-        {meta?.image && (
-          <>
+        {/* Breadcrumb */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4 }}
+          className="flex items-center gap-1.5 text-xs text-gray-400 mb-8 justify-end"
+          dir="rtl"
+        >
+          <Link to="/" className="hover:text-brand-blue transition-colors no-underline">الرئيسية</Link>
+          <span>›</span>
+          <Link to="/insight" className="hover:text-brand-blue transition-colors no-underline">إنسايت</Link>
+          <span>›</span>
+          <span className="text-gray-500 line-clamp-1 max-w-[160px]">{meta.title}</span>
+        </motion.div>
+
+        {/* Report image */}
+        {meta.image && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="rounded-3xl overflow-hidden bg-[#e8e8f0] shadow-sm mb-6"
+            style={{ padding: '32px 24px' }}
+          >
             <img
               src={meta.image}
               alt={meta.title}
-              className="absolute inset-0 w-full h-full object-cover object-center opacity-20"
+              className="w-full object-contain rounded-xl drop-shadow-2xl"
+              style={{ maxHeight: '340px' }}
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-brand-dark/80 to-brand-dark" />
-          </>
+          </motion.div>
         )}
 
-        <div className="relative z-10 max-w-3xl mx-auto px-6 lg:px-10">
+        {/* Tags row */}
+        {meta.tags?.length > 0 && (
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="flex items-center gap-2 text-sm text-gray-500 mb-6"
-          >
-            <Link to="/" className="hover:text-gray-300 transition-colors no-underline">الرئيسية</Link>
-            <span className="rotate-180 opacity-40"><ChevronIcon /></span>
-            <Link to="/insight" className="hover:text-gray-300 transition-colors no-underline">إنسايت</Link>
-            <span className="rotate-180 opacity-40"><ChevronIcon /></span>
-            <span className="text-gray-400 line-clamp-1">{meta?.title ?? 'تقرير'}</span>
-          </motion.div>
-
-          <div className="flex flex-wrap gap-2 mb-4">
-            <span className="text-xs text-brand-blue-light font-semibold tracking-widest uppercase">تقرير</span>
-            {meta?.tags?.slice(0, 3).map((tag) => (
-              <span key={tag} className={`text-xs px-2.5 py-0.5 rounded-full border ${tagCls(tag)}`}>
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.1 }}
-            className="text-3xl lg:text-4xl font-bold text-white leading-tight mb-4"
-          >
-            {meta?.title ?? 'تقرير'}
-          </motion.h1>
-
-          <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.4, delay: 0.18 }}
-            className="text-gray-500 text-sm"
+            transition={{ duration: 0.4, delay: 0.12 }}
+            className="flex flex-wrap gap-2 mb-5 justify-end"
+            dir="rtl"
           >
-            أوشن إكس إنسايت · {meta?.date ?? ''}
-          </motion.p>
-        </div>
+            <span className="text-[11px] text-brand-blue font-bold tracking-widest uppercase bg-brand-blue/8 border border-brand-blue/15 px-3 py-1 rounded-full">
+              تقرير
+            </span>
+            {meta.tags.slice(0, 3).map((tag) => (
+              <span key={tag} className={`text-[11px] px-3 py-1 rounded-full border font-medium ${tagCls(tag)}`}>{tag}</span>
+            ))}
+          </motion.div>
+        )}
+
+        {/* Title */}
+        <motion.h1
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.15 }}
+          className="text-2xl font-bold text-gray-900 leading-snug mb-2 text-right"
+          dir="rtl"
+        >
+          {meta.title}
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.2 }}
+          className="text-gray-400 text-xs mb-8 text-right"
+          dir="rtl"
+        >
+          أوشن إكس إنسايت · {meta.date}
+        </motion.p>
+
+        {/* Excerpt */}
+        {meta.excerpt && (
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.22 }}
+            className="bg-white rounded-2xl p-7 border border-gray-100 shadow-sm mb-8"
+            dir="rtl"
+          >
+            <p className="text-gray-400 text-[11px] font-bold tracking-widest uppercase mb-3">ملخص تقرير</p>
+            <p className="text-gray-700 text-base leading-relaxed">{meta.excerpt}</p>
+          </motion.div>
+        )}
+
+        {/* Actions */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.4, delay: 0.28 }}
+          className="flex items-center justify-between"
+        >
+          <button
+            onClick={() => navigate(-1)}
+            className="inline-flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-700 transition-colors"
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10 12L6 8l4-4" />
+            </svg>
+            رجوع
+          </button>
+          <a
+            href={meta.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-sm text-brand-blue font-semibold hover:underline no-underline"
+          >
+            قراءة تقرير كاملاً
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+              <path d="M3 11L11 3M6 3h5v5" />
+            </svg>
+          </a>
+        </motion.div>
+
+        {/* Related */}
+        {Number.isInteger(parsedId) && <RelatedReports currentId={parsedId} report={meta} />}
+
       </div>
-
-      <div className="bg-white min-h-screen">
-        <div className="max-w-3xl mx-auto px-6 lg:px-10 py-14">
-          {loading && <Skeleton />}
-
-          {!loading && !post && meta && (
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="space-y-10"
-            >
-              {meta.image && (
-                <div className="rounded-2xl overflow-hidden shadow-md aspect-video">
-                  <img
-                    src={meta.image}
-                    alt={meta.title}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
-
-              {meta.excerpt && (
-                <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100">
-                  <p className="text-gray-500 text-xs font-semibold tracking-widest uppercase mb-4">ملخص التقرير</p>
-                  <p className="text-gray-700 text-lg leading-relaxed font-light" dir="rtl">
-                    {meta.excerpt}
-                  </p>
-                </div>
-              )}
-
-              {meta.tags?.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {meta.tags.map((tag) => (
-                    <span key={tag} className={`text-xs px-3 py-1 rounded-full border font-medium ${tagCls(tag)}`}>
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
-
-              <div className="flex items-center justify-between flex-wrap gap-4 pt-4 border-t border-gray-100">
-                <button
-                  onClick={() => navigate(-1)}
-                  className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-800 transition-colors"
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M10 12L6 8l4-4" />
-                  </svg>
-                  رجوع
-                </button>
-                <a
-                  href={externalUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm text-brand-blue font-medium hover:underline"
-                >
-                  قراءة التقرير كاملاً
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-                    <path d="M3 11L11 3M6 3h5v5" />
-                  </svg>
-                </a>
-              </div>
-            </motion.div>
-          )}
-
-          {!loading && !post && !meta && (
-            <div className="text-center py-20">
-              <h2 className="text-xl font-bold text-gray-800 mb-3">التقرير غير موجود</h2>
-              <button onClick={() => navigate(-1)} className="btn-light text-sm mt-4">رجوع</button>
-            </div>
-          )}
-
-          {!loading && post && (
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <div
-                className="prose prose-lg prose-gray max-w-none
-                  prose-headings:font-bold prose-headings:text-gray-900
-                  prose-p:text-gray-700 prose-p:leading-relaxed prose-p:font-light
-                  prose-a:text-brand-blue prose-a:no-underline hover:prose-a:underline
-                  prose-img:rounded-2xl prose-img:shadow-md
-                  prose-strong:text-gray-900
-                  prose-ul:list-disc prose-ol:list-decimal
-                  prose-li:text-gray-700 prose-li:font-light
-                  [&>*:first-child]:mt-0"
-                dir="rtl"
-                dangerouslySetInnerHTML={{ __html: post.content }}
-              />
-
-              <div className="mt-12 pt-8 border-t border-gray-100 flex items-center justify-between flex-wrap gap-4">
-                <p className="text-gray-400 text-sm font-light">نُشر على منصة أوشن إكس إنسايت</p>
-                <a
-                  href={externalUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm text-brand-blue font-medium hover:underline"
-                >
-                  عرض التقرير الأصلي <ExternalArrow />
-                </a>
-              </div>
-
-              {Number.isInteger(parsedId) && meta && <RelatedReports currentId={parsedId} report={meta} />}
-            </motion.div>
-          )}
-        </div>
-      </div>
-    </>
+    </div>
   )
 }

@@ -13,11 +13,15 @@ import NewsPage from './pages/NewsPage'
 import JobsPage from './pages/JobsPage'
 import ContactPage from './pages/ContactPage'
 import ServicesPage from './pages/ServicesPage'
+import NewsDetailPage from './pages/NewsDetailPage'
 
 function ScrollToTop() {
   const { pathname, hash } = useLocation()
   useEffect(() => {
-    if (!hash) window.scrollTo({ top: 0, behavior: 'instant' })
+    if (!hash) {
+      document.documentElement.scrollTop = 0
+      document.body.scrollTop = 0
+    }
   }, [pathname, hash])
   return null
 }
@@ -181,6 +185,7 @@ function Layout() {
           <Route path="/practices/:slug" element={<PracticePage />} />
           <Route path="/practices" element={<Navigate to="/practices/innovation" replace />} />
           <Route path="/news" element={<NewsPage />} />
+          <Route path="/news/:newsId" element={<NewsDetailPage />} />
           <Route path="/jobs" element={<JobsPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/services" element={<ServicesPage />} />
