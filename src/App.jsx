@@ -170,7 +170,7 @@ function FloatingContact() {
 
 function Layout() {
   return (
-    <div className="font-arabic">
+    <div className="font-arabic overflow-x-hidden w-full">
       <ScrollToTop />
       <Navbar />
       <main>

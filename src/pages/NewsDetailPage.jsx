@@ -71,7 +71,7 @@ export default function NewsDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white overflow-x-hidden w-full">
 
       {/* ── Hero ── */}
       <div className="relative overflow-hidden" style={{ background: 'linear-gradient(160deg, #06081e 0%, #0f1540 60%, #1a2055 100%)' }}>
@@ -86,7 +86,7 @@ export default function NewsDetailPage() {
           </>
         )}
 
-        <div className="relative z-10 max-w-4xl mx-auto px-6 lg:px-10 pt-32 sm:pt-40 pb-14">
+        <div className="relative z-10 max-w-5xl mx-auto px-6 lg:px-10 pt-32 sm:pt-40 pb-14">
           {/* Breadcrumb */}
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}
             className="flex items-center gap-2 text-xs text-gray-500 mb-8" dir="rtl"
@@ -126,7 +126,7 @@ export default function NewsDetailPage() {
       </div>
 
       {/* ── Content ── */}
-      <div className="max-w-4xl mx-auto px-6 lg:px-10 py-12 pb-20">
+      <div className="max-w-5xl mx-auto px-6 lg:px-10 py-12 pb-20">
 
         {/* Main image */}
         {item.image && (
