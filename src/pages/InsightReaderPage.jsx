@@ -1,32 +1,13 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ARTICLES, REPORTS, TAG_COLORS } from '../data/insight'
-import { articleRoute, isInsightDirectEntry, reportRoute } from '../utils/insightLinks'
+import { articleRoute, reportRoute } from '../utils/insightLinks'
 
 function tagCls(tag) {
   return TAG_COLORS[tag] ?? 'bg-gray-100 text-gray-600 border-gray-200'
 }
 
-function ExternalArrow() {
-  return (
-    <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-      <path d="M3 11L11 3M6 3h5v5" />
-    </svg>
-  )
-}
-
-function Skeleton() {
-  return (
-    <div className="animate-pulse space-y-5 mt-10">
-      <div className="h-5 bg-gray-100 rounded-full w-3/4" />
-      <div className="h-4 bg-gray-100 rounded-full w-full" />
-      <div className="h-4 bg-gray-100 rounded-full w-5/6" />
-      <div className="h-40 bg-gray-100 rounded-2xl w-full mt-8" />
-      <div className="h-4 bg-gray-100 rounded-full w-2/3" />
-    </div>
-  )
-}
 
 /* ── Report page — fully independent, no API ─────────────────── */
 function ReportPage({ meta, parsedId, navigate }) {
@@ -239,30 +220,8 @@ function ReportPage({ meta, parsedId, navigate }) {
   )
 }
 
-/* ── Article page — keeps API fetch ─────────────────────────── */
-function ArticlePage({ meta, kind, parsedId, navigate, externalUrl, tags, relatedItems }) {
-  const [post, setPost] = useState(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    if (!meta || !isInsightDirectEntry(meta.url)) {
-      setLoading(false)
-      return
-    }
-    setLoading(true)
-    setPost(null)
-    const controller = new AbortController()
-    const timeout = setTimeout(() => controller.abort(), 6000)
-    fetch(`/api/article?url=${encodeURIComponent(meta.url)}`, { signal: controller.signal })
-      .then(async (res) => {
-        const data = await res.json().catch(() => ({}))
-        if (!res.ok || data.error || !data.content || data.content.trim().length < 50) return
-        setPost({ content: data.content })
-      })
-      .catch(() => {})
-      .finally(() => { clearTimeout(timeout); setLoading(false) })
-  }, [meta])
-
+/* ── Article page — fully local, no external fetch ──────────── */
+function ArticlePage({ meta, parsedId, navigate, tags, relatedItems }) {
   if (!meta) {
     return (
       <div className="text-center py-24">
@@ -274,6 +233,7 @@ function ArticlePage({ meta, kind, parsedId, navigate, externalUrl, tags, relate
 
   return (
     <>
+      {/* ── Hero ── */}
       <div className="relative bg-brand-dark overflow-hidden pt-28 sm:pt-36 pb-10">
         <div className="absolute inset-0 opacity-30" style={{
           backgroundImage: 'linear-gradient(rgba(47,72,245,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(47,72,245,0.08) 1px, transparent 1px)',
@@ -304,65 +264,66 @@ function ArticlePage({ meta, kind, parsedId, navigate, externalUrl, tags, relate
         </div>
       </div>
 
+      {/* ── Content ── */}
       <div className="bg-white min-h-screen">
         <div className="max-w-3xl mx-auto px-6 lg:px-10 py-14">
-          {loading && <Skeleton />}
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
 
-          {!loading && !post && (
-            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="space-y-10">
-              {meta.image && (
-                <div className="rounded-2xl overflow-hidden shadow-md aspect-video">
-                  <img src={meta.image} alt={meta.title} className="w-full h-full object-cover" />
-                </div>
-              )}
-              {meta.excerpt && (
-                <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100" dir="rtl">
-                  <p className="text-gray-500 text-xs font-semibold tracking-widest uppercase mb-4">ملخص المقالة</p>
-                  <p className="text-gray-700 text-lg leading-relaxed font-light">{meta.excerpt}</p>
-                </div>
-              )}
-              <div className="flex items-center justify-between flex-wrap gap-4 pt-4 border-t border-gray-100">
-                <button onClick={() => navigate(-1)} className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-800 transition-colors">
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M10 12L6 8l4-4" /></svg>
-                  رجوع
-                </button>
-                <a href={externalUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-brand-blue font-medium hover:underline no-underline">
-                  قراءة المقالة كاملةً <ExternalArrow />
-                </a>
+            {/* صورة المقال */}
+            {meta.image && (
+              <div className="rounded-2xl overflow-hidden shadow-md aspect-video mb-10">
+                <img src={meta.image} alt={meta.title} className="w-full h-full object-cover" />
               </div>
-            </motion.div>
-          )}
+            )}
 
-          {!loading && post && (
-            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            {/* المحتوى المحلي */}
+            {meta.body ? (
               <div
-                className="prose prose-lg prose-gray max-w-none prose-headings:font-bold prose-headings:text-gray-900 prose-p:text-gray-700 prose-p:leading-relaxed prose-p:font-light prose-a:text-brand-blue prose-a:no-underline hover:prose-a:underline prose-img:rounded-2xl prose-img:shadow-md prose-strong:text-gray-900 prose-ul:list-disc prose-ol:list-decimal prose-li:text-gray-700 [&>*:first-child]:mt-0"
+                className="prose prose-lg prose-gray max-w-none
+                  prose-headings:font-bold prose-headings:text-gray-900
+                  prose-h2:text-2xl prose-h2:mt-10 prose-h2:mb-4
+                  prose-h3:text-lg prose-h3:mt-7 prose-h3:mb-3
+                  prose-p:text-gray-700 prose-p:leading-relaxed prose-p:font-light prose-p:mb-4
+                  prose-strong:text-gray-900
+                  prose-ul:list-disc prose-ul:pr-6 prose-ul:space-y-2
+                  prose-li:text-gray-700 prose-li:font-light
+                  [&>*:first-child]:mt-0"
                 dir="rtl"
-                dangerouslySetInnerHTML={{ __html: post.content }}
+                dangerouslySetInnerHTML={{ __html: meta.body }}
               />
-              <div className="mt-12 pt-8 border-t border-gray-100 flex items-center justify-between flex-wrap gap-4">
-                <p className="text-gray-400 text-sm font-light">نُشر على منصة أوشن إكس إنسايت</p>
-                <a href={externalUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sm text-brand-blue font-medium hover:underline no-underline">
-                  عرض المصدر الأصلي <ExternalArrow />
-                </a>
+            ) : meta.excerpt ? (
+              <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100" dir="rtl">
+                <p className="text-gray-500 text-xs font-semibold tracking-widest uppercase mb-4">ملخص المقالة</p>
+                <p className="text-gray-700 text-lg leading-relaxed font-light">{meta.excerpt}</p>
               </div>
-              {relatedItems.length > 0 && (
-                <div className="mt-16 pt-10 border-t border-gray-100">
-                  <h3 className="text-lg font-bold text-gray-900 mb-6">مقالات ذات صلة</h3>
-                  <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {relatedItems.map(item => (
-                      <Link key={item.index} to={articleRoute(item.index)}
-                        className="group block bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-brand-blue/20 transition-all duration-300 overflow-hidden no-underline p-5"
-                      >
-                        <h4 className="text-gray-900 font-bold text-sm leading-snug group-hover:text-brand-blue transition-colors line-clamp-3">{item.title}</h4>
-                        <p className="text-gray-400 text-xs mt-3">{item.date}</p>
-                      </Link>
-                    ))}
-                  </div>
+            ) : null}
+
+            {/* زر الرجوع */}
+            <div className="mt-12 pt-8 border-t border-gray-100">
+              <button onClick={() => navigate(-1)} className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-800 transition-colors">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M10 12L6 8l4-4" /></svg>
+                رجوع
+              </button>
+            </div>
+
+            {/* مقالات ذات صلة */}
+            {relatedItems.length > 0 && (
+              <div className="mt-16 pt-10 border-t border-gray-100">
+                <h3 className="text-lg font-bold text-gray-900 mb-6" dir="rtl">مقالات ذات صلة</h3>
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {relatedItems.map(item => (
+                    <Link key={item.index} to={articleRoute(item.index)}
+                      className="group block bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-md hover:border-brand-blue/20 transition-all duration-300 overflow-hidden no-underline p-5"
+                    >
+                      <h4 className="text-gray-900 font-bold text-sm leading-snug group-hover:text-brand-blue transition-colors line-clamp-3" dir="rtl">{item.title}</h4>
+                      <p className="text-gray-400 text-xs mt-3">{item.date}</p>
+                    </Link>
+                  ))}
                 </div>
-              )}
-            </motion.div>
-          )}
+              </div>
+            )}
+
+          </motion.div>
         </div>
       </div>
     </>
@@ -389,11 +350,9 @@ export default function InsightReaderPage({ forcedKind }) {
     if (!meta || kind !== 'article') return []
     return ARTICLES
       .map((item, index) => ({ ...item, index }))
-      .filter(item => item.index !== parsedId && isInsightDirectEntry(item.url) && item.tag && tags.includes(item.tag))
+      .filter(item => item.index !== parsedId && item.tag && tags.includes(item.tag))
       .slice(0, 3)
   }, [kind, meta, parsedId, tags])
-
-  const externalUrl = meta?.url ?? 'https://insight.oceanx.sa/articles/'
 
   if (kind === 'report') {
     if (!meta) {
@@ -412,10 +371,8 @@ export default function InsightReaderPage({ forcedKind }) {
   return (
     <ArticlePage
       meta={meta}
-      kind={kind}
       parsedId={parsedId}
       navigate={navigate}
-      externalUrl={externalUrl}
       tags={tags}
       relatedItems={relatedItems}
     />

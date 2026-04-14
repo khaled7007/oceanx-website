@@ -1,8 +1,7 @@
 import { useParams, Link, useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { ARTICLES, TAG_COLORS } from '../data/insight'
-import { articleRoute, isInsightDirectEntry } from '../utils/insightLinks'
+import { articleRoute } from '../utils/insightLinks'
 
 function tagCls(tag) {
   return TAG_COLORS[tag] ?? 'bg-gray-100 text-gray-600 border-gray-200'
@@ -16,30 +15,6 @@ function ChevronIcon() {
   )
 }
 
-function ExternalArrow() {
-  return (
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-      <path d="M3 11L11 3M6 3h5v5" />
-    </svg>
-  )
-}
-
-function Skeleton() {
-  return (
-    <div className="animate-pulse space-y-5 mt-10">
-      <div className="h-5 bg-gray-100 rounded-full w-3/4" />
-      <div className="h-4 bg-gray-100 rounded-full w-full" />
-      <div className="h-4 bg-gray-100 rounded-full w-5/6" />
-      <div className="h-4 bg-gray-100 rounded-full w-full" />
-      <div className="h-4 bg-gray-100 rounded-full w-2/3" />
-      <div className="h-40 bg-gray-100 rounded-2xl w-full mt-8" />
-      <div className="h-4 bg-gray-100 rounded-full w-full" />
-      <div className="h-4 bg-gray-100 rounded-full w-4/5" />
-      <div className="h-4 bg-gray-100 rounded-full w-full" />
-      <div className="h-4 bg-gray-100 rounded-full w-3/4" />
-    </div>
-  )
-}
 
 function RelatedArticles({ currentId, tag }) {
   const related = ARTICLES
@@ -76,48 +51,10 @@ function RelatedArticles({ currentId, tag }) {
 export default function ArticleDetailPage() {
   const { articleId } = useParams()
   const navigate = useNavigate()
-  const [post, setPost] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
 
   const parsedId = Number(articleId)
   const meta = Number.isInteger(parsedId) && parsedId >= 0 ? ARTICLES[parsedId] ?? null : null
-
-  useEffect(() => {
-    if (!meta || !isInsightDirectEntry(meta.url)) {
-      setError('not_found')
-      setLoading(false)
-      return
-    }
-
-    setLoading(true)
-    setError(null)
-    setPost(null)
-
-    fetch(`/api/article?url=${encodeURIComponent(meta.url)}`)
-      .then(async (response) => {
-        const data = await response.json().catch(() => ({}))
-        if (!response.ok) {
-          setError(response.status >= 500 ? 'fetch_error' : 'not_found')
-          return
-        }
-
-        if (data.error || !data.content || data.content.trim().length < 50) {
-          setError('not_found')
-          return
-        }
-
-        setPost({ content: data.content })
-      })
-      .catch(() => {
-        setError('fetch_error')
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-  }, [meta])
-
-  const externalUrl = meta?.url ?? 'https://insight.oceanx.sa/articles/'
+  const post = meta?.body ? { content: meta.body } : null
 
   return (
     <>
@@ -189,9 +126,15 @@ export default function ArticleDetailPage() {
 
       <div className="bg-white min-h-screen">
         <div className="max-w-3xl mx-auto px-6 lg:px-10 py-14">
-          {loading && <Skeleton />}
 
-          {!loading && !post && meta && (
+          {!meta && (
+            <div className="text-center py-20">
+              <h2 className="text-xl font-bold text-gray-800 mb-3">المقالة غير موجودة</h2>
+              <button onClick={() => navigate(-1)} className="btn-light text-sm mt-4">رجوع</button>
+            </div>
+          )}
+
+          {meta && !post && (
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -200,24 +143,16 @@ export default function ArticleDetailPage() {
             >
               {meta.image && (
                 <div className="rounded-2xl overflow-hidden shadow-md aspect-video">
-                  <img
-                    src={meta.image}
-                    alt={meta.title}
-                    className="w-full h-full object-cover"
-                  />
+                  <img src={meta.image} alt={meta.title} className="w-full h-full object-cover" />
                 </div>
               )}
-
               {meta.excerpt && (
                 <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100">
                   <p className="text-gray-500 text-xs font-semibold tracking-widest uppercase mb-4">ملخص المقالة</p>
-                  <p className="text-gray-700 text-lg leading-relaxed font-light" dir="rtl">
-                    {meta.excerpt}
-                  </p>
+                  <p className="text-gray-700 text-lg leading-relaxed font-light" dir="rtl">{meta.excerpt}</p>
                 </div>
               )}
-
-              <div className="flex items-center justify-between flex-wrap gap-4 pt-4 border-t border-gray-100">
+              <div className="pt-4 border-t border-gray-100">
                 <button
                   onClick={() => navigate(-1)}
                   className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-800 transition-colors"
@@ -227,34 +162,22 @@ export default function ArticleDetailPage() {
                   </svg>
                   رجوع
                 </button>
-                <a
-                  href={externalUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm text-brand-blue font-medium hover:underline"
-                >
-                  قراءة المقالة كاملةً
-                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-                    <path d="M3 11L11 3M6 3h5v5" />
-                  </svg>
-                </a>
               </div>
             </motion.div>
           )}
 
-          {!loading && !post && !meta && (
-            <div className="text-center py-20">
-              <h2 className="text-xl font-bold text-gray-800 mb-3">المقالة غير موجودة</h2>
-              <button onClick={() => navigate(-1)} className="btn-light text-sm mt-4">رجوع</button>
-            </div>
-          )}
-
-          {!loading && post && (
+          {meta && post && (
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
             >
+              {meta.image && (
+                <div className="rounded-2xl overflow-hidden shadow-md aspect-video mb-10">
+                  <img src={meta.image} alt={meta.title} className="w-full h-full object-cover" />
+                </div>
+              )}
+
               <div
                 className="prose prose-lg prose-gray max-w-none
                   prose-headings:font-bold prose-headings:text-gray-900
@@ -269,18 +192,16 @@ export default function ArticleDetailPage() {
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
 
-              <div className="mt-12 pt-8 border-t border-gray-100 flex items-center justify-between flex-wrap gap-4">
-                <p className="text-gray-400 text-sm font-light">
-                  نُشر على منصة أوشن إكس إنسايت
-                </p>
-                <a
-                  href={externalUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-sm text-brand-blue font-medium hover:underline"
+              <div className="mt-12 pt-8 border-t border-gray-100">
+                <button
+                  onClick={() => navigate(-1)}
+                  className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-800 transition-colors"
                 >
-                  عرض المقالة الأصلية <ExternalArrow />
-                </a>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M10 12L6 8l4-4" />
+                  </svg>
+                  رجوع
+                </button>
               </div>
 
               {meta?.tag && Number.isInteger(parsedId) && <RelatedArticles currentId={parsedId} tag={meta.tag} />}
